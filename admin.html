@@ -1628,6 +1628,14 @@
       }
     }
 
+    function parseAdiTimestamp(ts) {
+      if (!ts) return null;
+      // Strip Z so browser treats as local NZ time not UTC
+      const local = ts.replace('Z', '').replace('T', ' ');
+      const d = new Date(local);
+      return isNaN(d) ? new Date(ts) : d;
+    }
+
     function getAdiClubFiltered() {
       const search = document.getElementById('ac-search').value.toLowerCase();
       const period = document.getElementById('ac-filter-period').value;
@@ -1636,7 +1644,8 @@
       return allAdiClub.filter(r => {
         if (search && !( (r.name||'').toLowerCase().includes(search) || (r.id||'').toLowerCase().includes(search) )) return false;
         if (period !== 'all') {
-          const d = new Date(r.timestamp);
+          const d = parseAdiTimestamp(r.timestamp);
+          if (!d) return false;
           if (period === 'today') {
             if (d.toDateString() !== now.toDateString()) return false;
           } else if (period === 'week') {
@@ -1660,7 +1669,14 @@
       }
 
       tbody.innerHTML = rows.map((r, i) => {
-        const d    = r.timestamp ? new Date(r.timestamp) : null;
+        let d = null;
+        if (r.timestamp) {
+          // Strip Z suffix so browser treats as local time, not UTC
+          // (imported data was recorded in NZ local time)
+          const ts = r.timestamp.replace('Z', '').replace('T', ' ');
+          d = new Date(ts);
+          if (isNaN(d)) d = new Date(r.timestamp); // fallback
+        }
         const date = d ? d.toLocaleDateString('en-NZ', { day:'2-digit', month:'short', year:'numeric' }) : '–';
         const time = d ? d.toLocaleTimeString('en-NZ', { hour:'2-digit', minute:'2-digit' }) : '–';
         return `<tr>
@@ -1677,15 +1693,17 @@
     }
 
     function updateAdiClubStats() {
-      const now      = new Date();
-      const total    = allAdiClub.length;
-      const today    = allAdiClub.filter(r => r.timestamp && new Date(r.timestamp).toDateString() === now.toDateString()).length;
-      const month    = allAdiClub.filter(r => {
-        if (!r.timestamp) return false;
-        const d = new Date(r.timestamp);
-        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      const now   = new Date();
+      const total = allAdiClub.length;
+      const today = allAdiClub.filter(r => {
+        const d = parseAdiTimestamp(r.timestamp);
+        return d && d.toDateString() === now.toDateString();
       }).length;
-      const unique   = new Set(allAdiClub.map(r => (r.id || r.name || '').toLowerCase()).filter(Boolean)).size;
+      const month = allAdiClub.filter(r => {
+        const d = parseAdiTimestamp(r.timestamp);
+        return d && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      }).length;
+      const unique = new Set(allAdiClub.map(r => (r.id || r.name || '').toLowerCase()).filter(Boolean)).size;
 
       document.getElementById('ac-stat-total').textContent  = total;
       document.getElementById('ac-stat-today').textContent  = today;
