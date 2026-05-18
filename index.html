@@ -932,16 +932,26 @@
     function applyComplete(id) {
       if (completed[id]) return;
       completed[id] = true;
-      completedCount++;
       const btn = document.getElementById(id);
-      if (!btn) return;
-      btn.classList.add('completed');
-      const action = btn.querySelector('.module-action span');
-      if (action) action.textContent = 'Done';
-      document.getElementById('prog-done').textContent = completedCount;
-      const activeTotal = activeModules.length;
-      document.getElementById('prog-total').textContent = activeTotal;
-      if (completedCount === activeTotal) document.getElementById('complete-banner').style.display = 'block';
+      if (btn) {
+        btn.classList.add('completed');
+        const action = btn.querySelector('.module-action span');
+        if (action) action.textContent = 'Done';
+      }
+      recalcProgress();
+    }
+
+    // ─── RECALC PROGRESS (always based on activeModules) ───
+    function recalcProgress() {
+      const activeDone = activeModules.filter(id => completed[id]).length;
+      completedCount   = activeDone;
+      document.getElementById('prog-done').textContent  = activeDone;
+      document.getElementById('prog-total').textContent = activeModules.length;
+      if (activeModules.length > 0 && activeDone === activeModules.length) {
+        document.getElementById('complete-banner').style.display = 'block';
+      } else {
+        document.getElementById('complete-banner').style.display = 'none';
+      }
     }
 
     // ─── SAVE (Firebase + localStorage backup) ───
@@ -1058,9 +1068,9 @@
             if (subEl  && m.sub)  subEl.textContent  = m.sub;
           });
 
-          // Update active modules list and progress total
+          // Update active modules list and recalc progress with correct total
           activeModules = newActive;
-          document.getElementById('prog-total').textContent = activeModules.length;
+          recalcProgress();
         }).catch(() => {});
       }).catch(() => {});
     }
