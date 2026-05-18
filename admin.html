@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>adidas | Training Hub · Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-100: #F5F5F5;
+      --gray-200: #E8E8E8;
+      --gray-400: #AAAAAA;
+      --gray-500: #888888;
+      --gray-700: #444444;
+      --green: #2ECC71;
+      --red: #E74C3C;
+      --amber: #F39C12;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+
+    body {
+      background: var(--gray-100);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      color: var(--black);
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--black);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .adidas-logo {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .header-text {
+      border-left: 2px solid #333;
+      padding-left: 16px;
+    }
+
+    .header-text h1 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .header-text p {
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #admin-badge {
+      display: none;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(46,204,113,0.12);
+      padding: 5px 12px;
+      border: 1px solid rgba(46,204,113,0.3);
+    }
+
+    #btn-logout {
+      display: none;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      background: none;
+      border: 1px solid #333;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    #btn-logout:hover { color: var(--white); border-color: var(--white); }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    /* ─── LOGIN ─── */
+    #screen-login {
+      display: flex;
+      justify-content: center;
+      padding-top: 60px;
+    }
+
+    .login-box {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .login-box .step-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+
+    .login-box h2 {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-700);
+      margin-bottom: 7px;
+    }
+
+    input[type="text"], input[type="password"], input[type="url"], select {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--gray-100);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--black);
+      background: var(--white);
+    }
+
+    input::placeholder { color: var(--gray-400); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: #222; }
+    .btn-primary:disabled { background: #888; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── ADMIN PANEL ─── */
+    #screen-admin { display: none; }
+
+    /* ─── TABS ─── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .tab-btn {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-500);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s;
+    }
+
+    .tab-btn.active { color: var(--black); border-bottom-color: var(--black); }
+    .tab-btn:hover:not(.active) { color: var(--gray-700); }
+
+    .tab-panel { display: none; animation: fadeUp 0.3s ease both; }
+    .tab-panel.active { display: block; }
+
+    /* ─── SECTION CARD ─── */
+    .card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 28px 28px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .card-tag {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .card-tag.outline {
+      background: transparent;
+      color: var(--black);
+      border: 1.5px solid var(--black);
+    }
+
+    /* ─── MODULE EDITOR ─── */
+    .module-row {
+      display: grid;
+      grid-template-columns: 42px 1fr 1fr 1.4fr;
+      gap: 10px;
+      align-items: start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .module-row:last-child { border-bottom: none; }
+
+    .module-num-label {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gray-200);
+      line-height: 1;
+      padding-top: 14px;
+    }
+
+    .module-row .form-group { margin-bottom: 0; }
+
+    .module-row input { font-size: 13px; padding: 10px 12px; }
+
+    .save-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .save-status {
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--gray-500);
+      transition: opacity 0.5s;
+    }
+
+    .btn-save {
+      padding: 13px 28px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-save:hover { background: #222; }
+    .btn-save:disabled { background: #999; cursor: not-allowed; }
+
+    /* ─── STATS ROW ─── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* ─── FILTERS ─── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar select,
+    .filter-bar input[type="text"] {
+      width: auto;
+      flex: 1;
+      min-width: 140px;
+      font-size: 13px;
+      padding: 10px 14px;
+    }
+
+    .select-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-500);
+      font-size: 13px;
+    }
+
+    .select-wrap select { width: 100%; }
+
+    .btn-refresh {
+      padding: 10px 18px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .btn-refresh:hover { background: #222; }
+
+    /* ─── PROGRESS TABLE ─── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      padding: 10px 12px;
+      text-align: left;
+      background: var(--gray-100);
+      border-bottom: 2px solid var(--gray-200);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: #fafafa; }
+
+    tbody td {
+      padding: 12px 12px;
+      vertical-align: middle;
+    }
+
+    .td-name { font-weight: 600; }
+    .td-store { color: var(--gray-500); font-size: 12px; }
+
+    .check-dot {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      text-align: center;
+      line-height: 20px;
+      font-size: 10px;
+    }
+
+    .check-dot.done {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .progress-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--gray-200);
+      flex: 1;
+      min-width: 50px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--black);
+      transition: width 0.3s;
+    }
+
+    .progress-bar-fill.full { background: var(--green); }
+
+    .pct-label {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .td-date { color: var(--gray-500); font-size: 11px; white-space: nowrap; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-500);
+    }
+
+    .empty-state p {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .empty-state span { font-size: 13px; display: block; margin-top: 6px; }
+
+    /* ─── LOADING ─── */
+    .loading-spinner {
+      text-align: center;
+      padding: 30px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+    }
+
+    /* ─── MONTH SELECTOR ─── */
+    .month-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .month-chip {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .month-chip.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .month-chip:hover:not(.active) { border-color: var(--black); }
+
+    /* ─── SETTINGS ─── */
+    .settings-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .settings-row .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
+
+    /* ─── ADMIN USERS ─── */
+    .user-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+    }
+
+    .user-item .u-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .user-item .u-role {
+      font-size: 11px;
+      color: var(--gray-500);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge-active {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.3);
+      padding: 4px 10px;
+    }
+
+    /* ─── NOTIFICATIONS ─── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #1a5c38; }
+    .toast.error { background: #8b1a1a; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .module-row { grid-template-columns: 36px 1fr; }
+      .module-row input:nth-of-type(2),
+      .module-row .url-field { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="adidas-logo">adidas</div>
+    <div class="header-text">
+      <h1>Training Hub</h1>
+      <p>Admin Panel</p>
+    </div>
+    <div class="header-right">
+      <span id="admin-badge">● Admin</span>
+      <button id="btn-logout" onclick="logout()">Log Out</button>
+    </div>
+  </header>
+
+  <!-- SCREEN: LOGIN -->
+  <div class="page" id="screen-login">
+    <div class="login-box">
+      <p class="step-label">Restricted Access</p>
+      <h2>Admin<br>Login</h2>
+
+      <div class="form-group">
+        <label for="login-user">Username</label>
+        <input type="text" id="login-user" placeholder="Enter username" autocomplete="username"
+               onkeydown="if(event.key==='Enter') doLogin()"/>
+      </div>
+      <div class="form-group">
+        <label for="login-pass">Password</label>
+        <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password"
+               onkeydown="if(event.key==='Enter') doLogin()"/>
+      </div>
+
+      <p class="error-msg" id="login-error">Incorrect username or password.</p>
+      <button class="btn-primary" onclick="doLogin()">Access Dashboard →</button>
+
+      <p style="font-size:11px; color:var(--gray-400); margin-top:20px; letter-spacing:0.04em; line-height:1.6;">
+        Access is restricted to authorised admin users only.<br>
+        Contact your system administrator if you need access.
+      </p>
+    </div>
+  </div>
+
+  <!-- SCREEN: ADMIN PANEL -->
+  <div class="page" id="screen-admin">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('modules')">Module Editor</button>
+      <button class="tab-btn" onclick="switchTab('progress')">Worker Progress</button>
+      <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
+    </div>
+
+    <!-- ─── TAB: MODULE EDITOR ─── -->
+    <div class="tab-panel active" id="tab-modules">
+
+      <!-- AREA MODULES -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">AREA Modules</span>
+          <span class="card-tag">AREA</span>
+        </div>
+
+        <div id="area-module-rows">
+          <!-- Rows injected by JS -->
+        </div>
+
+        <div class="save-bar">
+          <span class="save-status" id="save-status-area"></span>
+          <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
+        </div>
+      </div>
+
+      <!-- ATTICUS MODULES -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Atticus Modules</span>
+          <span class="card-tag outline">ATTICUS</span>
+        </div>
+
+        <div id="atticus-module-rows">
+          <!-- Rows injected by JS -->
+        </div>
+
+        <div class="save-bar">
+          <span class="save-status" id="save-status-atticus"></span>
+          <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding: 0 4px;">
+        ℹ️ Changes are saved to Firebase instantly and reflected in the worker app within seconds — no GitHub push required.
+      </p>
+    </div>
+
+    <!-- ─── TAB: WORKER PROGRESS ─── -->
+    <div class="tab-panel" id="tab-progress">
+
+      <!-- STATS -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="stat-total">–</div>
+          <div class="stat-label">Workers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-complete">–</div>
+          <div class="stat-label">100% Done</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-partial">–</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-rate">–</div>
+          <div class="stat-label">Avg Progress</div>
+        </div>
+      </div>
+
+      <!-- MONTH SELECTOR -->
+      <div class="card" style="padding: 20px 24px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div>
+            <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Viewing Month</p>
+            <div class="month-chips" id="month-chips">
+              <!-- chips injected by JS -->
+            </div>
+          </div>
+          <button class="btn-refresh" onclick="loadProgress()">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="filter-bar">
+        <div class="select-wrap">
+          <select id="filter-store" onchange="renderTable()">
+            <option value="">All Stores</option>
+          </select>
+        </div>
+        <input type="text" id="filter-search" placeholder="Search by name…" oninput="renderTable()" style="flex:1; min-width:150px;"/>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card" style="padding: 0;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Store</th>
+                <th title="AREA Module 1">A1</th>
+                <th title="AREA Module 2">A2</th>
+                <th title="AREA Module 3">A3</th>
+                <th title="Atticus Module 1">T1</th>
+                <th title="Atticus Module 2">T2</th>
+                <th title="Atticus Module 3">T3</th>
+                <th>Progress</th>
+                <th>Last Seen</th>
+              </tr>
+            </thead>
+            <tbody id="progress-tbody">
+              <tr><td colspan="10">
+                <div class="loading-spinner">Loading progress data…</div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── TAB: SETTINGS ─── -->
+    <div class="tab-panel" id="tab-settings">
+
+      <!-- ADMIN USERS -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Admin Users</span>
+        </div>
+        <div class="user-list" id="admin-user-list">
+          <!-- Injected by JS -->
+        </div>
+        <p style="font-size:12px; color:var(--gray-500); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
+          To add, remove, or change admin credentials, edit the <code style="background:var(--gray-100); padding:1px 5px; font-size:11px;">ADMIN_USERS</code> object at the top of <code style="background:var(--gray-100); padding:1px 5px; font-size:11px;">admin.html</code>.
+        </p>
+      </div>
+
+      <!-- FIREBASE CONFIG -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Firebase Config</span>
+        </div>
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          This admin panel uses the same Firebase project as the worker app. The config is stored locally in your browser.
+        </p>
+        <div id="fb-status-box" style="margin-bottom: 20px;"></div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;" id="fb-config-fields">
+          <div class="form-group">
+            <label>API Key</label>
+            <input type="text" id="fb-api-key" placeholder="AIzaSy…"/>
+          </div>
+          <div class="form-group">
+            <label>Auth Domain</label>
+            <input type="text" id="fb-auth-domain" placeholder="project.firebaseapp.com"/>
+          </div>
+          <div class="form-group">
+            <label>Database URL</label>
+            <input type="text" id="fb-db-url" placeholder="https://…-default-rtdb.firebaseio.com"/>
+          </div>
+          <div class="form-group">
+            <label>Project ID</label>
+            <input type="text" id="fb-project-id" placeholder="your-project"/>
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>App ID</label>
+            <input type="text" id="fb-app-id" placeholder="1:123456789:web:abc123"/>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn-save" onclick="saveFirebaseConfig()">Save Firebase Config →</button>
+          <button onclick="resetFirebaseConfig()" style="padding:13px 20px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; color:var(--gray-700); transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--gray-200)'">Reset</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FIREBASE SDK -->
+  <script type="module">
+    const { initializeApp }              = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getDatabase, ref, set, get } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+    async function initFirebase(cfg) {
+      try {
+        const app = initializeApp(cfg);
+        const db  = getDatabase(app);
+        window._db = db;
+        window._fbRef = ref;
+        window._fbSet = set;
+        window._fbGet = get;
+        window._firebaseReady = true;
+        document.dispatchEvent(new Event('firebase-ready'));
+      } catch(e) { console.warn('Firebase init failed', e); }
+    }
+
+    try {
+      const saved = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
+      if (saved && saved.apiKey && !saved.apiKey.includes('YOUR_')) await initFirebase(saved);
+    } catch(e) {}
+
+    document.addEventListener('firebase-config-saved', async (e) => {
+      await initFirebase(e.detail);
+    });
+  </script>
+
+  <script>
+    // ═══════════════════════════════════════════════════════
+    //  ✏️  ADMIN CREDENTIALS — Change these before deploying
+    //  Format: 'username': 'password'
+    // ═══════════════════════════════════════════════════════
+    const ADMIN_USERS = {
+      'admin':   'adidas2024',
+      'manager': 'training2024',
+      'director':'hub2024'
+    };
+
+    // ─── Module definitions ───
+    const MODULE_DEFS = [
+      { id: 'mod-a1', num: '01', group: 'area',    defaultName: 'AREA Module 1',    defaultSub: 'AREA · Training' },
+      { id: 'mod-a2', num: '02', group: 'area',    defaultName: 'AREA Module 2',    defaultSub: 'AREA · Training' },
+      { id: 'mod-a3', num: '03', group: 'area',    defaultName: 'AREA Module 3',    defaultSub: 'AREA · Training' },
+      { id: 'mod-t1', num: '04', group: 'atticus', defaultName: 'Atticus Module 1', defaultSub: 'Atticus · Training' },
+      { id: 'mod-t2', num: '05', group: 'atticus', defaultName: 'Atticus Module 2', defaultSub: 'Atticus · Training' },
+      { id: 'mod-t3', num: '06', group: 'atticus', defaultName: 'Atticus Module 3', defaultSub: 'Atticus · Training' },
+    ];
+
+    // ─── State ───
+    let currentUser = null;
+    let allProgress = [];
+    let selectedMonth = getCurrentMonthKey();
+    let allMonths = [];
+
+    // ─── Month helpers ───
+    function getCurrentMonthKey() {
+      return new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+    }
+
+    function getRecentMonths(n = 6) {
+      const months = [];
+      const d = new Date();
+      for (let i = 0; i < n; i++) {
+        months.unshift(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
+        d.setMonth(d.getMonth() - 1);
+      }
+      return months;
+    }
+
+    // ─── LOGIN ───
+    function doLogin() {
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      const err  = document.getElementById('login-error');
+      err.style.display = 'none';
+
+      if (ADMIN_USERS[user] && ADMIN_USERS[user] === pass) {
+        currentUser = user;
+        sessionStorage.setItem('adidas_admin_session', user);
+        showAdmin();
+      } else {
+        err.style.display = 'block';
+        document.getElementById('login-pass').value = '';
+        document.getElementById('login-pass').focus();
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      sessionStorage.removeItem('adidas_admin_session');
+      document.getElementById('screen-admin').style.display = 'none';
+      document.getElementById('screen-login').style.display = 'flex';
+      document.getElementById('admin-badge').style.display = 'none';
+      document.getElementById('btn-logout').style.display = 'none';
+      document.getElementById('login-user').value = '';
+      document.getElementById('login-pass').value = '';
+    }
+
+    // ─── SHOW ADMIN ───
+    function showAdmin() {
+      document.getElementById('screen-login').style.display = 'none';
+      document.getElementById('screen-admin').style.display = 'block';
+      document.getElementById('admin-badge').style.display = 'inline-block';
+      document.getElementById('btn-logout').style.display = 'inline-block';
+      document.getElementById('admin-badge').textContent = '● ' + currentUser;
+
+      buildModuleRows();
+      renderAdminUsers();
+      loadFbConfigToForm();
+      buildMonthChips();
+
+      // Load module config from Firebase
+      waitForFirebase(() => {
+        loadModuleConfig();
+        loadProgress();
+      });
+    }
+
+    // ─── WAIT FOR FIREBASE ───
+    function waitForFirebase(cb) {
+      if (window._firebaseReady) return cb();
+      document.addEventListener('firebase-ready', cb, { once: true });
+    }
+
+    // ─── BUILD MODULE ROWS ───
+    function buildModuleRows() {
+      const areaEl    = document.getElementById('area-module-rows');
+      const atticusEl = document.getElementById('atticus-module-rows');
+      areaEl.innerHTML = '';
+      atticusEl.innerHTML = '';
+
+      MODULE_DEFS.forEach(m => {
+        const row = document.createElement('div');
+        row.className = 'module-row';
+        row.innerHTML = `
+          <span class="module-num-label">${m.num}</span>
+          <div class="form-group">
+            <label>Module Name</label>
+            <input type="text" id="inp-name-${m.id}" placeholder="${m.defaultName}"/>
+          </div>
+          <div class="form-group">
+            <label>Subtitle</label>
+            <input type="text" id="inp-sub-${m.id}" placeholder="${m.defaultSub}"/>
+          </div>
+          <div class="form-group url-field">
+            <label>Training URL</label>
+            <input type="url" id="inp-url-${m.id}" placeholder="https://…"/>
+          </div>
+        `;
+        (m.group === 'area' ? areaEl : atticusEl).appendChild(row);
+      });
+    }
+
+    // ─── LOAD MODULE CONFIG FROM FIREBASE ───
+    async function loadModuleConfig() {
+      if (!window._firebaseReady) return;
+      try {
+        const snap = await window._fbGet(window._fbRef(window._db, 'config/modules'));
+        if (snap.exists()) applyModuleConfig(snap.val());
+      } catch(e) { console.warn('Could not load module config', e); }
+    }
+
+    function applyModuleConfig(cfg) {
+      MODULE_DEFS.forEach(m => {
+        const data = cfg[m.id];
+        if (!data) return;
+        const nameEl = document.getElementById('inp-name-' + m.id);
+        const subEl  = document.getElementById('inp-sub-'  + m.id);
+        const urlEl  = document.getElementById('inp-url-'  + m.id);
+        if (nameEl && data.name) nameEl.value = data.name;
+        if (subEl  && data.sub)  subEl.value  = data.sub;
+        if (urlEl  && data.url)  urlEl.value  = data.url;
+      });
+    }
+
+    // ─── SAVE MODULE CONFIG ───
+    async function saveModuleConfig() {
+      if (!window._firebaseReady) {
+        showToast('Firebase not connected — check Settings tab', 'error');
+        return;
+      }
+
+      const cfg = {};
+      MODULE_DEFS.forEach(m => {
+        cfg[m.id] = {
+          name: document.getElementById('inp-name-' + m.id).value.trim() || m.defaultName,
+          sub:  document.getElementById('inp-sub-'  + m.id).value.trim() || m.defaultSub,
+          url:  document.getElementById('inp-url-'  + m.id).value.trim() || '#',
+        };
+      });
+
+      try {
+        await window._fbSet(window._fbRef(window._db, 'config/modules'), cfg);
+        showToast('✓ Modules saved to Firebase', 'success');
+        ['area', 'atticus'].forEach(g => {
+          const el = document.getElementById('save-status-' + g);
+          if (el) {
+            el.textContent = '✓ Saved ' + new Date().toLocaleTimeString();
+            el.style.color = 'var(--green)';
+            setTimeout(() => { el.textContent = ''; }, 4000);
+          }
+        });
+      } catch(e) {
+        showToast('Save failed — check Firebase connection', 'error');
+      }
+    }
+
+    // ─── MONTH CHIPS ───
+    function buildMonthChips() {
+      allMonths = getRecentMonths(6);
+      selectedMonth = getCurrentMonthKey();
+      const wrap = document.getElementById('month-chips');
+      wrap.innerHTML = '';
+      allMonths.forEach(m => {
+        const chip = document.createElement('button');
+        chip.className = 'month-chip' + (m === selectedMonth ? ' active' : '');
+        chip.textContent = m;
+        chip.onclick = () => {
+          selectedMonth = m;
+          wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          renderTable();
+          updateStats();
+        };
+        wrap.appendChild(chip);
+      });
+    }
+
+    // ─── LOAD PROGRESS ───
+    async function loadProgress() {
+      if (!window._firebaseReady) {
+        document.getElementById('progress-tbody').innerHTML = `
+          <tr><td colspan="10">
+            <div class="empty-state">
+              <p>Firebase Not Connected</p>
+              <span>Configure Firebase in the Settings tab to view progress data.</span>
+            </div>
+          </td></tr>`;
+        return;
+      }
+
+      document.getElementById('progress-tbody').innerHTML = `
+        <tr><td colspan="10"><div class="loading-spinner">Loading progress data…</div></td></tr>`;
+
+      try {
+        const snap = await window._fbGet(window._fbRef(window._db, 'progress'));
+        allProgress = [];
+        if (snap.exists()) {
+          snap.forEach(child => {
+            allProgress.push({ key: child.key, ...child.val() });
+          });
+        }
+        populateStoreFilter();
+        renderTable();
+        updateStats();
+      } catch(e) {
+        document.getElementById('progress-tbody').innerHTML = `
+          <tr><td colspan="10">
+            <div class="empty-state">
+              <p>Could not load data</p>
+              <span>Check your Firebase connection and database rules.</span>
+            </div>
+          </td></tr>`;
+      }
+    }
+
+    function getFilteredRows() {
+      const store  = document.getElementById('filter-store').value;
+      const search = document.getElementById('filter-search').value.toLowerCase();
+      const monthSuffix = selectedMonth.replace(/[^a-zA-Z0-9_\-]/g, '_');
+
+      return allProgress.filter(r => {
+        if (!r.key.includes(monthSuffix)) return false;
+        if (store  && r.store !== store)   return false;
+        if (search && !r.name.toLowerCase().includes(search)) return false;
+        return true;
+      });
+    }
+
+    function populateStoreFilter() {
+      const stores = [...new Set(allProgress.map(r => r.store).filter(Boolean))].sort();
+      const sel = document.getElementById('filter-store');
+      const current = sel.value;
+      sel.innerHTML = '<option value="">All Stores</option>' +
+        stores.map(s => `<option value="${s}"${s===current?' selected':''}>${s}</option>`).join('');
+    }
+
+    function renderTable() {
+      const rows = getFilteredRows();
+      const tbody = document.getElementById('progress-tbody');
+      const mods  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10">
+          <div class="empty-state">
+            <p>No Data Found</p>
+            <span>No workers have logged progress for ${selectedMonth} yet.</span>
+          </div></td></tr>`;
+        return;
+      }
+
+      rows.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+      tbody.innerHTML = rows.map(r => {
+        const completed = r.completed || [];
+        const pct = Math.round((completed.length / 6) * 100);
+        const date = r.savedAt ? new Date(r.savedAt).toLocaleDateString('en-NZ', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '–';
+        const dots = mods.map(m =>
+          `<td><span class="check-dot${completed.includes(m) ? ' done' : ''}">✓</span></td>`
+        ).join('');
+
+        return `<tr>
+          <td class="td-name">${escHtml(r.name || '–')}</td>
+          <td class="td-store">${escHtml(r.store || '–')}</td>
+          ${dots}
+          <td>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar"><div class="progress-bar-fill${pct===100?' full':''}" style="width:${pct}%"></div></div>
+              <span class="pct-label">${pct}%</span>
+            </div>
+          </td>
+          <td class="td-date">${date}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function updateStats() {
+      const rows = getFilteredRows();
+      const mods = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+      const total    = rows.length;
+      const complete = rows.filter(r => (r.completed||[]).length === 6).length;
+      const partial  = rows.filter(r => { const c=(r.completed||[]).length; return c > 0 && c < 6; }).length;
+      const avgPct   = total ? Math.round(rows.reduce((s,r) => s + ((r.completed||[]).length/6)*100, 0) / total) : 0;
+
+      document.getElementById('stat-total').textContent    = total;
+      document.getElementById('stat-complete').textContent = complete;
+      document.getElementById('stat-partial').textContent  = partial;
+      document.getElementById('stat-rate').textContent     = total ? avgPct + '%' : '–';
+    }
+
+    // ─── ADMIN USERS ───
+    function renderAdminUsers() {
+      const list = document.getElementById('admin-user-list');
+      list.innerHTML = Object.entries(ADMIN_USERS).map(([u]) => `
+        <div class="user-item">
+          <div>
+            <div class="u-name">${escHtml(u)}</div>
+            <div class="u-role">Admin</div>
+          </div>
+          <span class="badge-active">${u === currentUser ? '● Active' : 'Enabled'}</span>
+        </div>
+      `).join('');
+    }
+
+    // ─── FIREBASE CONFIG ───
+    function loadFbConfigToForm() {
+      try {
+        const cfg = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
+        if (!cfg) {
+          document.getElementById('fb-status-box').innerHTML = `
+            <div style="padding:12px 16px; background:#fff8e1; border:1px solid #f0c040; font-size:12px; color:#7a6a00; letter-spacing:0.04em;">
+              ⚠ Firebase not configured. Enter your config below.
+            </div>`;
+          return;
+        }
+        document.getElementById('fb-api-key').value    = cfg.apiKey    || '';
+        document.getElementById('fb-auth-domain').value= cfg.authDomain|| '';
+        document.getElementById('fb-db-url').value     = cfg.databaseURL|| '';
+        document.getElementById('fb-project-id').value = cfg.projectId || '';
+        document.getElementById('fb-app-id').value     = cfg.appId     || '';
+        document.getElementById('fb-status-box').innerHTML = `
+          <div style="padding:12px 16px; background:#f0fdf5; border:1px solid rgba(46,204,113,0.4); font-size:12px; color:#1a5c38; letter-spacing:0.04em;">
+            ✓ Firebase connected · Project: <strong>${escHtml(cfg.projectId || '')}</strong>
+          </div>`;
+      } catch(e) {}
+    }
+
+    function saveFirebaseConfig() {
+      const cfg = {
+        apiKey:        document.getElementById('fb-api-key').value.trim(),
+        authDomain:    document.getElementById('fb-auth-domain').value.trim(),
+        databaseURL:   document.getElementById('fb-db-url').value.trim(),
+        projectId:     document.getElementById('fb-project-id').value.trim(),
+        storageBucket: document.getElementById('fb-project-id').value.trim() + '.appspot.com',
+        appId:         document.getElementById('fb-app-id').value.trim(),
+      };
+      if (!cfg.apiKey || !cfg.authDomain || !cfg.databaseURL || !cfg.projectId || !cfg.appId) {
+        showToast('Fill in all Firebase fields', 'error'); return;
+      }
+      localStorage.setItem('adidas_fb_config', JSON.stringify(cfg));
+      document.dispatchEvent(new CustomEvent('firebase-config-saved', { detail: cfg }));
+      loadFbConfigToForm();
+      showToast('✓ Firebase config saved — reload to reconnect', 'success');
+    }
+
+    function resetFirebaseConfig() {
+      if (!confirm('Reset Firebase config? You will need to re-enter your credentials.')) return;
+      localStorage.removeItem('adidas_fb_config');
+      location.reload();
+    }
+
+    // ─── TABS ───
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', ['modules','progress','settings'][i] === name);
+      });
+      document.querySelectorAll('.tab-panel').forEach((p, i) => {
+        p.classList.toggle('active', ['tab-modules','tab-progress','tab-settings'][i] === 'tab-' + name);
+      });
+      if (name === 'settings') loadFbConfigToForm();
+    }
+
+    // ─── TOAST ───
+    function showToast(msg, type = '') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (type ? ' ' + type : '') + ' show';
+      setTimeout(() => { t.classList.remove('show'); }, 3000);
+    }
+
+    // ─── UTILS ───
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ─── AUTO-LOGIN from session ───
+    (function() {
+      const saved = sessionStorage.getItem('adidas_admin_session');
+      if (saved && ADMIN_USERS[saved]) {
+        currentUser = saved;
+        showAdmin();
+      }
+    })();
+  </script>
+
+</body>
+</html>
