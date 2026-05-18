@@ -1649,8 +1649,10 @@
           if (period === 'today') {
             if (d.toDateString() !== now.toDateString()) return false;
           } else if (period === 'week') {
-            const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 7);
-            if (d < weekAgo) return false;
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+            monday.setHours(0, 0, 0, 0);
+            if (d < monday) return false;
           } else if (period === 'month') {
             if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false;
           }
