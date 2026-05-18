@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join adiClub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #000; color: #fff; font-family: 'Inter', sans-serif;
+      min-height: 100vh; display: flex; justify-content: center;
+      align-items: center; overflow: hidden; position: relative;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a1a1a 0%, #000 100%);
+      z-index: 0;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.15; pointer-events: none; z-index: 0;
+    }
+    .container {
+      position: relative; z-index: 1; max-width: 680px; width: 90%;
+      text-align: center; padding: 60px 40px;
+      animation: fadeUp 0.9s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .logo { width: 100px; margin-bottom: 40px; animation: fadeUp 0.9s 0.1s cubic-bezier(.22,1,.36,1) both; }
+    .eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.25em;
+      text-transform: uppercase; color: #666; margin-bottom: 16px;
+      animation: fadeUp 0.9s 0.2s cubic-bezier(.22,1,.36,1) both;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 10vw, 90px); line-height: 0.95;
+      letter-spacing: 0.02em; margin-bottom: 24px;
+      animation: fadeUp 0.9s 0.25s cubic-bezier(.22,1,.36,1) both;
+    }
+    h1 span {
+      display: block;
+      background: linear-gradient(90deg, #fff 60%, #888 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .greeting {
+      font-size: 14px; font-weight: 600; color: #fff;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px;
+      animation: fadeUp 0.9s 0.3s cubic-bezier(.22,1,.36,1) both;
+    }
+    .greeting em { font-style: normal; color: #a0ff00; }
+    p {
+      font-size: 16px; line-height: 1.7; color: #888; margin-bottom: 44px;
+      max-width: 440px; margin-left: auto; margin-right: auto;
+      animation: fadeUp 0.9s 0.35s cubic-bezier(.22,1,.36,1) both;
+    }
+    .btn-wrap { animation: fadeUp 0.9s 0.45s cubic-bezier(.22,1,.36,1) both; }
+    .btn {
+      display: inline-block; padding: 18px 52px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.12em;
+      background: #fff; color: #000; text-decoration: none; border-radius: 3px;
+      position: relative; overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease; cursor: pointer;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0; background: #a0ff00;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s cubic-bezier(.22,1,.36,1); z-index: 0;
+    }
+    .btn:hover::after { transform: scaleX(1); }
+    .btn:hover { color: #000; box-shadow: 0 0 40px rgba(160,255,0,0.3); transform: translateY(-2px); }
+    .btn span { position: relative; z-index: 1; }
+    .plain-link { display: block; margin-top: 16px; color: #888; font-size: 13px; text-decoration: underline; letter-spacing: 0.05em; }
+    .plain-link:hover { color: #fff; }
+    .fine-print {
+      margin-top: 20px; font-size: 11px; color: #444; letter-spacing: 0.05em;
+      animation: fadeUp 0.9s 0.55s cubic-bezier(.22,1,.36,1) both;
+    }
+    @media (max-width: 480px) {
+      .container { padding: 40px 24px; }
+      .btn { padding: 15px 36px; font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Adidas-original.svg" alt="Adidas Logo">
+    <p class="eyebrow">adiClub Membership</p>
+    <h1><span>UNLOCK MORE</span><span>REWARDS</span></h1>
+    <p class="greeting">Welcome from <em id="nameDisplay">Member</em></p>
+    <p>Earn adiClub points with every purchase and redeem them for member exclusives, limited drops, and personalised offers.</p>
+    <div class="btn-wrap">
+      <a href="https://www.adidas.co.nz/adiclub" target="_blank" rel="noopener" class="btn" id="joinBtn">
+        <span>JOIN FOR FREE</span>
+      </a>
+      <a href="https://www.adidas.co.nz/adiclub" target="_blank" rel="noopener" class="plain-link">Visit adiClub</a>
+    </div>
+    <p class="fine-print">By joining you agree to the adiClub Terms &amp; Conditions</p>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    const { initializeApp }                    = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getDatabase, ref, push, set }      = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+
+    async function initFirebase() {
+      try {
+        const cfg = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
+        if (!cfg || !cfg.apiKey || cfg.apiKey.includes('YOUR_')) return null;
+        const app = initializeApp(cfg);
+        return getDatabase(app);
+      } catch(e) { return null; }
+    }
+
+    const db = await initFirebase();
+
+    const params = new URLSearchParams(window.location.search);
+    const name   = params.get("name") || "Member";
+    const id     = params.get("id")   || "";
+
+    document.getElementById("nameDisplay").textContent = name;
+
+    document.getElementById("joinBtn").addEventListener("click", async function() {
+      if (!db) return; // silent fail if Firebase not configured
+      try {
+        const newRef = push(ref(db, 'adiclub'));
+        await set(newRef, {
+          name:      name,
+          id:        id,
+          timestamp: new Date().toISOString(),
+        });
+      } catch(e) {
+        // Silent fail — user still gets redirected to adiClub
+        console.warn('adiClub log failed:', e);
+      }
+    });
+  </script>
+</body>
+</html>
