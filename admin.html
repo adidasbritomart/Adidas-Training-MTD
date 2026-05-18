@@ -909,7 +909,7 @@
       <div class="card" style="padding: 0;">
         <div class="table-wrap">
           <table>
-            <thead>
+            <thead id="progress-thead">
               <tr>
                 <th>Name</th>
                 <th>Store</th>
@@ -1463,11 +1463,23 @@
     }
 
     // ─── LOAD MODULE CONFIG FROM FIREBASE ───
+    // ─── ACTIVE MODULES (set by loadModuleConfig, used by renderTable) ───
+    let adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+
     async function loadModuleConfig() {
       if (!window._firebaseReady) return;
       try {
         const snap = await window._fbGet(window._fbRef(window._db, 'config/modules'));
-        if (snap.exists()) applyModuleConfig(snap.val());
+        if (snap.exists()) {
+          applyModuleConfig(snap.val());
+          // Track which modules have a URL set
+          const cfg = snap.val();
+          adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id =>
+            cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url !== ''
+          );
+          // Refresh table if already loaded so dots/% update
+          if (allProgress.length) { renderTable(); updateStats(); }
+        }
       } catch(e) { console.warn('Could not load module config', e); }
     }
 
@@ -1599,10 +1611,23 @@
     function renderTable() {
       const rows = getFilteredRows();
       const tbody = document.getElementById('progress-tbody');
-      const mods  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+      const mods  = adminActiveModules;
+      const modLabels = { 'mod-a1':'A1','mod-a2':'A2','mod-a3':'A3','mod-t1':'T1','mod-t2':'T2','mod-t3':'T3' };
+      const modTitles = { 'mod-a1':'AREA Module 1','mod-a2':'AREA Module 2','mod-a3':'AREA Module 3','mod-t1':'Atticus Module 1','mod-t2':'Atticus Module 2','mod-t3':'Atticus Module 3' };
+      const colCount  = 3 + mods.length + 1; // name + store + dots + progress + date + actions
+
+      // Update thead dynamically
+      const thead = document.getElementById('progress-thead');
+      if (thead) {
+        thead.innerHTML = `<tr>
+          <th>Name</th><th>Store</th>
+          ${mods.map(m => `<th title="${modTitles[m]}">${modLabels[m]}</th>`).join('')}
+          <th>Progress</th><th>Last Seen</th><th>Actions</th>
+        </tr>`;
+      }
 
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11">
+        tbody.innerHTML = `<tr><td colspan="${colCount + 3}">
           <div class="empty-state">
             <p>No Data Found</p>
             <span>No workers have logged progress for ${selectedMonth} yet.</span>
@@ -1614,12 +1639,14 @@
 
       tbody.innerHTML = rows.map(r => {
         const completed = r.completed || [];
-        const pct = Math.round((completed.length / 6) * 100);
+        // Only count completions for active modules
+        const activeDone = completed.filter(m => mods.includes(m)).length;
+        const pct = mods.length ? Math.round((activeDone / mods.length) * 100) : 0;
         const date = r.savedAt ? new Date(r.savedAt).toLocaleDateString('en-NZ', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '–';
         const dots = mods.map(m => {
           const done = completed.includes(m);
           return `<td>
-            <span class="check-dot${done ? ' done' : ''}" 
+            <span class="check-dot${done ? ' done' : ''}"
               onclick="${done ? `uncompleteModule('${r.key}', '${m}')` : `completeModule('${r.key}', '${m}')`}"
               title="${done ? 'Click to uncomplete' : 'Click to complete'}"
               style="cursor:pointer;"
@@ -1646,12 +1673,20 @@
     }
 
     function updateStats() {
-      const rows = getFilteredRows();
-      const mods = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+      const rows   = getFilteredRows();
+      const mods   = adminActiveModules;
       const total    = rows.length;
-      const complete = rows.filter(r => (r.completed||[]).length === 6).length;
-      const partial  = rows.filter(r => { const c=(r.completed||[]).length; return c > 0 && c < 6; }).length;
-      const avgPct   = total ? Math.round(rows.reduce((s,r) => s + ((r.completed||[]).length/6)*100, 0) / total) : 0;
+      const complete = rows.filter(r => {
+        const activeDone = (r.completed||[]).filter(m => mods.includes(m)).length;
+        return mods.length > 0 && activeDone === mods.length;
+      }).length;
+      const partial  = rows.filter(r => {
+        const activeDone = (r.completed||[]).filter(m => mods.includes(m)).length;
+        return activeDone > 0 && activeDone < mods.length;
+      }).length;
+      const avgPct = total && mods.length ? Math.round(
+        rows.reduce((s, r) => s + ((r.completed||[]).filter(m => mods.includes(m)).length / mods.length) * 100, 0) / total
+      ) : 0;
 
       document.getElementById('stat-total').textContent    = total;
       document.getElementById('stat-complete').textContent = complete;
