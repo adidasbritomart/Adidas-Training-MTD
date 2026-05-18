@@ -1568,30 +1568,42 @@
       document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
       document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
       if (name === 'settings') loadFbConfigToForm();
-      if (name === 'adiclub' && !window._acLoaded) loadAdiClub();
+      if (name === 'adiclub') loadAdiClub();
     }
 
     // ─── ADICLUB DATA ───
     let allAdiClub = [];
 
     async function loadAdiClub() {
-      if (!window._firebaseReady) return;
       window._acLoaded = true;
+      allAdiClub = []; // always reset
       document.getElementById('adiclub-tbody').innerHTML =
         '<tr><td colspan="5"><div class="loading-spinner">Loading adiClub data…</div></td></tr>';
+
+      if (!window._firebaseReady) {
+        document.getElementById('adiclub-tbody').innerHTML =
+          '<tr><td colspan="5"><div class="empty-state"><p>Firebase Not Connected</p><span>Check Settings tab and make sure your Database URL uses asia-southeast1.firebasedatabase.app</span></div></td></tr>';
+        return;
+      }
+
       try {
         const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
-        allAdiClub = [];
         if (snap.exists()) {
-          snap.forEach(child => allAdiClub.push({ key: child.key, ...child.val() }));
+          snap.forEach(child => {
+            const val = child.val();
+            if (val && val.timestamp) {
+              allAdiClub.push({ key: child.key, ...val });
+            }
+          });
         }
-        // Sort newest first
         allAdiClub.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         renderAdiClubTable();
         updateAdiClubStats();
+        showToast('✓ Loaded ' + allAdiClub.length + ' entries', 'success');
       } catch(e) {
         document.getElementById('adiclub-tbody').innerHTML =
-          '<tr><td colspan="5"><div class="empty-state"><p>Could Not Load</p><span>Check Firebase connection.</span></div></td></tr>';
+          '<tr><td colspan="5"><div class="empty-state"><p>Could Not Load</p><span>' + e.message + '</span></div></td></tr>';
+        showToast('Load failed: ' + e.message, 'error');
       }
     }
 
