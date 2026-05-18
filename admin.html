@@ -847,6 +847,48 @@
         </p>
       </div>
 
+      <!-- PASSWORD HASH GENERATOR -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Password Hash Generator</span>
+        </div>
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          Passwords are stored as SHA-256 hashes in Firebase — never as plain text.
+          Use this tool to generate a hash for each admin, then save it in Firebase under
+          <code style="background:var(--gray-100);padding:1px 6px;font-size:12px;">config/admins/{username}</code>
+          as the value. The username you type here becomes the login username.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div class="form-group" style="margin:0;">
+            <label>Username</label>
+            <input type="text" id="hash-username" placeholder="e.g. sarah"/>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Password</label>
+            <input type="password" id="hash-password" placeholder="Choose a password"/>
+          </div>
+        </div>
+        <button class="btn-save" onclick="generateHash()" style="margin-bottom:16px;">Generate Hash →</button>
+
+        <div id="hash-result" style="display:none;">
+          <div style="background:var(--gray-100); border:1.5px solid var(--gray-200); padding:16px 18px; margin-bottom:10px;">
+            <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Firebase path & value to save</p>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <code id="hash-path" style="font-size:12px; color:var(--black); background:var(--white); border:1px solid var(--gray-200); padding:6px 10px; flex-shrink:0;"></code>
+              <span style="color:var(--gray-400); font-size:13px;">→</span>
+              <code id="hash-value" style="font-size:11px; color:#555; word-break:break-all; flex:1; background:var(--white); border:1px solid var(--gray-200); padding:6px 10px;"></code>
+              <button onclick="copyHash()" style="padding:7px 14px; background:var(--black); color:var(--white); border:none; font-family:var(--font-display); font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; white-space:nowrap;" id="copy-hash-btn">Copy Hash</button>
+            </div>
+          </div>
+          <div style="background:#fff8e1; border:1px solid #f0c040; padding:12px 16px; font-size:12px; color:#7a6a00; line-height:1.7;">
+            <strong>How to save this in Firebase:</strong><br>
+            In Realtime Database → <code style="font-size:11px;">config → admins</code> → add child with key
+            <strong id="hash-key-hint"></strong> and paste the hash above as its value.
+          </div>
+        </div>
+      </div>
+
       <!-- FIREBASE CONFIG -->
       <div class="card">
         <div class="card-header">
@@ -922,15 +964,7 @@
   </script>
 
   <script>
-    // ═══════════════════════════════════════════════════════
-    //  ✏️  ADMIN CREDENTIALS — Change these before deploying
-    //  Format: 'username': 'password'
-    // ═══════════════════════════════════════════════════════
-    const ADMIN_USERS = {
-      'admin':   'adidas2024',
-      'manager': 'training2024',
-      'director':'hub2024'
-    };
+    // Credentials live in Firebase under config/admins — nothing stored here.
 
     // ─── Module definitions ───
     const MODULE_DEFS = [
@@ -963,21 +997,46 @@
       return months;
     }
 
+    // ─── SHA-256 HASH ───
+    async function sha256(str) {
+      const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
     // ─── LOGIN ───
-    function doLogin() {
+    async function doLogin() {
       const user = document.getElementById('login-user').value.trim();
       const pass = document.getElementById('login-pass').value;
       const err  = document.getElementById('login-error');
+      const btn  = document.querySelector('#screen-login .btn-primary');
       err.style.display = 'none';
 
-      if (ADMIN_USERS[user] && ADMIN_USERS[user] === pass) {
-        currentUser = user;
-        sessionStorage.setItem('adidas_admin_session', user);
-        showAdmin();
-      } else {
+      if (!user || !pass) { err.style.display = 'block'; return; }
+
+      btn.textContent = 'Checking…';
+      btn.disabled = true;
+
+      try {
+        if (!window._firebaseReady) throw new Error('Firebase not ready');
+        const hash = await sha256(pass);
+        const snap = await window._fbGet(window._fbRef(window._db, 'config/admins/' + user));
+        if (snap.exists() && snap.val() === hash) {
+          currentUser = user;
+          sessionStorage.setItem('adidas_admin_session', user);
+          showAdmin();
+        } else {
+          throw new Error('bad credentials');
+        }
+      } catch(e) {
+        err.textContent = window._firebaseReady
+          ? 'Incorrect username or password.'
+          : 'Firebase not connected — configure it in Settings first.';
         err.style.display = 'block';
         document.getElementById('login-pass').value = '';
         document.getElementById('login-pass').focus();
+      } finally {
+        btn.textContent = 'Access Dashboard →';
+        btn.disabled = false;
       }
     }
 
@@ -1234,18 +1293,53 @@
       document.getElementById('stat-rate').textContent     = total ? avgPct + '%' : '–';
     }
 
-    // ─── ADMIN USERS ───
-    function renderAdminUsers() {
+    // ─── ADMIN USERS (loaded from Firebase) ───
+    async function renderAdminUsers() {
       const list = document.getElementById('admin-user-list');
-      list.innerHTML = Object.entries(ADMIN_USERS).map(([u]) => `
-        <div class="user-item">
-          <div>
-            <div class="u-name">${escHtml(u)}</div>
-            <div class="u-role">Admin</div>
+      list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Loading…</div>';
+      try {
+        if (!window._firebaseReady) throw new Error('no firebase');
+        const snap = await window._fbGet(window._fbRef(window._db, 'config/admins'));
+        if (!snap.exists()) {
+          list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">No admin users found. Run the setup tool to add them.</div>';
+          return;
+        }
+        const users = Object.keys(snap.val());
+        list.innerHTML = users.map(u => `
+          <div class="user-item">
+            <div>
+              <div class="u-name">${escHtml(u)}</div>
+              <div class="u-role">Admin</div>
+            </div>
+            <span class="badge-active">${u === currentUser ? '● Active' : 'Enabled'}</span>
           </div>
-          <span class="badge-active">${u === currentUser ? '● Active' : 'Enabled'}</span>
-        </div>
-      `).join('');
+        `).join('');
+      } catch(e) {
+        list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Could not load user list.</div>';
+      }
+    }
+
+    // ─── HASH GENERATOR ───
+    async function generateHash() {
+      const username = document.getElementById('hash-username').value.trim();
+      const password = document.getElementById('hash-password').value;
+      if (!username || !password) {
+        showToast('Enter both a username and password', 'error'); return;
+      }
+      const hash = await sha256(password);
+      document.getElementById('hash-path').textContent  = 'config/admins/' + username;
+      document.getElementById('hash-value').textContent = hash;
+      document.getElementById('hash-key-hint').textContent = username;
+      document.getElementById('hash-result').style.display = 'block';
+      document.getElementById('copy-hash-btn').textContent = 'Copy Hash';
+    }
+
+    function copyHash() {
+      const hash = document.getElementById('hash-value').textContent;
+      navigator.clipboard.writeText(hash).then(() => {
+        document.getElementById('copy-hash-btn').textContent = '✓ Copied!';
+        setTimeout(() => { document.getElementById('copy-hash-btn').textContent = 'Copy Hash'; }, 2000);
+      });
     }
 
     // ─── FIREBASE CONFIG ───
@@ -1319,13 +1413,10 @@
       return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    // ─── AUTO-LOGIN from session ───
+    // ─── AUTO-LOGIN from session (tab refresh etc.) ───
     (function() {
       const saved = sessionStorage.getItem('adidas_admin_session');
-      if (saved && ADMIN_USERS[saved]) {
-        currentUser = saved;
-        showAdmin();
-      }
+      if (saved) { currentUser = saved; showAdmin(); }
     })();
   </script>
 
