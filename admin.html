@@ -1028,7 +1028,9 @@
       return months;
     }
 
-    // ─── SHA-256 HASH ───
+    // ─── SAFE KEY (encodes dots so emails work as usernames) ───
+    function safeKey(str) { return str.replace(/\./g, ','); }
+    function unsafeKey(str) { return str.replace(/,/g, '.'); }
     async function sha256(str) {
       const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
@@ -1074,7 +1076,7 @@
         }
 
         const hash = await sha256(pass);
-        const snap = await window._fbGet(window._fbRef(window._db, 'config/admins/' + user));
+        const snap = await window._fbGet(window._fbRef(window._db, 'config/admins/' + safeKey(user)));
 
         if (snap.exists() && snap.val() === hash) {
           currentUser = user;
@@ -1129,7 +1131,7 @@
 
       try {
         const hash = await sha256(pass);
-        await window._fbSet(window._fbRef(window._db, 'config/admins/' + user), hash);
+        await window._fbSet(window._fbRef(window._db, 'config/admins/' + safeKey(user)), hash);
         currentUser = user;
         sessionStorage.setItem('adidas_admin_session', user);
         sessionStorage.removeItem('adidas_used_default');
@@ -1412,10 +1414,10 @@
         list.innerHTML = users.map(u => `
           <div class="user-item">
             <div>
-              <div class="u-name">${escHtml(u)}</div>
+              <div class="u-name">${escHtml(unsafeKey(u))}</div>
               <div class="u-role">Admin</div>
             </div>
-            <span class="badge-active">${u === currentUser ? '● Active' : 'Enabled'}</span>
+            <span class="badge-active">${unsafeKey(u) === currentUser ? '● Active' : 'Enabled'}</span>
           </div>
         `).join('');
       } catch(e) {
