@@ -695,6 +695,12 @@
       </div>
 
       <p class="error-msg" id="login-error"></p>
+
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; margin-top:4px;">
+        <input type="checkbox" id="keep-logged-in" style="width:16px; height:16px; cursor:pointer; accent-color:var(--black);"/>
+        <label for="keep-logged-in" style="font-size:12px; font-weight:500; letter-spacing:0.05em; text-transform:none; color:var(--gray-700); cursor:pointer; margin:0;">Keep me logged in</label>
+      </div>
+
       <button class="btn-primary" id="login-btn" onclick="doLogin()">Access Dashboard →</button>
 
       <p style="font-size:11px; color:var(--gray-400); margin-top:20px; letter-spacing:0.04em; line-height:1.6;">
@@ -850,10 +856,11 @@
                 <th title="Atticus Module 3">T3</th>
                 <th>Progress</th>
                 <th>Last Seen</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="progress-tbody">
-              <tr><td colspan="10">
+              <tr><td colspan="11">
                 <div class="loading-spinner">Loading progress data…</div>
               </td></tr>
             </tbody>
@@ -915,10 +922,11 @@
                 <th>ID</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="adiclub-tbody">
-              <tr><td colspan="5">
+              <tr><td colspan="6">
                 <div class="loading-spinner">Loading adiClub data…</div>
               </td></tr>
             </tbody>
@@ -1130,7 +1138,7 @@
           currentUser = user;
           sessionStorage.setItem('adidas_admin_session', user);
           sessionStorage.setItem('adidas_used_default', '1');
-          showSetup(); // prompt them to change
+          showSetup();
           return;
         }
 
@@ -1147,6 +1155,9 @@
         if (snap.exists() && snap.val() === hash) {
           currentUser = user;
           sessionStorage.setItem('adidas_admin_session', user);
+          if (document.getElementById('keep-logged-in').checked) {
+            localStorage.setItem('adidas_admin_persistent', user);
+          }
           showAdmin();
         } else {
           err.textContent = 'Incorrect username or password.';
@@ -1214,6 +1225,7 @@
       currentUser = null;
       sessionStorage.removeItem('adidas_admin_session');
       sessionStorage.removeItem('adidas_used_default');
+      localStorage.removeItem('adidas_admin_persistent');
       document.getElementById('screen-admin').style.display = 'none';
       document.getElementById('screen-setup').style.display = 'none';
       document.getElementById('screen-login').style.display = 'flex';
@@ -1221,6 +1233,7 @@
       document.getElementById('btn-logout').style.display = 'none';
       document.getElementById('login-user').value = '';
       document.getElementById('login-pass').value = '';
+      document.getElementById('keep-logged-in').checked = false;
     }
 
     // ─── SHOW ADMIN ───
@@ -1418,7 +1431,7 @@
       const mods  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
 
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10">
+        tbody.innerHTML = `<tr><td colspan="11">
           <div class="empty-state">
             <p>No Data Found</p>
             <span>No workers have logged progress for ${selectedMonth} yet.</span>
@@ -1432,9 +1445,14 @@
         const completed = r.completed || [];
         const pct = Math.round((completed.length / 6) * 100);
         const date = r.savedAt ? new Date(r.savedAt).toLocaleDateString('en-NZ', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '–';
-        const dots = mods.map(m =>
-          `<td><span class="check-dot${completed.includes(m) ? ' done' : ''}">✓</span></td>`
-        ).join('');
+        const dots = mods.map(m => {
+          const done = completed.includes(m);
+          return `<td>
+            <span class="check-dot${done ? ' done' : ''}" 
+              ${done ? `onclick="uncompleteModule('${r.key}', '${m}')" title="Click to uncomplete" style="cursor:pointer;"` : ''}
+            >✓</span>
+          </td>`;
+        }).join('');
 
         return `<tr>
           <td class="td-name">${escHtml(r.name || '–')}</td>
@@ -1447,6 +1465,9 @@
             </div>
           </td>
           <td class="td-date">${date}</td>
+          <td>
+            <button onclick="deleteWorker('${r.key}', '${escHtml(r.name||'')}')" style="padding:5px 10px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:var(--red); transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button>
+          </td>
         </tr>`;
       }).join('');
     }
@@ -1634,7 +1655,7 @@
       const tbody = document.getElementById('adiclub-tbody');
 
       if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><p>No Signups Found</p><span>No adiClub signups match your filter.</span></div></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>No Signups Found</p><span>No adiClub signups match your filter.</span></div></td></tr>';
         return;
       }
 
@@ -1648,6 +1669,9 @@
           <td style="font-family:var(--font-display); font-size:15px; font-weight:700; letter-spacing:0.05em;">${escHtml(r.id || '–')}</td>
           <td class="td-date">${date}</td>
           <td class="td-date">${time}</td>
+          <td>
+            <button onclick="deleteAdiClub('${r.key}', '${escHtml(r.name||'')}')" style="padding:5px 10px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:var(--red); transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button>
+          </td>
         </tr>`;
       }).join('');
     }
@@ -1682,12 +1706,70 @@
       return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    // ─── AUTO-LOGIN from session (tab refresh etc.) ───
-    // Only restores if they've already set their own credentials (not mid-setup)
+    // ─── DELETE WORKER ───
+    async function deleteWorker(key, name) {
+      if (!confirm(`Delete all progress for "${name}"? This cannot be undone.`)) return;
+      try {
+        const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+        await remove(ref(window._db, 'progress/' + key));
+        allProgress = allProgress.filter(r => r.key !== key);
+        populateStoreFilter();
+        renderTable();
+        updateStats();
+        showToast('✓ ' + name + ' deleted', 'success');
+      } catch(e) {
+        showToast('Delete failed — ' + e.message, 'error');
+      }
+    }
+
+    // ─── UNCOMPLETE MODULE ───
+    async function uncompleteModule(key, modId) {
+      const row = allProgress.find(r => r.key === key);
+      if (!row) return;
+      const modNames = { 'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3' };
+      if (!confirm(`Mark ${modNames[modId] || modId} as incomplete for "${row.name}"?`)) return;
+      try {
+        const newCompleted = (row.completed || []).filter(m => m !== modId);
+        const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+        await update(ref(window._db, 'progress/' + key), { completed: newCompleted });
+        row.completed = newCompleted;
+        renderTable();
+        updateStats();
+        showToast('✓ Module unmarked', 'success');
+      } catch(e) {
+        showToast('Update failed — ' + e.message, 'error');
+      }
+    }
+
+    // ─── DELETE ADICLUB ENTRY ───
+    async function deleteAdiClub(key, name) {
+      if (!confirm(`Delete this adiClub signup for "${name}"? This cannot be undone.`)) return;
+      try {
+        const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+        await remove(ref(window._db, 'adiclub/' + key));
+        allAdiClub = allAdiClub.filter(r => r.key !== key);
+        renderAdiClubTable();
+        updateAdiClubStats();
+        showToast('✓ Entry deleted', 'success');
+      } catch(e) {
+        showToast('Delete failed — ' + e.message, 'error');
+      }
+    }
+
+    // ─── AUTO-LOGIN (session + keep-me-logged-in) ───
     (function() {
-      const saved      = sessionStorage.getItem('adidas_admin_session');
-      const usedDefault = sessionStorage.getItem('adidas_used_default');
-      if (saved && !usedDefault) { currentUser = saved; showAdmin(); }
+      // Check persistent login first
+      const persistent   = localStorage.getItem('adidas_admin_persistent');
+      const sessionSaved = sessionStorage.getItem('adidas_admin_session');
+      const usedDefault  = sessionStorage.getItem('adidas_used_default');
+
+      if (persistent) {
+        currentUser = persistent;
+        showAdmin();
+      } else if (sessionSaved && !usedDefault) {
+        currentUser = sessionSaved;
+        showAdmin();
+      }
     })();
   </script>
 
