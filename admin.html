@@ -820,6 +820,19 @@
     <!-- ─── TAB: MODULE EDITOR ─── -->
     <div class="tab-panel active" id="tab-modules">
 
+      <!-- MONTH SELECTOR -->
+      <div class="card" style="padding:20px 24px; margin-bottom:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div>
+            <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Configuring Month</p>
+            <div class="month-chips" id="module-month-chips"></div>
+          </div>
+          <div style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; max-width:260px; text-align:right;">
+            Each month's URLs are saved separately.<br>Workers only see modules with a URL for their current month.
+          </div>
+        </div>
+      </div>
+
       <!-- AREA MODULES -->
       <div class="card">
         <div class="card-header">
@@ -1314,6 +1327,7 @@
       renderAdminUsers();
       loadFbConfigToForm();
       buildMonthChips();
+      buildModuleMonthChips();
       buildReqMonthSelect();
       buildReqToggles(['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']);
 
@@ -1464,18 +1478,65 @@
 
     // ─── LOAD MODULE CONFIG FROM FIREBASE ───
     // ─── ACTIVE MODULES (set by loadModuleConfig, used by renderTable) ───
-    let adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+    let adminActiveModules  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+    let selectedModuleMonth = getCurrentMonthKey();
 
-    async function loadModuleConfig() {
+    // Convert month name to a Firebase-safe key e.g. "May 2026" → "May_2026"
+    function monthToKey(m) { return m.replace(/\s+/g, '_'); }
+    function moduleConfigPath(m) { return 'config/modules/' + monthToKey(m || selectedModuleMonth); }
+
+    function buildModuleMonthChips() {
+      // Show 3 past months + current + 3 future
+      const chips = [];
+      const d = new Date();
+      for (let i = 3; i >= 1; i--) {
+        const dd = new Date(d); dd.setMonth(d.getMonth() - i);
+        chips.push(dd.toLocaleString('default', { month: 'long', year: 'numeric' }));
+      }
+      chips.push(getCurrentMonthKey());
+      for (let i = 1; i <= 3; i++) {
+        const dd = new Date(d); dd.setMonth(d.getMonth() + i);
+        chips.push(dd.toLocaleString('default', { month: 'long', year: 'numeric' }));
+      }
+
+      const wrap = document.getElementById('module-month-chips');
+      wrap.innerHTML = '';
+      chips.forEach(m => {
+        const chip = document.createElement('button');
+        chip.className = 'month-chip' + (m === selectedModuleMonth ? ' active' : '');
+        chip.textContent = m;
+        chip.onclick = () => {
+          selectedModuleMonth = m;
+          wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          loadModuleConfig(m);
+        };
+        wrap.appendChild(chip);
+      });
+    }
+
+    async function loadModuleConfig(month) {
+      month = month || selectedModuleMonth;
       if (!window._firebaseReady) return;
       try {
-        const snap = await window._fbGet(window._fbRef(window._db, 'config/modules'));
+        const snap = await window._fbGet(window._fbRef(window._db, moduleConfigPath(month)));
         if (snap.exists()) {
           const cfg = snap.val();
           applyModuleConfig(cfg);
           adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id =>
             cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url !== ''
           );
+        } else {
+          // Clear all fields if no config for this month
+          MODULE_DEFS.forEach(m => {
+            const nameEl = document.getElementById('inp-name-' + m.id);
+            const subEl  = document.getElementById('inp-sub-'  + m.id);
+            const urlEl  = document.getElementById('inp-url-'  + m.id);
+            if (nameEl) nameEl.value = '';
+            if (subEl)  subEl.value  = '';
+            if (urlEl)  urlEl.value  = '';
+          });
+          adminActiveModules = [];
         }
       } catch(e) { console.warn('Could not load module config', e); }
     }
@@ -1510,13 +1571,13 @@
       });
 
       try {
-        await window._fbSet(window._fbRef(window._db, 'config/modules'), cfg);
+        await window._fbSet(window._fbRef(window._db, moduleConfigPath(selectedModuleMonth)), cfg);
         // Update active modules immediately so progress tab reflects changes
         adminActiveModules = MODULE_DEFS.filter(m =>
           cfg[m.id] && cfg[m.id].url && cfg[m.id].url !== '#' && cfg[m.id].url !== ''
         ).map(m => m.id);
         if (allProgress.length) { renderTable(); updateStats(); }
-        showToast('✓ Modules saved to Firebase', 'success');
+        showToast('✓ Modules saved for ' + selectedModuleMonth, 'success');
         ['area', 'atticus'].forEach(g => {
           const el = document.getElementById('save-status-' + g);
           if (el) {
@@ -1544,8 +1605,11 @@
           selectedMonth = m;
           wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
-          renderTable();
-          updateStats();
+          // Load module config for this month so dots/% are correct
+          loadModuleConfig(m).then(() => {
+            renderTable();
+            updateStats();
+          });
         };
         wrap.appendChild(chip);
       });
