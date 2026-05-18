@@ -694,12 +694,43 @@
                onkeydown="if(event.key==='Enter') doLogin()"/>
       </div>
 
-      <p class="error-msg" id="login-error">Incorrect username or password.</p>
-      <button class="btn-primary" onclick="doLogin()">Access Dashboard →</button>
+      <p class="error-msg" id="login-error"></p>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">Access Dashboard →</button>
 
       <p style="font-size:11px; color:var(--gray-400); margin-top:20px; letter-spacing:0.04em; line-height:1.6;">
-        Access is restricted to authorised admin users only.<br>
-        Contact your system administrator if you need access.
+        Access is restricted to authorised admin users only.
+      </p>
+    </div>
+  </div>
+
+  <!-- SCREEN: SET UP ACCOUNT (shown after first default login) -->
+  <div class="page" id="screen-setup" style="display:none;">
+    <div class="login-box">
+      <p class="step-label">First Login Detected</p>
+      <h2>Set Up Your<br>Account</h2>
+      <p style="font-size:13px; color:var(--gray-700); margin-bottom:24px; line-height:1.6;">
+        You logged in with the default password. Choose a username and new password — these will be saved to Firebase so you can log in from anywhere.
+      </p>
+
+      <div class="form-group">
+        <label for="setup-user">Choose Username</label>
+        <input type="text" id="setup-user" placeholder="e.g. sarah" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="setup-pass">Choose Password</label>
+        <input type="password" id="setup-pass" placeholder="Min. 8 characters" autocomplete="new-password"/>
+      </div>
+      <div class="form-group">
+        <label for="setup-confirm">Confirm Password</label>
+        <input type="password" id="setup-confirm" placeholder="Repeat your password" autocomplete="new-password"
+               onkeydown="if(event.key==='Enter') saveNewCredentials()"/>
+      </div>
+
+      <p class="error-msg" id="setup-error"></p>
+      <button class="btn-primary" onclick="saveNewCredentials()">Save & Continue →</button>
+
+      <p style="font-size:11px; color:var(--gray-400); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
+        Other admins can do the same — they log in with the default and set their own credentials.
       </p>
     </div>
   </div>
@@ -1003,47 +1034,120 @@
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
 
+    // ─── DEFAULT CREDENTIALS (used only until each admin sets their own) ───
+    // ✏️ You can change this default password before deploying
+    const DEFAULT_USER = 'admin';
+    const DEFAULT_PASS = 'adidas123';
+
     // ─── LOGIN ───
     async function doLogin() {
       const user = document.getElementById('login-user').value.trim();
       const pass = document.getElementById('login-pass').value;
       const err  = document.getElementById('login-error');
-      const btn  = document.querySelector('#screen-login .btn-primary');
+      const btn  = document.getElementById('login-btn');
       err.style.display = 'none';
 
-      if (!user || !pass) { err.style.display = 'block'; return; }
+      if (!user || !pass) {
+        err.textContent = 'Please enter your username and password.';
+        err.style.display = 'block';
+        return;
+      }
 
       btn.textContent = 'Checking…';
       btn.disabled = true;
 
       try {
-        if (!window._firebaseReady) throw new Error('Firebase not ready');
+        // 1. Check default credentials first (works even without Firebase)
+        if (user === DEFAULT_USER && pass === DEFAULT_PASS) {
+          currentUser = user;
+          sessionStorage.setItem('adidas_admin_session', user);
+          sessionStorage.setItem('adidas_used_default', '1');
+          showSetup(); // prompt them to change
+          return;
+        }
+
+        // 2. Check Firebase for saved credentials
+        if (!window._firebaseReady) {
+          err.textContent = 'Incorrect username or password.';
+          err.style.display = 'block';
+          return;
+        }
+
         const hash = await sha256(pass);
         const snap = await window._fbGet(window._fbRef(window._db, 'config/admins/' + user));
+
         if (snap.exists() && snap.val() === hash) {
           currentUser = user;
           sessionStorage.setItem('adidas_admin_session', user);
           showAdmin();
         } else {
-          throw new Error('bad credentials');
+          err.textContent = 'Incorrect username or password.';
+          err.style.display = 'block';
+          document.getElementById('login-pass').value = '';
+          document.getElementById('login-pass').focus();
         }
       } catch(e) {
-        err.textContent = window._firebaseReady
-          ? 'Incorrect username or password.'
-          : 'Firebase not connected — configure it in Settings first.';
+        err.textContent = 'Incorrect username or password.';
         err.style.display = 'block';
-        document.getElementById('login-pass').value = '';
-        document.getElementById('login-pass').focus();
       } finally {
         btn.textContent = 'Access Dashboard →';
         btn.disabled = false;
       }
     }
 
+    // ─── SHOW SETUP SCREEN ───
+    function showSetup() {
+      document.getElementById('screen-login').style.display = 'none';
+      document.getElementById('screen-setup').style.display = 'flex';
+    }
+
+    // ─── SAVE NEW CREDENTIALS ───
+    async function saveNewCredentials() {
+      const user    = document.getElementById('setup-user').value.trim();
+      const pass    = document.getElementById('setup-pass').value;
+      const confirm = document.getElementById('setup-confirm').value;
+      const err     = document.getElementById('setup-error');
+      err.style.display = 'none';
+
+      if (!user) {
+        err.textContent = 'Please choose a username.'; err.style.display = 'block'; return;
+      }
+      if (pass.length < 8) {
+        err.textContent = 'Password must be at least 8 characters.'; err.style.display = 'block'; return;
+      }
+      if (pass !== confirm) {
+        err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return;
+      }
+      if (user === DEFAULT_USER && pass === DEFAULT_PASS) {
+        err.textContent = 'Please choose a different username or password from the default.'; err.style.display = 'block'; return;
+      }
+
+      if (!window._firebaseReady) {
+        err.textContent = 'Firebase not connected — credentials cannot be saved yet. Try again in a moment.';
+        err.style.display = 'block'; return;
+      }
+
+      try {
+        const hash = await sha256(pass);
+        await window._fbSet(window._fbRef(window._db, 'config/admins/' + user), hash);
+        currentUser = user;
+        sessionStorage.setItem('adidas_admin_session', user);
+        sessionStorage.removeItem('adidas_used_default');
+        document.getElementById('screen-setup').style.display = 'none';
+        showAdmin();
+        showToast('✓ Account saved — use these credentials next time', 'success');
+      } catch(e) {
+        err.textContent = 'Could not save to Firebase. Check your connection.';
+        err.style.display = 'block';
+      }
+    }
+
     function logout() {
       currentUser = null;
       sessionStorage.removeItem('adidas_admin_session');
+      sessionStorage.removeItem('adidas_used_default');
       document.getElementById('screen-admin').style.display = 'none';
+      document.getElementById('screen-setup').style.display = 'none';
       document.getElementById('screen-login').style.display = 'flex';
       document.getElementById('admin-badge').style.display = 'none';
       document.getElementById('btn-logout').style.display = 'none';
@@ -1054,6 +1158,7 @@
     // ─── SHOW ADMIN ───
     function showAdmin() {
       document.getElementById('screen-login').style.display = 'none';
+      document.getElementById('screen-setup').style.display = 'none';
       document.getElementById('screen-admin').style.display = 'block';
       document.getElementById('admin-badge').style.display = 'inline-block';
       document.getElementById('btn-logout').style.display = 'inline-block';
@@ -1064,7 +1169,6 @@
       loadFbConfigToForm();
       buildMonthChips();
 
-      // Load module config from Firebase
       waitForFirebase(() => {
         loadModuleConfig();
         loadProgress();
@@ -1414,9 +1518,11 @@
     }
 
     // ─── AUTO-LOGIN from session (tab refresh etc.) ───
+    // Only restores if they've already set their own credentials (not mid-setup)
     (function() {
-      const saved = sessionStorage.getItem('adidas_admin_session');
-      if (saved) { currentUser = saved; showAdmin(); }
+      const saved      = sessionStorage.getItem('adidas_admin_session');
+      const usedDefault = sessionStorage.getItem('adidas_used_default');
+      if (saved && !usedDefault) { currentUser = saved; showAdmin(); }
     })();
   </script>
 
