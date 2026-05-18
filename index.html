@@ -687,11 +687,8 @@
           <select id="store-select">
             <option value="">— Select your store —</option>
             <!-- ✏️ ADD YOUR STORE LOCATIONS BELOW -->
-            <option value="Store 001 – New York">Store 001 – New York</option>
+            <option value="Store NZ1104 – Britomart">Store NZ1104 – Britomart</option>
             <option value="Store 002 – Los Angeles">Store 002 – Los Angeles</option>
-            <option value="Store 003 – Chicago">Store 003 – Chicago</option>
-            <option value="Store 004 – Houston">Store 004 – Houston</option>
-            <option value="Store 005 – Miami">Store 005 – Miami</option>
             <!-- Add more stores here -->
           </select>
         </div>
@@ -714,7 +711,7 @@
           <span id="sync-status" style="font-size:11px; margin-top:3px; display:block; letter-spacing:0.05em; transition: opacity 1s;"></span>
         </div>
         <div class="progress-pill">
-          <div class="prog-num"><span id="prog-done">0</span>/6</div>
+          <div class="prog-num"><span id="prog-done">0</span>/<span id="prog-total">6</span></div>
           <div class="prog-label">Completed</div>
         </div>
       </div>
@@ -919,6 +916,7 @@
     const completed  = {};
     let completedCount = 0;
     let currentFbKey   = null;
+    let activeModules  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']; // updated by initModuleConfigLoader
 
     // ─── SYNC STATUS INDICATOR ───
     function showSyncStatus(msg, color) {
@@ -941,7 +939,9 @@
       const action = btn.querySelector('.module-action span');
       if (action) action.textContent = 'Done';
       document.getElementById('prog-done').textContent = completedCount;
-      if (completedCount === 6) document.getElementById('complete-banner').style.display = 'block';
+      const activeTotal = activeModules.length;
+      document.getElementById('prog-total').textContent = activeTotal;
+      if (completedCount === activeTotal) document.getElementById('complete-banner').style.display = 'block';
     }
 
     // ─── SAVE (Firebase + localStorage backup) ───
@@ -1036,6 +1036,7 @@
         get(ref(window._db, 'config/modules')).then(snap => {
           if (!snap.exists()) return;
           const cfg = snap.val();
+          const newActive = [];
           ids.forEach(id => {
             const m      = cfg[id];
             const btn    = document.getElementById(id);
@@ -1048,6 +1049,7 @@
               return;
             }
 
+            newActive.push(id);
             if (btn) {
               btn.style.display = '';
               btn.href = m.url;
@@ -1055,6 +1057,10 @@
             if (nameEl && m.name) nameEl.textContent = m.name;
             if (subEl  && m.sub)  subEl.textContent  = m.sub;
           });
+
+          // Update active modules list and progress total
+          activeModules = newActive;
+          document.getElementById('prog-total').textContent = activeModules.length;
         }).catch(() => {});
       }).catch(() => {});
     }
