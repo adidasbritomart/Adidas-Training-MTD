@@ -480,12 +480,18 @@
       text-align: center;
       line-height: 20px;
       font-size: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
     }
+
+    .check-dot:hover { background: #b0b0b0; }
 
     .check-dot.done {
       background: var(--green);
       color: var(--white);
     }
+
+    .check-dot.done:hover { background: #27ae60; }
 
     .progress-bar-wrap {
       display: flex;
@@ -1449,7 +1455,9 @@
           const done = completed.includes(m);
           return `<td>
             <span class="check-dot${done ? ' done' : ''}" 
-              ${done ? `onclick="uncompleteModule('${r.key}', '${m}')" title="Click to uncomplete" style="cursor:pointer;"` : ''}
+              onclick="${done ? `uncompleteModule('${r.key}', '${m}')` : `completeModule('${r.key}', '${m}')`}"
+              title="${done ? 'Click to uncomplete' : 'Click to complete'}"
+              style="cursor:pointer;"
             >✓</span>
           </td>`;
         }).join('');
@@ -1739,6 +1747,25 @@
         showToast('✓ ' + name + ' deleted', 'success');
       } catch(e) {
         showToast('Delete failed — ' + e.message, 'error');
+      }
+    }
+
+    // ─── COMPLETE MODULE ───
+    async function completeModule(key, modId) {
+      const row = allProgress.find(r => r.key === key);
+      if (!row) return;
+      const modNames = { 'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3' };
+      if (!confirm(`Mark ${modNames[modId] || modId} as complete for "${row.name}"?`)) return;
+      try {
+        const newCompleted = [...new Set([...(row.completed || []), modId])];
+        const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+        await update(ref(window._db, 'progress/' + key), { completed: newCompleted });
+        row.completed = newCompleted;
+        renderTable();
+        updateStats();
+        showToast('✓ Module marked complete', 'success');
+      } catch(e) {
+        showToast('Update failed — ' + e.message, 'error');
       }
     }
 
