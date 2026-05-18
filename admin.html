@@ -1317,8 +1317,8 @@
       buildReqMonthSelect();
       buildReqToggles(['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']);
 
-      waitForFirebase(() => {
-        loadModuleConfig();
+      waitForFirebase(async () => {
+        await loadModuleConfig();  // must finish first so adminActiveModules is set
         loadProgress();
         loadRequiredForMonth();
       });
@@ -1471,14 +1471,11 @@
       try {
         const snap = await window._fbGet(window._fbRef(window._db, 'config/modules'));
         if (snap.exists()) {
-          applyModuleConfig(snap.val());
-          // Track which modules have a URL set
           const cfg = snap.val();
+          applyModuleConfig(cfg);
           adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id =>
             cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url !== ''
           );
-          // Refresh table if already loaded so dots/% update
-          if (allProgress.length) { renderTable(); updateStats(); }
         }
       } catch(e) { console.warn('Could not load module config', e); }
     }
@@ -1514,6 +1511,11 @@
 
       try {
         await window._fbSet(window._fbRef(window._db, 'config/modules'), cfg);
+        // Update active modules immediately so progress tab reflects changes
+        adminActiveModules = MODULE_DEFS.filter(m =>
+          cfg[m.id] && cfg[m.id].url && cfg[m.id].url !== '#' && cfg[m.id].url !== ''
+        ).map(m => m.id);
+        if (allProgress.length) { renderTable(); updateStats(); }
         showToast('✓ Modules saved to Firebase', 'success');
         ['area', 'atticus'].forEach(g => {
           const el = document.getElementById('save-status-' + g);
