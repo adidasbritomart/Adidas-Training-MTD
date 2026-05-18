@@ -807,7 +807,7 @@
       <!-- COMPLETION BANNER -->
       <div id="complete-banner">
         <h2>All Done! 🎉</h2>
-        <p>You've opened all 6 modules for this month. Great work.</p>
+        <p>You've completed all <span id="banner-mod-count">6</span> modules for this month. Great work.</p>
       </div>
 
       <footer>adidas Training Hub &nbsp;·&nbsp; <span id="footer-month"></span></footer>
@@ -945,8 +945,9 @@
     function recalcProgress() {
       const activeDone = activeModules.filter(id => completed[id]).length;
       completedCount   = activeDone;
-      document.getElementById('prog-done').textContent  = activeDone;
-      document.getElementById('prog-total').textContent = activeModules.length;
+      document.getElementById('prog-done').textContent    = activeDone;
+      document.getElementById('prog-total').textContent   = activeModules.length;
+      document.getElementById('banner-mod-count').textContent = activeModules.length;
       if (activeModules.length > 0 && activeDone === activeModules.length) {
         document.getElementById('complete-banner').style.display = 'block';
       } else {
@@ -1041,11 +1042,12 @@
     // Override _fbLoad for config — reads from config/modules node directly
     function initModuleConfigLoader() {
       if (!window._firebaseReady || !window._db) return;
-      const ids = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+      const ids      = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+      const fbMonthKey = monthKey.replace(/\s+/g, '_'); // e.g. "May_2026"
       import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({ ref, get }) => {
-        get(ref(window._db, 'config/modules')).then(snap => {
-          if (!snap.exists()) return;
-          const cfg = snap.val();
+        get(ref(window._db, 'config/modules/' + fbMonthKey)).then(snap => {
+          if (!snap.exists()) return; // no config = show nothing (all hidden by default href="#")
+          const cfg      = snap.val();
           const newActive = [];
           ids.forEach(id => {
             const m      = cfg[id];
@@ -1053,22 +1055,17 @@
             const nameEl = document.getElementById('name-' + id);
             const subEl  = document.getElementById('sub-'  + id);
 
-            // Hide the module entirely if no URL is set
             if (!m || !m.url || m.url === '#' || m.url === '') {
               if (btn) btn.style.display = 'none';
               return;
             }
 
             newActive.push(id);
-            if (btn) {
-              btn.style.display = '';
-              btn.href = m.url;
-            }
+            if (btn) { btn.style.display = ''; btn.href = m.url; }
             if (nameEl && m.name) nameEl.textContent = m.name;
             if (subEl  && m.sub)  subEl.textContent  = m.sub;
           });
 
-          // Update active modules list and recalc progress with correct total
           activeModules = newActive;
           recalcProgress();
         }).catch(() => {});
