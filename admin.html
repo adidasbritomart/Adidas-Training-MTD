@@ -1885,23 +1885,48 @@
       return 'All Time';
     }
 
-    function exportAdiClub() {
+    async function exportAdiClub() {
       const period = document.getElementById('export-period').value;
       const format = document.getElementById('export-format').value;
-      const rows   = getExportRows(period);
       const label  = periodLabel(period);
+      const btn    = document.querySelector('#tab-settings .btn-save');
 
-      if (rows.length === 0) {
-        showToast('No data for selected period', 'error');
-        return;
+      btn.textContent = 'Loading data…';
+      btn.disabled = true;
+
+      try {
+        // Always fetch fresh from Firebase so we don't rely on the adiClub tab being visited
+        if (!allAdiClub.length) {
+          const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
+          allAdiClub = [];
+          if (snap.exists()) {
+            snap.forEach(child => {
+              const val = child.val();
+              if (val && val.timestamp) allAdiClub.push({ key: child.key, ...val });
+            });
+          }
+          allAdiClub.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        }
+
+        const rows = getExportRows(period);
+
+        document.getElementById('export-preview').textContent =
+          rows.length + ' entries · ' + label;
+
+        if (rows.length === 0) {
+          showToast('No data for selected period', 'error');
+          return;
+        }
+
+        if (format === 'csv') exportCSV(rows, label);
+        else exportPDF(rows, label);
+
+      } catch(e) {
+        showToast('Export failed — ' + e.message, 'error');
+      } finally {
+        btn.textContent = 'Export Data →';
+        btn.disabled = false;
       }
-
-      // Update preview
-      document.getElementById('export-preview').textContent =
-        rows.length + ' entries · ' + label;
-
-      if (format === 'csv') exportCSV(rows, label);
-      else exportPDF(rows, label);
     }
 
     function exportCSV(rows, label) {
@@ -1971,13 +1996,31 @@
       setTimeout(() => { win.print(); }, 400);
       showToast('✓ PDF ready — use Print → Save as PDF', 'success');
     }
-    function updateExportPreview() {
+    async function updateExportPreview() {
       const period = document.getElementById('export-period')?.value;
-      if (!period || !allAdiClub.length) return;
+      if (!period) return;
+      const preview = document.getElementById('export-preview');
+      if (!preview) return;
+
+      if (!allAdiClub.length && window._firebaseReady) {
+        preview.textContent = 'Loading…';
+        try {
+          const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
+          allAdiClub = [];
+          if (snap.exists()) {
+            snap.forEach(child => {
+              const val = child.val();
+              if (val && val.timestamp) allAdiClub.push({ key: child.key, ...val });
+            });
+          }
+        } catch(e) {}
+      }
+
       const rows  = getExportRows(period);
       const label = periodLabel(period);
-      document.getElementById('export-preview').textContent =
-        rows.length + ' entries · ' + label;
+      preview.textContent = rows.length
+        ? rows.length + ' entries · ' + label
+        : 'No entries for ' + label;
     }
 
     function loadFbConfigToForm() {
