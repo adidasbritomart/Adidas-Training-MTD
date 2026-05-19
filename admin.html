@@ -616,8 +616,14 @@
     .month-chips {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
     }
+
+    .month-chips::-webkit-scrollbar { display: none; }
 
     .month-chip {
       font-family: var(--font-display);
@@ -626,6 +632,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       padding: 6px 14px;
+      white-space: nowrap;
+      flex-shrink: 0;
       border: 1.5px solid var(--gray-200);
       background: var(--white);
       cursor: pointer;
@@ -1211,32 +1219,30 @@
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <!-- FIREBASE SDK -->
+  <!-- FIREBASE SDK — config baked in, works on any device -->
   <script type="module">
-    const { initializeApp }              = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-    const { getDatabase, ref, set, get } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+    import { initializeApp }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    async function initFirebase(cfg) {
-      try {
-        const app = initializeApp(cfg);
-        const db  = getDatabase(app);
-        window._db = db;
-        window._fbRef = ref;
-        window._fbSet = set;
-        window._fbGet = get;
-        window._firebaseReady = true;
-        document.dispatchEvent(new Event('firebase-ready'));
-      } catch(e) { console.warn('Firebase init failed', e); }
-    }
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
+      authDomain:        "adidas-training-mtd.firebaseapp.com",
+      databaseURL:       "https://adidas-training-mtd-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId:         "adidas-training-mtd",
+      storageBucket:     "adidas-training-mtd.firebasestorage.app",
+      messagingSenderId: "208658627122",
+      appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
+    };
 
-    try {
-      const saved = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
-      if (saved && saved.apiKey && !saved.apiKey.includes('YOUR_')) await initFirebase(saved);
-    } catch(e) {}
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
 
-    document.addEventListener('firebase-config-saved', async (e) => {
-      await initFirebase(e.detail);
-    });
+    window._db            = db;
+    window._fbRef         = ref;
+    window._fbSet         = set;
+    window._fbGet         = get;
+    window._firebaseReady = true;
+    document.dispatchEvent(new Event('firebase-ready'));
   </script>
 
   <script>
