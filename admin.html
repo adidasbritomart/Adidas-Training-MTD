@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -9,825 +8,821 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-```
-:root {
-  --black: #000000;
-  --white: #FFFFFF;
-  --gray-100: #F5F5F5;
-  --gray-200: #E8E8E8;
-  --gray-400: #AAAAAA;
-  --gray-500: #888888;
-  --gray-700: #444444;
-  --green: #2ECC71;
-  --red: #E74C3C;
-  --amber: #F39C12;
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body: 'Barlow', sans-serif;
-}
-
-body {
-  background: var(--gray-100);
-  font-family: var(--font-body);
-  min-height: 100vh;
-  color: var(--black);
-}
-
-/* ─── HEADER ─── */
-header {
-  background: var(--black);
-  padding: 16px 28px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  flex-wrap: wrap;
-}
-
-.adidas-logo {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--white);
-  letter-spacing: -0.02em;
-  text-transform: lowercase;
-  line-height: 1;
-  user-select: none;
-}
-
-.header-text {
-  border-left: 2px solid #333;
-  padding-left: 16px;
-}
-
-.header-text h1 {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-.header-text p {
-  font-size: 10px;
-  color: var(--gray-500);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-top: 3px;
-}
-
-.header-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-#admin-badge {
-  display: none;
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--green);
-  background: rgba(46,204,113,0.12);
-  padding: 5px 12px;
-  border: 1px solid rgba(46,204,113,0.3);
-}
-
-#btn-logout {
-  display: none;
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  background: none;
-  border: 1px solid #333;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-}
-
-#btn-logout:hover { color: var(--white); border-color: var(--white); }
-
-/* ─── LAYOUT ─── */
-.page { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
-
-/* ─── LOGIN ─── */
-#screen-login {
-  display: flex;
-  justify-content: center;
-  padding-top: 60px;
-}
-
-.login-box {
-  background: var(--white);
-  border: 1.5px solid var(--gray-200);
-  padding: 40px 36px;
-  width: 100%;
-  max-width: 420px;
-  animation: fadeUp 0.4s ease both;
-}
-
-.login-box .step-label {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 6px;
-}
-
-.login-box h2 {
-  font-family: var(--font-display);
-  font-size: 38px;
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 32px;
-  letter-spacing: -0.01em;
-}
-
-.form-group { margin-bottom: 18px; }
-
-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-700);
-  margin-bottom: 7px;
-}
-
-input[type="text"], input[type="password"], input[type="url"], select {
-  width: 100%;
-  padding: 13px 15px;
-  border: 1.5px solid var(--gray-200);
-  background: var(--gray-100);
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: var(--black);
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-  border-radius: 0;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-input:focus, select:focus {
-  border-color: var(--black);
-  background: var(--white);
-}
-
-input::placeholder { color: var(--gray-400); }
-
-.btn-primary {
-  width: 100%;
-  padding: 16px;
-  background: var(--black);
-  color: var(--white);
-  border: none;
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-top: 6px;
-  transition: background 0.2s;
-}
-
-.btn-primary:hover { background: #222; }
-.btn-primary:disabled { background: #888; cursor: not-allowed; }
-
-.error-msg {
-  color: var(--red);
-  font-size: 12px;
-  margin-top: 8px;
-  display: none;
-  letter-spacing: 0.04em;
-}
-
-/* ─── ADMIN PANEL ─── */
-#screen-admin { display: none; }
-
-/* ─── TABS ─── */
-.tabs {
-  display: flex;
-  gap: 0;
-  margin-bottom: 28px;
-  border-bottom: 2px solid var(--gray-200);
-}
-
-.tab-btn {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 14px 22px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--gray-500);
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  transition: color 0.2s;
-}
-
-.tab-btn.active { color: var(--black); border-bottom-color: var(--black); }
-.tab-btn:hover:not(.active) { color: var(--gray-700); }
-
-.tab-panel { display: none; animation: fadeUp 0.3s ease both; }
-.tab-panel.active { display: block; }
-
-/* ─── SECTION CARD ─── */
-.card {
-  background: var(--white);
-  border: 1.5px solid var(--gray-200);
-  padding: 28px 28px;
-  margin-bottom: 20px;
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--gray-200);
-}
-
-.card-title {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.card-tag {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  background: var(--black);
-  color: var(--white);
-}
-
-.card-tag.outline {
-  background: transparent;
-  color: var(--black);
-  border: 1.5px solid var(--black);
-}
-
-/* ─── MODULE EDITOR ─── */
-.module-row {
-  display: grid;
-  grid-template-columns: 42px 1fr 1fr 1.4fr;
-  gap: 10px;
-  align-items: start;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--gray-100);
-}
-
-.module-row:last-child { border-bottom: none; }
-
-.module-num-label {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--gray-200);
-  line-height: 1;
-  padding-top: 14px;
-}
-
-.module-row .form-group { margin-bottom: 0; }
-
-.module-row input { font-size: 13px; padding: 10px 12px; }
-
-.save-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--gray-200);
-}
-
-.save-status {
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: var(--gray-500);
-  transition: opacity 0.5s;
-}
-
-.btn-save {
-  padding: 13px 28px;
-  background: var(--black);
-  color: var(--white);
-  border: none;
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-save:hover { background: #222; }
-.btn-save:disabled { background: #999; cursor: not-allowed; }
-
-/* ─── STATS ROW ─── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.stat-box {
-  background: var(--white);
-  border: 1.5px solid var(--gray-200);
-  padding: 18px 16px;
-  text-align: center;
-}
-
-.stat-num {
-  font-family: var(--font-display);
-  font-size: 36px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-top: 4px;
-}
-
-/* ─── FILTERS ─── */
-.filter-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.filter-bar select,
-.filter-bar input[type="text"] {
-  width: auto;
-  flex: 1;
-  min-width: 140px;
-  font-size: 13px;
-  padding: 10px 14px;
-}
-
-.select-wrap {
-  position: relative;
-  flex: 1;
-  min-width: 140px;
-}
-
-.select-wrap::after {
-  content: '▾';
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: var(--gray-500);
-  font-size: 13px;
-}
-
-.select-wrap select { width: 100%; }
-
-.btn-refresh {
-  padding: 10px 18px;
-  background: var(--black);
-  color: var(--white);
-  border: none;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s;
-}
-
-.btn-refresh:hover { background: #222; }
-
-/* ─── PROGRESS TABLE ─── */
-.table-wrap {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-thead th {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  padding: 10px 12px;
-  text-align: left;
-  background: var(--gray-100);
-  border-bottom: 2px solid var(--gray-200);
-  white-space: nowrap;
-}
-
-tbody tr {
-  border-bottom: 1px solid var(--gray-100);
-  transition: background 0.15s;
-}
-
-tbody tr:hover { background: #fafafa; }
-
-tbody td {
-  padding: 12px 12px;
-  vertical-align: middle;
-}
-
-.td-name { font-weight: 600; }
-.td-store { color: var(--gray-500); font-size: 12px; }
-
-.check-dot {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--gray-200);
-  text-align: center;
-  line-height: 20px;
-  font-size: 10px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.check-dot:hover { background: #b0b0b0; }
-
-.check-dot.done {
-  background: var(--green);
-  color: var(--white);
-}
-
-.check-dot.done:hover { background: #27ae60; }
-
-.progress-bar-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.progress-bar {
-  height: 6px;
-  background: var(--gray-200);
-  flex: 1;
-  min-width: 50px;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: var(--black);
-  transition: width 0.3s;
-}
-
-.progress-bar-fill.full { background: var(--green); }
-
-.pct-label {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  min-width: 36px;
-  text-align: right;
-}
-
-.td-date { color: var(--gray-500); font-size: 11px; white-space: nowrap; }
-
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--gray-500);
-}
-
-.empty-state p {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.empty-state span { font-size: 13px; display: block; margin-top: 6px; }
-
-/* ─── MODULE TOGGLE ─── */
-.mod-toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  background: var(--gray-100);
-  border: 1.5px solid var(--gray-200);
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.mod-toggle-row.active {
-  background: #f0fdf5;
-  border-color: rgba(46,204,113,0.4);
-}
-
-.mod-toggle-label {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.mod-toggle-label.inactive { color: var(--gray-400); }
-
-.toggle-switch {
-  position: relative;
-  width: 40px;
-  height: 22px;
-  flex-shrink: 0;
-}
-
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-
-.toggle-slider {
-  position: absolute;
-  inset: 0;
-  background: var(--gray-200);
-  cursor: pointer;
-  border-radius: 22px;
-  transition: background 0.2s;
-}
-
-.toggle-slider::before {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  left: 3px;
-  top: 3px;
-  background: var(--white);
-  border-radius: 50%;
-  transition: transform 0.2s;
-}
-
-.toggle-switch input:checked + .toggle-slider { background: var(--green); }
-.toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
-
-/* ─── LOADING SPINNER ─── */
-.loading-spinner {
-  text-align: center;
-  padding: 30px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-}
-
-/* ─── MONTH SELECTOR ─── */
-.month-chips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.month-chip {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  border: 1.5px solid var(--gray-200);
-  background: var(--white);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.month-chip.active {
-  background: var(--black);
-  color: var(--white);
-  border-color: var(--black);
-}
-
-.month-chip:hover:not(.active) { border-color: var(--black); }
-
-/* ─── SETTINGS ─── */
-.settings-row {
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.settings-row .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
-
-/* ─── ADMIN USERS ─── */
-.user-list { display: flex; flex-direction: column; gap: 10px; }
-
-.user-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  background: var(--gray-100);
-  border: 1px solid var(--gray-200);
-}
-
-.user-item .u-name {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.user-item .u-role {
-  font-size: 11px;
-  color: var(--gray-500);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.badge-active {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--green);
-  background: rgba(46,204,113,0.1);
-  border: 1px solid rgba(46,204,113,0.3);
-  padding: 4px 10px;
-}
-
-/* ─── NOTIFICATIONS ─── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: var(--black);
-  color: var(--white);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 14px 22px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.25s, transform 0.25s;
-  pointer-events: none;
-}
-
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.success { background: #1a5c38; }
-.toast.error { background: #8b1a1a; }
-
-/* ─── ANIMATIONS ─── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 640px) {
-  /* Header */
-  header { padding: 12px 16px; gap: 10px; }
-  .adidas-logo { font-size: 22px; }
-  .header-text h1 { font-size: 13px; }
-  .header-text p { display: none; }
-  #admin-badge { display: none !important; }
-  #btn-logout { font-size: 11px; padding: 5px 10px; }
-
-  /* Page */
-  .page { padding: 20px 12px 40px; }
-
-  /* Login */
-  #screen-login { padding-top: 32px; }
-  .login-box { padding: 28px 20px; }
-  .login-box h2 { font-size: 30px; }
-
-  /* Tabs — scrollable horizontal */
-  .tabs {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    gap: 0;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab-btn { padding: 12px 14px; font-size: 12px; white-space: nowrap; }
-
-  /* Stats */
-  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .stat-num { font-size: 28px; }
-
-  /* Cards */
-  .card { padding: 18px 14px; }
-  .card-title { font-size: 16px; }
-
-  /* Module editor — stack fields vertically */
-  .module-row {
-    grid-template-columns: 32px 1fr;
-    gap: 6px;
-  }
-  .module-row > .form-group:nth-child(3) { grid-column: 2; }
-  .module-row > .form-group:nth-child(4) { grid-column: 2; }
-  .module-num-label { font-size: 22px; padding-top: 10px; }
-  .module-row input { font-size: 12px; padding: 9px 10px; }
-
-  /* Save bar */
-  .save-bar { flex-direction: column; gap: 10px; align-items: stretch; }
-  .btn-save { text-align: center; }
-
-  /* Month chips — scrollable */
-  .month-chips {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-  }
-  .month-chips::-webkit-scrollbar { display: none; }
-  .month-chip { white-space: nowrap; font-size: 11px; padding: 5px 10px; }
-
-  /* Filter bar */
-  .filter-bar { flex-direction: column; gap: 8px; }
-  .filter-bar input, .filter-bar .select-wrap, .select-wrap { min-width: unset; width: 100%; }
-  .btn-refresh { width: 100%; text-align: center; }
-
-  /* Progress table — horizontal scroll */
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { min-width: 480px; }
-  thead th { padding: 8px 8px; font-size: 10px; }
-  tbody td { padding: 10px 8px; }
-  .pct-label { min-width: 28px; font-size: 12px; }
-  .progress-bar { min-width: 36px; }
-
-  /* Delete buttons in table */
-  tbody td button { padding: 4px 8px; font-size: 10px; }
-
-  /* Toast */
-  .toast { bottom: 14px; right: 14px; left: 14px; font-size: 12px; padding: 12px 16px; }
-
-  /* Settings */
-  .user-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-  #fb-config-fields { grid-template-columns: 1fr !important; }
-
-  /* Hash generator */
-  #hash-result > div:first-child > div { flex-direction: column; }
-  #copy-hash-btn { width: 100%; }
-
-  /* adiClub filter */
-  #tab-adiclub .filter-bar { flex-direction: column; }
-  #tab-adiclub .select-wrap { width: 100%; }
-}
-
-@media (max-width: 400px) {
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .stat-num { font-size: 24px; }
-  .tab-btn { padding: 10px 11px; font-size: 11px; }
-}
-```
-
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-100: #F5F5F5;
+      --gray-200: #E8E8E8;
+      --gray-400: #AAAAAA;
+      --gray-500: #888888;
+      --gray-700: #444444;
+      --green: #2ECC71;
+      --red: #E74C3C;
+      --amber: #F39C12;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+
+    body {
+      background: var(--gray-100);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      color: var(--black);
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--black);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      flex-wrap: wrap;
+    }
+
+    .adidas-logo {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .header-text {
+      border-left: 2px solid #333;
+      padding-left: 16px;
+    }
+
+    .header-text h1 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .header-text p {
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #admin-badge {
+      display: none;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(46,204,113,0.12);
+      padding: 5px 12px;
+      border: 1px solid rgba(46,204,113,0.3);
+    }
+
+    #btn-logout {
+      display: none;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      background: none;
+      border: 1px solid #333;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    #btn-logout:hover { color: var(--white); border-color: var(--white); }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    /* ─── LOGIN ─── */
+    #screen-login {
+      display: flex;
+      justify-content: center;
+      padding-top: 60px;
+    }
+
+    .login-box {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .login-box .step-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+
+    .login-box h2 {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-700);
+      margin-bottom: 7px;
+    }
+
+    input[type="text"], input[type="password"], input[type="url"], select {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--gray-100);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--black);
+      background: var(--white);
+    }
+
+    input::placeholder { color: var(--gray-400); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: #222; }
+    .btn-primary:disabled { background: #888; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── ADMIN PANEL ─── */
+    #screen-admin { display: none; }
+
+    /* ─── TABS ─── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .tab-btn {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-500);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s;
+    }
+
+    .tab-btn.active { color: var(--black); border-bottom-color: var(--black); }
+    .tab-btn:hover:not(.active) { color: var(--gray-700); }
+
+    .tab-panel { display: none; animation: fadeUp 0.3s ease both; }
+    .tab-panel.active { display: block; }
+
+    /* ─── SECTION CARD ─── */
+    .card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 28px 28px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .card-tag {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .card-tag.outline {
+      background: transparent;
+      color: var(--black);
+      border: 1.5px solid var(--black);
+    }
+
+    /* ─── MODULE EDITOR ─── */
+    .module-row {
+      display: grid;
+      grid-template-columns: 42px 1fr 1fr 1.4fr;
+      gap: 10px;
+      align-items: start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .module-row:last-child { border-bottom: none; }
+
+    .module-num-label {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gray-200);
+      line-height: 1;
+      padding-top: 14px;
+    }
+
+    .module-row .form-group { margin-bottom: 0; }
+
+    .module-row input { font-size: 13px; padding: 10px 12px; }
+
+    .save-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .save-status {
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--gray-500);
+      transition: opacity 0.5s;
+    }
+
+    .btn-save {
+      padding: 13px 28px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-save:hover { background: #222; }
+    .btn-save:disabled { background: #999; cursor: not-allowed; }
+
+    /* ─── STATS ROW ─── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* ─── FILTERS ─── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar select,
+    .filter-bar input[type="text"] {
+      width: auto;
+      flex: 1;
+      min-width: 140px;
+      font-size: 13px;
+      padding: 10px 14px;
+    }
+
+    .select-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-500);
+      font-size: 13px;
+    }
+
+    .select-wrap select { width: 100%; }
+
+    .btn-refresh {
+      padding: 10px 18px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .btn-refresh:hover { background: #222; }
+
+    /* ─── PROGRESS TABLE ─── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      padding: 10px 12px;
+      text-align: left;
+      background: var(--gray-100);
+      border-bottom: 2px solid var(--gray-200);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: #fafafa; }
+
+    tbody td {
+      padding: 12px 12px;
+      vertical-align: middle;
+    }
+
+    .td-name { font-weight: 600; }
+    .td-store { color: var(--gray-500); font-size: 12px; }
+
+    .check-dot {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      text-align: center;
+      line-height: 20px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .check-dot:hover { background: #b0b0b0; }
+
+    .check-dot.done {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .check-dot.done:hover { background: #27ae60; }
+
+    .progress-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--gray-200);
+      flex: 1;
+      min-width: 50px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--black);
+      transition: width 0.3s;
+    }
+
+    .progress-bar-fill.full { background: var(--green); }
+
+    .pct-label {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .td-date { color: var(--gray-500); font-size: 11px; white-space: nowrap; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-500);
+    }
+
+    .empty-state p {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .empty-state span { font-size: 13px; display: block; margin-top: 6px; }
+
+    /* ─── MODULE TOGGLE ─── */
+    .mod-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .mod-toggle-row.active {
+      background: #f0fdf5;
+      border-color: rgba(46,204,113,0.4);
+    }
+
+    .mod-toggle-label {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .mod-toggle-label.inactive { color: var(--gray-400); }
+
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--gray-200);
+      cursor: pointer;
+      border-radius: 22px;
+      transition: background 0.2s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      background: var(--white);
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider { background: var(--green); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    /* ─── LOADING SPINNER ─── */
+    .loading-spinner {
+      text-align: center;
+      padding: 30px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+    }
+
+    /* ─── MONTH SELECTOR ─── */
+    .month-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .month-chip {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .month-chip.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .month-chip:hover:not(.active) { border-color: var(--black); }
+
+    /* ─── SETTINGS ─── */
+    .settings-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .settings-row .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
+
+    /* ─── ADMIN USERS ─── */
+    .user-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+    }
+
+    .user-item .u-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .user-item .u-role {
+      font-size: 11px;
+      color: var(--gray-500);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge-active {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.3);
+      padding: 4px 10px;
+    }
+
+    /* ─── NOTIFICATIONS ─── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #1a5c38; }
+    .toast.error { background: #8b1a1a; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      /* Header */
+      header { padding: 12px 16px; gap: 10px; }
+      .adidas-logo { font-size: 22px; }
+      .header-text h1 { font-size: 13px; }
+      .header-text p { display: none; }
+      #admin-badge { display: none !important; }
+      #btn-logout { font-size: 11px; padding: 5px 10px; }
+
+      /* Page */
+      .page { padding: 20px 12px 40px; }
+
+      /* Login */
+      #screen-login { padding-top: 32px; }
+      .login-box { padding: 28px 20px; }
+      .login-box h2 { font-size: 30px; }
+
+      /* Tabs — scrollable horizontal */
+      .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        gap: 0;
+        scrollbar-width: none;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tab-btn { padding: 12px 14px; font-size: 12px; white-space: nowrap; }
+
+      /* Stats */
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stat-num { font-size: 28px; }
+
+      /* Cards */
+      .card { padding: 18px 14px; }
+      .card-title { font-size: 16px; }
+
+      /* Module editor — stack fields vertically */
+      .module-row {
+        grid-template-columns: 32px 1fr;
+        gap: 6px;
+      }
+      .module-row > .form-group:nth-child(3) { grid-column: 2; }
+      .module-row > .form-group:nth-child(4) { grid-column: 2; }
+      .module-num-label { font-size: 22px; padding-top: 10px; }
+      .module-row input { font-size: 12px; padding: 9px 10px; }
+
+      /* Save bar */
+      .save-bar { flex-direction: column; gap: 10px; align-items: stretch; }
+      .btn-save { text-align: center; }
+
+      /* Month chips — scrollable */
+      .month-chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+      .month-chips::-webkit-scrollbar { display: none; }
+      .month-chip { white-space: nowrap; font-size: 11px; padding: 5px 10px; }
+
+      /* Filter bar */
+      .filter-bar { flex-direction: column; gap: 8px; }
+      .filter-bar input, .filter-bar .select-wrap, .select-wrap { min-width: unset; width: 100%; }
+      .btn-refresh { width: 100%; text-align: center; }
+
+      /* Progress table — horizontal scroll */
+      .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      table { min-width: 480px; }
+      thead th { padding: 8px 8px; font-size: 10px; }
+      tbody td { padding: 10px 8px; }
+      .pct-label { min-width: 28px; font-size: 12px; }
+      .progress-bar { min-width: 36px; }
+
+      /* Delete buttons in table */
+      tbody td button { padding: 4px 8px; font-size: 10px; }
+
+      /* Toast */
+      .toast { bottom: 14px; right: 14px; left: 14px; font-size: 12px; padding: 12px 16px; }
+
+      /* Settings */
+      .user-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      #fb-config-fields { grid-template-columns: 1fr !important; }
+
+      /* Hash generator */
+      #hash-result > div:first-child > div { flex-direction: column; }
+      #copy-hash-btn { width: 100%; }
+
+      /* adiClub filter */
+      #tab-adiclub .filter-bar { flex-direction: column; }
+      #tab-adiclub .select-wrap { width: 100%; }
+    }
+
+    @media (max-width: 400px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .stat-num { font-size: 24px; }
+      .tab-btn { padding: 10px 11px; font-size: 11px; }
+    }
   </style>
 </head>
 <body>
 
   <!-- HEADER -->
-
   <header>
     <div class="adidas-logo">adidas</div>
     <div class="header-text">
@@ -841,43 +836,38 @@ tbody td {
   </header>
 
   <!-- SCREEN: LOGIN -->
-
   <div class="page" id="screen-login">
     <div class="login-box">
       <p class="step-label">Restricted Access</p>
       <h2>Admin<br>Login</h2>
 
-```
-  <div class="form-group">
-    <label for="login-user">Username</label>
-    <input type="text" id="login-user" placeholder="Enter username" autocomplete="username"
-           onkeydown="if(event.key==='Enter') doLogin()"/>
-  </div>
-  <div class="form-group">
-    <label for="login-pass">Password</label>
-    <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password"
-           onkeydown="if(event.key==='Enter') doLogin()"/>
-  </div>
+      <div class="form-group">
+        <label for="login-user">Username</label>
+        <input type="text" id="login-user" placeholder="Enter username" autocomplete="username"
+               onkeydown="if(event.key==='Enter') doLogin()"/>
+      </div>
+      <div class="form-group">
+        <label for="login-pass">Password</label>
+        <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password"
+               onkeydown="if(event.key==='Enter') doLogin()"/>
+      </div>
 
-  <p class="error-msg" id="login-error"></p>
+      <p class="error-msg" id="login-error"></p>
 
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; margin-top:4px;">
-    <input type="checkbox" id="keep-logged-in" style="width:16px; height:16px; cursor:pointer; accent-color:var(--black);"/>
-    <label for="keep-logged-in" style="font-size:12px; font-weight:500; letter-spacing:0.05em; text-transform:none; color:var(--gray-700); cursor:pointer; margin:0;">Keep me logged in</label>
-  </div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; margin-top:4px;">
+        <input type="checkbox" id="keep-logged-in" style="width:16px; height:16px; cursor:pointer; accent-color:var(--black);"/>
+        <label for="keep-logged-in" style="font-size:12px; font-weight:500; letter-spacing:0.05em; text-transform:none; color:var(--gray-700); cursor:pointer; margin:0;">Keep me logged in</label>
+      </div>
 
-  <button class="btn-primary" id="login-btn" onclick="doLogin()">Access Dashboard →</button>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">Access Dashboard →</button>
 
-  <p style="font-size:11px; color:var(--gray-400); margin-top:20px; letter-spacing:0.04em; line-height:1.6;">
-    Access is restricted to authorised admin users only.
-  </p>
-</div>
-```
-
+      <p style="font-size:11px; color:var(--gray-400); margin-top:20px; letter-spacing:0.04em; line-height:1.6;">
+        Access is restricted to authorised admin users only.
+      </p>
+    </div>
   </div>
 
   <!-- SCREEN: SET UP ACCOUNT (shown after first default login) -->
-
   <div class="page" id="screen-setup" style="display:none;">
     <div class="login-box">
       <p class="step-label">First Login Detected</p>
@@ -886,350 +876,342 @@ tbody td {
         You logged in with the default password. Choose a username and new password — these will be saved to Firebase so you can log in from anywhere.
       </p>
 
-```
-  <div class="form-group">
-    <label for="setup-user">Choose Username</label>
-    <input type="text" id="setup-user" placeholder="e.g. sarah" autocomplete="off"/>
-  </div>
-  <div class="form-group">
-    <label for="setup-pass">Choose Password</label>
-    <input type="password" id="setup-pass" placeholder="Min. 8 characters" autocomplete="new-password"/>
-  </div>
-  <div class="form-group">
-    <label for="setup-confirm">Confirm Password</label>
-    <input type="password" id="setup-confirm" placeholder="Repeat your password" autocomplete="new-password"
-           onkeydown="if(event.key==='Enter') saveNewCredentials()"/>
-  </div>
+      <div class="form-group">
+        <label for="setup-user">Choose Username</label>
+        <input type="text" id="setup-user" placeholder="e.g. sarah" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="setup-pass">Choose Password</label>
+        <input type="password" id="setup-pass" placeholder="Min. 8 characters" autocomplete="new-password"/>
+      </div>
+      <div class="form-group">
+        <label for="setup-confirm">Confirm Password</label>
+        <input type="password" id="setup-confirm" placeholder="Repeat your password" autocomplete="new-password"
+               onkeydown="if(event.key==='Enter') saveNewCredentials()"/>
+      </div>
 
-  <p class="error-msg" id="setup-error"></p>
-  <button class="btn-primary" onclick="saveNewCredentials()">Save & Continue →</button>
+      <p class="error-msg" id="setup-error"></p>
+      <button class="btn-primary" onclick="saveNewCredentials()">Save & Continue →</button>
 
-  <p style="font-size:11px; color:var(--gray-400); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
-    Other admins can do the same — they log in with the default and set their own credentials.
-  </p>
-</div>
-```
-
+      <p style="font-size:11px; color:var(--gray-400); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
+        Other admins can do the same — they log in with the default and set their own credentials.
+      </p>
+    </div>
   </div>
 
   <!-- SCREEN: ADMIN PANEL -->
-
   <div class="page" id="screen-admin">
 
-```
-<!-- TABS -->
-<div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('modules')">Module Editor</button>
-  <button class="tab-btn" onclick="switchTab('progress')">Worker Progress</button>
-  <button class="tab-btn" onclick="switchTab('adiclub')">adiClub Signups</button>
-  <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
-</div>
-
-<!-- ─── TAB: MODULE EDITOR ─── -->
-<div class="tab-panel active" id="tab-modules">
-
-  <!-- MONTH SELECTOR -->
-  <div class="card" style="padding:20px 24px; margin-bottom:20px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-      <div>
-        <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Configuring Month</p>
-        <div class="month-chips" id="module-month-chips"></div>
-      </div>
-      <div style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; max-width:260px; text-align:right;">
-        Each month's URLs are saved separately.<br>Workers only see modules with a URL for their current month.
-      </div>
-    </div>
-  </div>
-
-  <!-- AREA MODULES -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">AREA Modules</span>
-      <span class="card-tag">AREA</span>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('modules')">Module Editor</button>
+      <button class="tab-btn" onclick="switchTab('progress')">Worker Progress</button>
+      <button class="tab-btn" onclick="switchTab('adiclub')">adiClub Signups</button>
+      <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
     </div>
 
-    <div id="area-module-rows">
-      <!-- Rows injected by JS -->
-    </div>
+    <!-- ─── TAB: MODULE EDITOR ─── -->
+    <div class="tab-panel active" id="tab-modules">
 
-    <div class="save-bar">
-      <span class="save-status" id="save-status-area"></span>
-      <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
-    </div>
-  </div>
-
-  <!-- ATTICUS MODULES -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Atticus Modules</span>
-      <span class="card-tag outline">ATTICUS</span>
-    </div>
-
-    <div id="atticus-module-rows">
-      <!-- Rows injected by JS -->
-    </div>
-
-    <div class="save-bar">
-      <span class="save-status" id="save-status-atticus"></span>
-      <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
-    </div>
-  </div>
-
-  <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding: 0 4px;">
-    ℹ️ Changes are saved to Firebase instantly and reflected in the worker app within seconds — no GitHub push required.
-  </p>
-</div>
-
-<!-- ─── TAB: WORKER PROGRESS ─── -->
-<div class="tab-panel" id="tab-progress">
-
-  <!-- STATS -->
-  <div class="stats-row" id="stats-row">
-    <div class="stat-box">
-      <div class="stat-num" id="stat-total">–</div>
-      <div class="stat-label">Workers</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-complete">–</div>
-      <div class="stat-label">100% Done</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-partial">–</div>
-      <div class="stat-label">In Progress</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="stat-rate">–</div>
-      <div class="stat-label">Avg Progress</div>
-    </div>
-  </div>
-
-  <!-- MONTH SELECTOR -->
-  <div class="card" style="padding: 20px 24px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-      <div>
-        <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Viewing Month</p>
-        <div class="month-chips" id="month-chips">
-          <!-- chips injected by JS -->
+      <!-- MONTH SELECTOR -->
+      <div class="card" style="padding:20px 24px; margin-bottom:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div>
+            <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Configuring Month</p>
+            <div class="month-chips" id="module-month-chips"></div>
+          </div>
+          <div style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; max-width:260px; text-align:right;">
+            Each month's URLs are saved separately.<br>Workers only see modules with a URL for their current month.
+          </div>
         </div>
       </div>
-      <button class="btn-refresh" onclick="loadProgress()">↻ Refresh</button>
-    </div>
-  </div>
 
-  <!-- FILTERS -->
-  <div class="filter-bar">
-    <div class="select-wrap">
-      <select id="filter-store" onchange="renderTable()">
-        <option value="">All Stores</option>
-      </select>
-    </div>
-    <input type="text" id="filter-search" placeholder="Search by name…" oninput="renderTable()" style="flex:1; min-width:150px;"/>
-  </div>
+      <!-- AREA MODULES -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">AREA Modules</span>
+          <span class="card-tag">AREA</span>
+        </div>
 
-  <!-- TABLE -->
-  <div class="card" style="padding: 0;">
-    <div class="table-wrap">
-      <table>
-        <thead id="progress-thead">
-          <tr>
-            <th>Name</th>
-            <th>Store</th>
-            <th title="AREA Module 1">A1</th>
-            <th title="AREA Module 2">A2</th>
-            <th title="AREA Module 3">A3</th>
-            <th title="Atticus Module 1">T1</th>
-            <th title="Atticus Module 2">T2</th>
-            <th title="Atticus Module 3">T3</th>
-            <th>Progress</th>
-            <th>Last Seen</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="progress-tbody">
-          <tr><td colspan="11">
-            <div class="loading-spinner">Loading progress data…</div>
-          </td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div id="area-module-rows">
+          <!-- Rows injected by JS -->
+        </div>
 
-</div>
+        <div class="save-bar">
+          <span class="save-status" id="save-status-area"></span>
+          <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
+        </div>
+      </div>
 
-<!-- ─── TAB: ADICLUB SIGNUPS ─── -->
-<div class="tab-panel" id="tab-adiclub">
+      <!-- ATTICUS MODULES -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Atticus Modules</span>
+          <span class="card-tag outline">ATTICUS</span>
+        </div>
 
-  <!-- STATS -->
-  <div class="stats-row">
-    <div class="stat-box">
-      <div class="stat-num" id="ac-stat-total">–</div>
-      <div class="stat-label">Total Signups</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="ac-stat-today">–</div>
-      <div class="stat-label">Today</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="ac-stat-month">–</div>
-      <div class="stat-label">This Month</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="ac-stat-unique">–</div>
-      <div class="stat-label">Unique Members</div>
-    </div>
-  </div>
+        <div id="atticus-module-rows">
+          <!-- Rows injected by JS -->
+        </div>
 
-  <!-- CONTROLS -->
-  <div class="card" style="padding:18px 24px; margin-bottom:16px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-      <div class="filter-bar" style="margin:0; flex:1;">
-        <input type="text" id="ac-search" placeholder="Search by name or ID…" oninput="renderAdiClubTable()" style="flex:1; min-width:160px;"/>
-        <div class="select-wrap" style="min-width:140px;">
-          <select id="ac-filter-period" onchange="renderAdiClubTable()">
-            <option value="all">All Time</option>
-            <option value="today">Today</option>
-            <option value="week">This Week</option>
-            <option value="month" selected>This Month</option>
+        <div class="save-bar">
+          <span class="save-status" id="save-status-atticus"></span>
+          <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding: 0 4px;">
+        ℹ️ Changes are saved to Firebase instantly and reflected in the worker app within seconds — no GitHub push required.
+      </p>
+    </div>
+
+    <!-- ─── TAB: WORKER PROGRESS ─── -->
+    <div class="tab-panel" id="tab-progress">
+
+      <!-- STATS -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="stat-total">–</div>
+          <div class="stat-label">Workers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-complete">–</div>
+          <div class="stat-label">100% Done</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-partial">–</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-rate">–</div>
+          <div class="stat-label">Avg Progress</div>
+        </div>
+      </div>
+
+      <!-- MONTH SELECTOR -->
+      <div class="card" style="padding: 20px 24px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div>
+            <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Viewing Month</p>
+            <div class="month-chips" id="month-chips">
+              <!-- chips injected by JS -->
+            </div>
+          </div>
+          <button class="btn-refresh" onclick="loadProgress()">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="filter-bar">
+        <div class="select-wrap">
+          <select id="filter-store" onchange="renderTable()">
+            <option value="">All Stores</option>
           </select>
         </div>
+        <input type="text" id="filter-search" placeholder="Search by name…" oninput="renderTable()" style="flex:1; min-width:150px;"/>
       </div>
-      <button class="btn-refresh" onclick="loadAdiClub()">↻ Refresh</button>
-    </div>
-  </div>
 
-  <!-- TABLE -->
-  <div class="card" style="padding:0;">
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="adiclub-tbody">
-          <tr><td colspan="6">
-            <div class="loading-spinner">Loading adiClub data…</div>
-          </td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
-
-<!-- ─── TAB: SETTINGS ─── -->
-<div class="tab-panel" id="tab-settings">
-
-  <!-- ADMIN USERS -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Admin Users</span>
-    </div>
-    <div class="user-list" id="admin-user-list">
-      <!-- Injected by JS -->
-    </div>
-    <p style="font-size:12px; color:var(--gray-500); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
-      To add, remove, or change admin credentials, edit the <code style="background:var(--gray-100); padding:1px 5px; font-size:11px;">ADMIN_USERS</code> object at the top of <code style="background:var(--gray-100); padding:1px 5px; font-size:11px;">admin.html</code>.
-    </p>
-  </div>
-
-  <!-- PASSWORD HASH GENERATOR -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Password Hash Generator</span>
-    </div>
-    <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
-      Passwords are stored as SHA-256 hashes in Firebase — never as plain text.
-      Use this tool to generate a hash for each admin, then save it in Firebase under
-      <code style="background:var(--gray-100);padding:1px 6px;font-size:12px;">config/admins/{username}</code>
-      as the value. The username you type here becomes the login username.
-    </p>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-      <div class="form-group" style="margin:0;">
-        <label>Username</label>
-        <input type="text" id="hash-username" placeholder="e.g. sarah"/>
-      </div>
-      <div class="form-group" style="margin:0;">
-        <label>Password</label>
-        <input type="password" id="hash-password" placeholder="Choose a password"/>
-      </div>
-    </div>
-    <button class="btn-save" onclick="generateHash()" style="margin-bottom:16px;">Generate Hash →</button>
-
-    <div id="hash-result" style="display:none;">
-      <div style="background:var(--gray-100); border:1.5px solid var(--gray-200); padding:16px 18px; margin-bottom:10px;">
-        <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Firebase path & value to save</p>
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <code id="hash-path" style="font-size:12px; color:var(--black); background:var(--white); border:1px solid var(--gray-200); padding:6px 10px; flex-shrink:0;"></code>
-          <span style="color:var(--gray-400); font-size:13px;">→</span>
-          <code id="hash-value" style="font-size:11px; color:#555; word-break:break-all; flex:1; background:var(--white); border:1px solid var(--gray-200); padding:6px 10px;"></code>
-          <button onclick="copyHash()" style="padding:7px 14px; background:var(--black); color:var(--white); border:none; font-family:var(--font-display); font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; white-space:nowrap;" id="copy-hash-btn">Copy Hash</button>
+      <!-- TABLE -->
+      <div class="card" style="padding: 0;">
+        <div class="table-wrap">
+          <table>
+            <thead id="progress-thead">
+              <tr>
+                <th>Name</th>
+                <th>Store</th>
+                <th title="AREA Module 1">A1</th>
+                <th title="AREA Module 2">A2</th>
+                <th title="AREA Module 3">A3</th>
+                <th title="Atticus Module 1">T1</th>
+                <th title="Atticus Module 2">T2</th>
+                <th title="Atticus Module 3">T3</th>
+                <th>Progress</th>
+                <th>Last Seen</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="progress-tbody">
+              <tr><td colspan="11">
+                <div class="loading-spinner">Loading progress data…</div>
+              </td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div style="background:#fff8e1; border:1px solid #f0c040; padding:12px 16px; font-size:12px; color:#7a6a00; line-height:1.7;">
-        <strong>How to save this in Firebase:</strong><br>
-        In Realtime Database → <code style="font-size:11px;">config → admins</code> → add child with key
-        <strong id="hash-key-hint"></strong> and paste the hash above as its value.
-      </div>
-    </div>
-  </div>
 
-  <!-- FIREBASE CONFIG -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">Firebase Config</span>
-    </div>
-    <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
-      This admin panel uses the same Firebase project as the worker app. The config is stored locally in your browser.
-    </p>
-    <div id="fb-status-box" style="margin-bottom: 20px;"></div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;" id="fb-config-fields">
-      <div class="form-group">
-        <label>API Key</label>
-        <input type="text" id="fb-api-key" placeholder="AIzaSy…"/>
-      </div>
-      <div class="form-group">
-        <label>Auth Domain</label>
-        <input type="text" id="fb-auth-domain" placeholder="project.firebaseapp.com"/>
-      </div>
-      <div class="form-group">
-        <label>Database URL</label>
-        <input type="text" id="fb-db-url" placeholder="https://…-default-rtdb.firebaseio.com"/>
-      </div>
-      <div class="form-group">
-        <label>Project ID</label>
-        <input type="text" id="fb-project-id" placeholder="your-project"/>
-      </div>
-      <div class="form-group" style="grid-column:1/-1;">
-        <label>App ID</label>
-        <input type="text" id="fb-app-id" placeholder="1:123456789:web:abc123"/>
-      </div>
     </div>
 
-    <div style="display:flex; gap:10px; margin-top:16px;">
-      <button class="btn-save" onclick="saveFirebaseConfig()">Save Firebase Config →</button>
-      <button onclick="resetFirebaseConfig()" style="padding:13px 20px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; color:var(--gray-700); transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--gray-200)'">Reset</button>
-    </div>
-  </div>
+    <!-- ─── TAB: ADICLUB SIGNUPS ─── -->
+    <div class="tab-panel" id="tab-adiclub">
 
-</div>
-```
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="ac-stat-total">–</div>
+          <div class="stat-label">Total Signups</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="ac-stat-today">–</div>
+          <div class="stat-label">Today</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="ac-stat-month">–</div>
+          <div class="stat-label">This Month</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="ac-stat-unique">–</div>
+          <div class="stat-label">Unique Members</div>
+        </div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="card" style="padding:18px 24px; margin-bottom:16px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div class="filter-bar" style="margin:0; flex:1;">
+            <input type="text" id="ac-search" placeholder="Search by name or ID…" oninput="renderAdiClubTable()" style="flex:1; min-width:160px;"/>
+            <div class="select-wrap" style="min-width:140px;">
+              <select id="ac-filter-period" onchange="renderAdiClubTable()">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month" selected>This Month</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-refresh" onclick="loadAdiClub()">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card" style="padding:0;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adiclub-tbody">
+              <tr><td colspan="6">
+                <div class="loading-spinner">Loading adiClub data…</div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── TAB: SETTINGS ─── -->
+    <div class="tab-panel" id="tab-settings">
+
+      <!-- ADMIN USERS -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Admin Users</span>
+        </div>
+        <div class="user-list" id="admin-user-list">
+          <!-- Injected by JS -->
+        </div>
+        <p style="font-size:12px; color:var(--gray-500); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
+          To add, remove, or change admin credentials, edit the <code style="background:var(--gray-100); padding:1px 5px; font-size:11px;">ADMIN_USERS</code> object at the top of <code style="background:var(--gray-100); padding:1px 5px; font-size:11px;">admin.html</code>.
+        </p>
+      </div>
+
+      <!-- PASSWORD HASH GENERATOR -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Password Hash Generator</span>
+        </div>
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          Passwords are stored as SHA-256 hashes in Firebase — never as plain text.
+          Use this tool to generate a hash for each admin, then save it in Firebase under
+          <code style="background:var(--gray-100);padding:1px 6px;font-size:12px;">config/admins/{username}</code>
+          as the value. The username you type here becomes the login username.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div class="form-group" style="margin:0;">
+            <label>Username</label>
+            <input type="text" id="hash-username" placeholder="e.g. sarah"/>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Password</label>
+            <input type="password" id="hash-password" placeholder="Choose a password"/>
+          </div>
+        </div>
+        <button class="btn-save" onclick="generateHash()" style="margin-bottom:16px;">Generate Hash →</button>
+
+        <div id="hash-result" style="display:none;">
+          <div style="background:var(--gray-100); border:1.5px solid var(--gray-200); padding:16px 18px; margin-bottom:10px;">
+            <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Firebase path & value to save</p>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <code id="hash-path" style="font-size:12px; color:var(--black); background:var(--white); border:1px solid var(--gray-200); padding:6px 10px; flex-shrink:0;"></code>
+              <span style="color:var(--gray-400); font-size:13px;">→</span>
+              <code id="hash-value" style="font-size:11px; color:#555; word-break:break-all; flex:1; background:var(--white); border:1px solid var(--gray-200); padding:6px 10px;"></code>
+              <button onclick="copyHash()" style="padding:7px 14px; background:var(--black); color:var(--white); border:none; font-family:var(--font-display); font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; white-space:nowrap;" id="copy-hash-btn">Copy Hash</button>
+            </div>
+          </div>
+          <div style="background:#fff8e1; border:1px solid #f0c040; padding:12px 16px; font-size:12px; color:#7a6a00; line-height:1.7;">
+            <strong>How to save this in Firebase:</strong><br>
+            In Realtime Database → <code style="font-size:11px;">config → admins</code> → add child with key
+            <strong id="hash-key-hint"></strong> and paste the hash above as its value.
+          </div>
+        </div>
+      </div>
+
+      <!-- FIREBASE CONFIG -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Firebase Config</span>
+        </div>
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          This admin panel uses the same Firebase project as the worker app. The config is stored locally in your browser.
+        </p>
+        <div id="fb-status-box" style="margin-bottom: 20px;"></div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;" id="fb-config-fields">
+          <div class="form-group">
+            <label>API Key</label>
+            <input type="text" id="fb-api-key" placeholder="AIzaSy…"/>
+          </div>
+          <div class="form-group">
+            <label>Auth Domain</label>
+            <input type="text" id="fb-auth-domain" placeholder="project.firebaseapp.com"/>
+          </div>
+          <div class="form-group">
+            <label>Database URL</label>
+            <input type="text" id="fb-db-url" placeholder="https://…-default-rtdb.firebaseio.com"/>
+          </div>
+          <div class="form-group">
+            <label>Project ID</label>
+            <input type="text" id="fb-project-id" placeholder="your-project"/>
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>App ID</label>
+            <input type="text" id="fb-app-id" placeholder="1:123456789:web:abc123"/>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn-save" onclick="saveFirebaseConfig()">Save Firebase Config →</button>
+          <button onclick="resetFirebaseConfig()" style="padding:13px 20px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; color:var(--gray-700); transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--gray-200)'">Reset</button>
+        </div>
+      </div>
+
+    </div>
 
   </div>
 
   <!-- TOAST -->
-
   <div class="toast" id="toast"></div>
 
   <!-- FIREBASE SDK -->
-
   <script type="module">
     const { initializeApp }              = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
     const { getDatabase, ref, set, get } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
