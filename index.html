@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,666 +8,658 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-```
-:root {
-  --black: #000000;
-  --white: #FFFFFF;
-  --gray-100: #F5F5F5;
-  --gray-200: #E8E8E8;
-  --gray-500: #888888;
-  --gray-700: #444444;
-  --area-accent: #000000;
-  --atticus-accent: #1a1a1a;
-  --complete: #2ECC71;
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body: 'Barlow', sans-serif;
-}
-
-body {
-  background: var(--gray-100);
-  font-family: var(--font-body);
-  min-height: 100vh;
-  color: var(--black);
-}
-
-/* ─── HEADER ─── */
-header {
-  background: var(--black);
-  padding: 18px 28px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.adidas-logo {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--white);
-  letter-spacing: -0.02em;
-  text-transform: lowercase;
-  line-height: 1;
-  user-select: none;
-}
-
-.header-text {
-  border-left: 2px solid #444;
-  padding-left: 16px;
-}
-
-.header-text h1 {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-.header-text p {
-  font-size: 11px;
-  color: var(--gray-500);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 3px;
-}
-
-.header-month {
-  margin-left: auto;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gray-500);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-/* ─── MAIN CONTAINER ─── */
-.container {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 32px 20px 60px;
-}
-
-/* ─── STEP 1: IDENTITY FORM ─── */
-#step-identity {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  padding: 36px 32px;
-  animation: fadeUp 0.4s ease both;
-}
-
-.step-label {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 6px;
-}
-
-.step-title {
-  font-family: var(--font-display);
-  font-size: 32px;
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 28px;
-  letter-spacing: -0.01em;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-700);
-  margin-bottom: 8px;
-}
-
-input, select {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1.5px solid var(--gray-200);
-  background: var(--gray-100);
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: var(--black);
-  outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-  border-radius: 0;
-}
-
-input:focus, select:focus {
-  border-color: var(--black);
-  background: var(--white);
-}
-
-input::placeholder { color: var(--gray-500); }
-
-.select-wrap {
-  position: relative;
-}
-
-.select-wrap::after {
-  content: '▾';
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: var(--gray-500);
-  font-size: 14px;
-}
-
-.btn-start {
-  width: 100%;
-  padding: 18px;
-  background: var(--black);
-  color: var(--white);
-  border: none;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: background 0.2s, transform 0.1s;
-}
-
-.btn-start:hover { background: #222; }
-.btn-start:active { transform: scale(0.99); }
-
-/* ─── STEP 2: MODULES ─── */
-#step-modules {
-  display: none;
-  animation: fadeUp 0.4s ease both;
-}
-
-.user-banner {
-  background: var(--black);
-  color: var(--white);
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-}
-
-.user-banner-info strong {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: block;
-}
-
-.user-banner-info span {
-  font-size: 12px;
-  color: var(--gray-500);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.progress-pill {
-  background: #222;
-  padding: 8px 16px;
-  text-align: center;
-}
-
-.progress-pill .prog-num {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--white);
-  line-height: 1;
-}
-
-.progress-pill .prog-label {
-  font-size: 10px;
-  color: var(--gray-500);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-/* ─── MODULE SECTIONS ─── */
-.module-section {
-  margin-bottom: 28px;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.section-tag {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  background: var(--black);
-  color: var(--white);
-}
-
-.section-tag.atticus {
-  background: var(--white);
-  color: var(--black);
-  border: 1.5px solid var(--black);
-}
-
-.section-title {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-/* ─── MODULE BUTTON ─── */
-.module-btn {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background: var(--white);
-  border: 1.5px solid var(--gray-200);
-  padding: 18px 20px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  color: var(--black);
-  transition: border-color 0.2s, transform 0.1s, background 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-
-.module-btn:hover {
-  border-color: var(--black);
-  transform: translateX(3px);
-}
-
-.module-btn.completed {
-  background: #f0fdf5;
-  border-color: var(--complete);
-}
-
-.module-num {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--gray-200);
-  min-width: 40px;
-  line-height: 1;
-  transition: color 0.2s;
-}
-
-.module-btn.completed .module-num {
-  color: var(--complete);
-}
-
-.module-info {
-  flex: 1;
-  text-align: left;
-  padding: 0 16px;
-}
-
-.module-name {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  line-height: 1.1;
-}
-
-.module-sub {
-  font-size: 12px;
-  color: var(--gray-500);
-  margin-top: 3px;
-  letter-spacing: 0.05em;
-}
-
-.module-action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  transition: color 0.2s;
-  white-space: nowrap;
-}
-
-.module-btn:hover .module-action { color: var(--black); }
-.module-btn.completed .module-action { color: var(--complete); }
-
-.check-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid var(--gray-200);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-
-.module-btn.completed .check-icon {
-  background: var(--complete);
-  border-color: var(--complete);
-  color: white;
-}
-
-/* ─── COMPLETION BANNER ─── */
-#complete-banner {
-  display: none;
-  background: var(--black);
-  color: var(--white);
-  padding: 28px 32px;
-  text-align: center;
-  margin-top: 8px;
-  animation: fadeUp 0.4s ease both;
-}
-
-#complete-banner h2 {
-  font-family: var(--font-display);
-  font-size: 32px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 6px;
-}
-
-#complete-banner p {
-  font-size: 14px;
-  color: var(--gray-500);
-  letter-spacing: 0.05em;
-}
-
-/* ─── FOOTER ─── */
-footer {
-  text-align: center;
-  margin-top: 40px;
-  font-size: 11px;
-  color: var(--gray-500);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* ─── ANIMATIONS ─── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.module-btn {
-  animation: fadeUp 0.35s ease both;
-}
-.module-btn:nth-child(1) { animation-delay: 0.05s; }
-.module-btn:nth-child(2) { animation-delay: 0.1s; }
-.module-btn:nth-child(3) { animation-delay: 0.15s; }
-
-/* ─── VALIDATION ─── */
-.error-msg {
-  color: #e74c3c;
-  font-size: 12px;
-  margin-top: 6px;
-  display: none;
-  letter-spacing: 0.05em;
-}
-
-/* ─── MUSIC PLAYER ─── */
-body { padding-bottom: 72px; }
-
-#music-player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--black);
-  height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 16px;
-  z-index: 200;
-  border-top: 1px solid #222;
-}
-
-#play-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--white);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.15s, background 0.15s;
-}
-
-#play-btn:hover { transform: scale(1.08); background: #eee; }
-
-#play-btn svg { width: 14px; height: 14px; fill: var(--black); }
-
-.player-track {
-  flex: 1;
-  overflow: hidden;
-}
-
-.player-title {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--white);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.player-sub {
-  font-size: 10px;
-  color: var(--gray-500);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-/* Equalizer bars */
-.eq-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.eq-bar {
-  width: 3px;
-  background: var(--white);
-  border-radius: 1px;
-  animation: eq 0.8s ease-in-out infinite alternate;
-  opacity: 0.3;
-}
-
-.eq-bar:nth-child(1) { height: 6px;  animation-duration: 0.6s; }
-.eq-bar:nth-child(2) { height: 14px; animation-duration: 0.9s; animation-delay: 0.1s; }
-.eq-bar:nth-child(3) { height: 10px; animation-duration: 0.7s; animation-delay: 0.2s; }
-.eq-bar:nth-child(4) { height: 18px; animation-duration: 1.0s; animation-delay: 0.05s; }
-.eq-bar:nth-child(5) { height: 8px;  animation-duration: 0.75s; animation-delay: 0.15s; }
-
-.eq-bars.playing .eq-bar { opacity: 1; }
-
-@keyframes eq {
-  from { transform: scaleY(0.3); }
-  to   { transform: scaleY(1); }
-}
-
-/* Volume */
-.volume-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.vol-icon { font-size: 14px; opacity: 0.5; }
-
-#volume-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 70px;
-  height: 3px;
-  background: #444;
-  outline: none;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-#volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--white);
-  cursor: pointer;
-}
-
-#volume-slider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--white);
-  border: none;
-  cursor: pointer;
-}
-
-/* ─── MOBILE RESPONSIVE ─── */
-@media (max-width: 640px) {
-  /* Header */
-  header { padding: 14px 16px; gap: 12px; }
-  .adidas-logo { font-size: 24px; }
-  .header-text h1 { font-size: 15px; }
-  .header-text p { font-size: 10px; }
-  .header-month { font-size: 11px; letter-spacing: 0.06em; }
-
-  /* Container */
-  .container { padding: 20px 14px 80px; }
-
-  /* Identity / returning screens */
-  #step-identity { padding: 24px 18px; }
-  #step-returning { padding: 0; }
-  .step-title { font-size: 26px; }
-
-  input, select { padding: 12px 14px; font-size: 15px; }
-  .btn-start { font-size: 16px; padding: 16px; }
-
-  /* User banner */
-  .user-banner { padding: 14px 16px; }
-  .user-banner-info strong { font-size: 15px; }
-  .user-banner-info span { font-size: 11px; }
-  .progress-pill { padding: 6px 12px; }
-  .progress-pill .prog-num { font-size: 18px; }
-  .progress-pill .prog-label { font-size: 9px; }
-
-  /* Module buttons */
-  .module-btn { padding: 14px 14px; margin-bottom: 8px; }
-  .module-num { font-size: 22px; min-width: 32px; }
-  .module-name { font-size: 15px; }
-  .module-sub { font-size: 11px; }
-  .module-info { padding: 0 10px; }
-  .module-action { font-size: 11px; gap: 6px; }
-  .check-icon { width: 18px; height: 18px; font-size: 10px; }
-
-  /* Section headers */
-  .section-tag { font-size: 10px; padding: 3px 8px; }
-  .section-title { font-size: 17px; }
-  .section-header { gap: 8px; margin-bottom: 10px; }
-
-  /* Completion banner */
-  #complete-banner { padding: 22px 20px; }
-  #complete-banner h2 { font-size: 26px; }
-  #complete-banner p { font-size: 13px; }
-
-  /* Music player */
-  #music-player { padding: 0 12px; gap: 10px; height: 58px; }
-  .player-title { font-size: 12px; }
-  .player-sub { font-size: 9px; }
-  #volume-slider { width: 52px; }
-  .vol-icon { font-size: 12px; }
-  .eq-bars { gap: 2px; }
-  .eq-bar { width: 2px; }
-}
-
-@media (max-width: 380px) {
-  .volume-wrap { display: none; }
-  .player-title { font-size: 11px; }
-  #music-player { gap: 8px; }
-}
-```
-
-  </style>
-
-  <!-- Firebase SDK — loaded dynamically once config is saved -->
-
-  <script type="module">
-    async function initFirebase(cfg) {
-      try {
-        const { initializeApp }          = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-        const { getDatabase, ref, set, get } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        const app = initializeApp(cfg);
-        const db  = getDatabase(app);
-        window._db = db;
-        window._fbSave = async (key, data) => { try { await set(ref(db,'progress/'+key), data); } catch(e){} };
-        window._fbLoad = async (key) => { try { const s = await get(ref(db,'progress/'+key)); return s.exists() ? s.val() : null; } catch(e){ return null; } };
-        window._firebaseReady = true;
-        document.dispatchEvent(new Event('firebase-ready'));
-      } catch(e) { console.warn('Firebase init failed', e); }
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-100: #F5F5F5;
+      --gray-200: #E8E8E8;
+      --gray-500: #888888;
+      --gray-700: #444444;
+      --area-accent: #000000;
+      --atticus-accent: #1a1a1a;
+      --complete: #2ECC71;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
     }
 
-    // Load saved config from localStorage
-    try {
-      const saved = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
-      if (saved && saved.apiKey && !saved.apiKey.includes('YOUR_')) initFirebase(saved);
-    } catch(e) {}
+    body {
+      background: var(--gray-100);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      color: var(--black);
+    }
 
-    // Listen for config saved via setup screen
-    document.addEventListener('firebase-config-saved', async (e) => {
-      await initFirebase(e.detail);
-    });
+    /* ─── HEADER ─── */
+    header {
+      background: var(--black);
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .adidas-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .header-text {
+      border-left: 2px solid #444;
+      padding-left: 16px;
+    }
+
+    .header-text h1 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .header-text p {
+      font-size: 11px;
+      color: var(--gray-500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .header-month {
+      margin-left: auto;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ─── MAIN CONTAINER ─── */
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* ─── STEP 1: IDENTITY FORM ─── */
+    #step-identity {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      padding: 36px 32px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .step-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-700);
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--gray-100);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--black);
+      background: var(--white);
+    }
+
+    input::placeholder { color: var(--gray-500); }
+
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray-500);
+      font-size: 14px;
+    }
+
+    .btn-start {
+      width: 100%;
+      padding: 18px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-start:hover { background: #222; }
+    .btn-start:active { transform: scale(0.99); }
+
+    /* ─── STEP 2: MODULES ─── */
+    #step-modules {
+      display: none;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .user-banner {
+      background: var(--black);
+      color: var(--white);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .user-banner-info strong {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+    }
+
+    .user-banner-info span {
+      font-size: 12px;
+      color: var(--gray-500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .progress-pill {
+      background: #222;
+      padding: 8px 16px;
+      text-align: center;
+    }
+
+    .progress-pill .prog-num {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .progress-pill .prog-label {
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ─── MODULE SECTIONS ─── */
+    .module-section {
+      margin-bottom: 28px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-tag {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .section-tag.atticus {
+      background: var(--white);
+      color: var(--black);
+      border: 1.5px solid var(--black);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* ─── MODULE BUTTON ─── */
+    .module-btn {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 18px 20px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--black);
+      transition: border-color 0.2s, transform 0.1s, background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-btn:hover {
+      border-color: var(--black);
+      transform: translateX(3px);
+    }
+
+    .module-btn.completed {
+      background: #f0fdf5;
+      border-color: var(--complete);
+    }
+
+    .module-num {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gray-200);
+      min-width: 40px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .module-btn.completed .module-num {
+      color: var(--complete);
+    }
+
+    .module-info {
+      flex: 1;
+      text-align: left;
+      padding: 0 16px;
+    }
+
+    .module-name {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+    }
+
+    .module-sub {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 3px;
+      letter-spacing: 0.05em;
+    }
+
+    .module-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+
+    .module-btn:hover .module-action { color: var(--black); }
+    .module-btn.completed .module-action { color: var(--complete); }
+
+    .check-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .module-btn.completed .check-icon {
+      background: var(--complete);
+      border-color: var(--complete);
+      color: white;
+    }
+
+    /* ─── COMPLETION BANNER ─── */
+    #complete-banner {
+      display: none;
+      background: var(--black);
+      color: var(--white);
+      padding: 28px 32px;
+      text-align: center;
+      margin-top: 8px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    #complete-banner h2 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    #complete-banner p {
+      font-size: 14px;
+      color: var(--gray-500);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 11px;
+      color: var(--gray-500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .module-btn {
+      animation: fadeUp 0.35s ease both;
+    }
+    .module-btn:nth-child(1) { animation-delay: 0.05s; }
+    .module-btn:nth-child(2) { animation-delay: 0.1s; }
+    .module-btn:nth-child(3) { animation-delay: 0.15s; }
+
+    /* ─── VALIDATION ─── */
+    .error-msg {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── MUSIC PLAYER ─── */
+    body { padding-bottom: 72px; }
+
+    #music-player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--black);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+      z-index: 200;
+      border-top: 1px solid #222;
+    }
+
+    #play-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--white);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    #play-btn:hover { transform: scale(1.08); background: #eee; }
+
+    #play-btn svg { width: 14px; height: 14px; fill: var(--black); }
+
+    .player-track {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .player-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-sub {
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* Equalizer bars */
+    .eq-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .eq-bar {
+      width: 3px;
+      background: var(--white);
+      border-radius: 1px;
+      animation: eq 0.8s ease-in-out infinite alternate;
+      opacity: 0.3;
+    }
+
+    .eq-bar:nth-child(1) { height: 6px;  animation-duration: 0.6s; }
+    .eq-bar:nth-child(2) { height: 14px; animation-duration: 0.9s; animation-delay: 0.1s; }
+    .eq-bar:nth-child(3) { height: 10px; animation-duration: 0.7s; animation-delay: 0.2s; }
+    .eq-bar:nth-child(4) { height: 18px; animation-duration: 1.0s; animation-delay: 0.05s; }
+    .eq-bar:nth-child(5) { height: 8px;  animation-duration: 0.75s; animation-delay: 0.15s; }
+
+    .eq-bars.playing .eq-bar { opacity: 1; }
+
+    @keyframes eq {
+      from { transform: scaleY(0.3); }
+      to   { transform: scaleY(1); }
+    }
+
+    /* Volume */
+    .volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .vol-icon { font-size: 14px; opacity: 0.5; }
+
+    #volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 70px;
+      height: 3px;
+      background: #444;
+      outline: none;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    #volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    #volume-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--white);
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ─── MOBILE RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      /* Header */
+      header { padding: 14px 16px; gap: 12px; }
+      .adidas-logo { font-size: 24px; }
+      .header-text h1 { font-size: 15px; }
+      .header-text p { font-size: 10px; }
+      .header-month { font-size: 11px; letter-spacing: 0.06em; }
+
+      /* Container */
+      .container { padding: 20px 14px 80px; }
+
+      /* Identity / returning screens */
+      #step-identity { padding: 24px 18px; }
+      #step-returning { padding: 0; }
+      .step-title { font-size: 26px; }
+
+      input, select { padding: 12px 14px; font-size: 15px; }
+      .btn-start { font-size: 16px; padding: 16px; }
+
+      /* User banner */
+      .user-banner { padding: 14px 16px; }
+      .user-banner-info strong { font-size: 15px; }
+      .user-banner-info span { font-size: 11px; }
+      .progress-pill { padding: 6px 12px; }
+      .progress-pill .prog-num { font-size: 18px; }
+      .progress-pill .prog-label { font-size: 9px; }
+
+      /* Module buttons */
+      .module-btn { padding: 14px 14px; margin-bottom: 8px; }
+      .module-num { font-size: 22px; min-width: 32px; }
+      .module-name { font-size: 15px; }
+      .module-sub { font-size: 11px; }
+      .module-info { padding: 0 10px; }
+      .module-action { font-size: 11px; gap: 6px; }
+      .check-icon { width: 18px; height: 18px; font-size: 10px; }
+
+      /* Section headers */
+      .section-tag { font-size: 10px; padding: 3px 8px; }
+      .section-title { font-size: 17px; }
+      .section-header { gap: 8px; margin-bottom: 10px; }
+
+      /* Completion banner */
+      #complete-banner { padding: 22px 20px; }
+      #complete-banner h2 { font-size: 26px; }
+      #complete-banner p { font-size: 13px; }
+
+      /* Music player */
+      #music-player { padding: 0 12px; gap: 10px; height: 58px; }
+      .player-title { font-size: 12px; }
+      .player-sub { font-size: 9px; }
+      #volume-slider { width: 52px; }
+      .vol-icon { font-size: 12px; }
+      .eq-bars { gap: 2px; }
+      .eq-bar { width: 2px; }
+    }
+
+    @media (max-width: 380px) {
+      .volume-wrap { display: none; }
+      .player-title { font-size: 11px; }
+      #music-player { gap: 8px; }
+    }
+  </style>
+
+
+  <!-- Firebase SDK — config baked in, works on any device -->
+  <script type="module">
+    import { initializeApp }                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, get }       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
+      authDomain:        "adidas-training-mtd.firebaseapp.com",
+      databaseURL:       "https://adidas-training-mtd-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId:         "adidas-training-mtd",
+      storageBucket:     "adidas-training-mtd.firebasestorage.app",
+      messagingSenderId: "208658627122",
+      appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    window._db     = db;
+    window._fbSave = async (key, data) => { try { await set(ref(db, 'progress/' + key), data); } catch(e) {} };
+    window._fbLoad = async (key) => { try { const s = await get(ref(db, 'progress/' + key)); return s.exists() ? s.val() : null; } catch(e) { return null; } };
+    window._firebaseReady = true;
+    document.dispatchEvent(new Event('firebase-ready'));
   </script>
-
 </head>
 <body>
 
   <!-- HEADER -->
-
   <header>
     <div class="adidas-logo">adidas</div>
     <div class="header-text">
@@ -680,217 +671,170 @@ body { padding-bottom: 72px; }
 
   <div class="container">
 
-```
-<!-- FIREBASE SETUP SCREEN (shown only if not configured) -->
-<div id="step-firebase" style="display:none;">
-  <div style="background:#fff; border:1.5px solid #E8E8E8; padding:36px 32px;">
-    <p class="step-label">One-time setup</p>
-    <h2 class="step-title">Connect<br>Firebase</h2>
-    <p style="font-size:14px; color:#666; margin-bottom:24px; line-height:1.6;">
-      Paste your Firebase config below to enable cross-device saving. This only needs to be done once.
-      <br><a href="https://console.firebase.google.com" target="_blank" style="color:#000; font-weight:600;">Get your config at console.firebase.google.com →</a>
-    </p>
+    <!-- RETURNING USER SCREEN -->
+    <div id="step-returning" style="display:none; animation: fadeUp 0.4s ease both;">
+      <p class="step-label">Welcome Back</p>
+      <h2 class="step-title">Continue<br>Training?</h2>
 
-    <div class="form-group">
-      <label for="fb-api-key">API Key</label>
-      <input type="text" id="fb-api-key" placeholder="AIzaSy..."/>
-    </div>
-    <div class="form-group">
-      <label for="fb-auth-domain">Auth Domain</label>
-      <input type="text" id="fb-auth-domain" placeholder="your-project.firebaseapp.com"/>
-    </div>
-    <div class="form-group">
-      <label for="fb-db-url">Database URL</label>
-      <input type="text" id="fb-db-url" placeholder="https://your-project-default-rtdb.firebaseio.com"/>
-    </div>
-    <div class="form-group">
-      <label for="fb-project-id">Project ID</label>
-      <input type="text" id="fb-project-id" placeholder="your-project"/>
-    </div>
-    <div class="form-group">
-      <label for="fb-app-id">App ID</label>
-      <input type="text" id="fb-app-id" placeholder="1:123456:web:abc123"/>
+      <div id="returning-card" style="background:#fff; border:1.5px solid #E8E8E8; padding:22px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:0.03em;" id="returning-name">–</div>
+          <div style="font-size:12px; color:#888; letter-spacing:0.06em; text-transform:uppercase; margin-top:3px;" id="returning-store">–</div>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#2ECC71; background:rgba(46,204,113,0.1); border:1px solid rgba(46,204,113,0.3); padding:5px 12px;">● Logged In</div>
+      </div>
+
+      <button class="btn-start" onclick="continueSession()" style="margin-bottom:12px;">Continue →</button>
+
+      <button onclick="clearSession()" style="width:100%; padding:15px; background:none; border:1.5px solid #E8E8E8; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; color:#888; transition:border-color 0.2s, color 0.2s;" onmouseover="this.style.borderColor='#000';this.style.color='#000'" onmouseout="this.style.borderColor='#E8E8E8';this.style.color='#888'">
+        Not You? Log Out ↺
+      </button>
     </div>
 
-    <p id="fb-error" style="color:#e74c3c; font-size:12px; display:none; margin-bottom:12px;">Please fill in all fields.</p>
-    <button class="btn-start" onclick="saveFirebaseConfig()">Save & Connect →</button>
-    <p style="text-align:center; margin-top:14px;">
-      <span onclick="skipFirebase()" style="font-size:12px; color:#888; cursor:pointer; letter-spacing:0.06em; text-transform:uppercase;">Skip for now (use this device only)</span>
-    </p>
-  </div>
-</div>
+    <!-- STEP 1: IDENTITY -->
+    <div id="step-identity">
+      <p class="step-label">Step 1 of 1</p>
+      <h2 class="step-title">Let's Get<br>Started</h2>
 
-<!-- RETURNING USER SCREEN -->
-<div id="step-returning" style="display:none; animation: fadeUp 0.4s ease both;">
-  <p class="step-label">Welcome Back</p>
-  <h2 class="step-title">Continue<br>Training?</h2>
+      <div class="form-group">
+        <label for="worker-name">Your Full Name</label>
+        <input type="text" id="worker-name" placeholder="e.g. Jordan Smith" autocomplete="name"/>
+        <p class="error-msg" id="name-error">Please enter your name.</p>
+      </div>
 
-  <div id="returning-card" style="background:#fff; border:1.5px solid #E8E8E8; padding:22px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between;">
-    <div>
-      <div style="font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:0.03em;" id="returning-name">–</div>
-      <div style="font-size:12px; color:#888; letter-spacing:0.06em; text-transform:uppercase; margin-top:3px;" id="returning-store">–</div>
-    </div>
-    <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#2ECC71; background:rgba(46,204,113,0.1); border:1px solid rgba(46,204,113,0.3); padding:5px 12px;">● Logged In</div>
-  </div>
+      <div class="form-group">
+        <label for="store-select">Your Store</label>
+        <div class="select-wrap">
+          <select id="store-select">
+            <option value="">— Select your store —</option>
+            <option value="Store NZ1104 – Britomart">Store NZ1104 – Britomart</option>
+            <option value="Store NZ1113 – Customs St">Store NZ1113 – Customs St</option>
+          </select>
+        </div>
+        <p class="error-msg" id="store-error">Please select your store.</p>
+      </div>
 
-  <button class="btn-start" onclick="continueSession()" style="margin-bottom:12px;">Continue →</button>
-
-  <button onclick="clearSession()" style="width:100%; padding:15px; background:none; border:1.5px solid #E8E8E8; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; color:#888; transition:border-color 0.2s, color 0.2s;" onmouseover="this.style.borderColor='#000';this.style.color='#000'" onmouseout="this.style.borderColor='#E8E8E8';this.style.color='#888'">
-    Not You? Log Out ↺
-  </button>
-</div>
-
-<!-- STEP 1: IDENTITY -->
-<div id="step-identity">
-  <p class="step-label">Step 1 of 1</p>
-  <h2 class="step-title">Let's Get<br>Started</h2>
-
-  <div class="form-group">
-    <label for="worker-name">Your Full Name</label>
-    <input type="text" id="worker-name" placeholder="e.g. Jordan Smith" autocomplete="name"/>
-    <p class="error-msg" id="name-error">Please enter your name.</p>
-  </div>
-
-  <div class="form-group">
-    <label for="store-select">Your Store</label>
-    <div class="select-wrap">
-      <select id="store-select">
-        <option value="">— Select your store —</option>
-        <!-- ✏️ ADD YOUR STORE LOCATIONS BELOW -->
-        <option value="Store 001 – New York">Store 001 – New York</option>
-        <option value="Store 002 – Los Angeles">Store 002 – Los Angeles</option>
-        <option value="Store 003 – Chicago">Store 003 – Chicago</option>
-        <option value="Store 004 – Houston">Store 004 – Houston</option>
-        <option value="Store 005 – Miami">Store 005 – Miami</option>
-        <!-- Add more stores here -->
-      </select>
-    </div>
-    <p class="error-msg" id="store-error">Please select your store.</p>
-  </div>
-
-  <button class="btn-start" onclick="startModules()">View My Modules →</button>
-</div>
-
-<!-- STEP 2: MODULES -->
-<div id="step-modules">
-
-  <div class="user-banner">
-    <div class="user-banner-info">
-      <strong id="banner-name">–</strong>
-      <span id="banner-store">–</span>
-      <span style="font-size:11px; color:#555; margin-top:4px; display:block; letter-spacing:0.05em;">
-        <span onclick="clearSession()" style="cursor:pointer; text-decoration:underline; text-underline-offset:2px;">Log Out ↺</span>
-      </span>
-      <span id="sync-status" style="font-size:11px; margin-top:3px; display:block; letter-spacing:0.05em; transition: opacity 1s;"></span>
-    </div>
-    <div class="progress-pill">
-      <div class="prog-num"><span id="prog-done">0</span>/<span id="prog-total">6</span></div>
-      <div class="prog-label">Completed</div>
-    </div>
-  </div>
-
-  <!-- AREA MODULES -->
-  <div class="module-section">
-    <div class="section-header">
-      <span class="section-tag">AREA</span>
-      <span class="section-title">AREA Modules</span>
+      <button class="btn-start" onclick="startModules()">View My Modules →</button>
     </div>
 
-    <a class="module-btn" id="mod-a1" href="#" target="_blank" onclick="markComplete('mod-a1', event)">
-      <span class="module-num">01</span>
-      <div class="module-info">
-        <div class="module-name" id="name-mod-a1">AREA Module 1</div>
-        <div class="module-sub"  id="sub-mod-a1">AREA · Training</div>
-      </div>
-      <div class="module-action">
-        <span>Open</span>
-        <div class="check-icon" id="check-mod-a1">✓</div>
-      </div>
-    </a>
+    <!-- STEP 2: MODULES -->
+    <div id="step-modules">
 
-    <a class="module-btn" id="mod-a2" href="#" target="_blank" onclick="markComplete('mod-a2', event)">
-      <span class="module-num">02</span>
-      <div class="module-info">
-        <div class="module-name" id="name-mod-a2">AREA Module 2</div>
-        <div class="module-sub"  id="sub-mod-a2">AREA · Training</div>
+      <div class="user-banner">
+        <div class="user-banner-info">
+          <strong id="banner-name">–</strong>
+          <span id="banner-store">–</span>
+          <span style="font-size:11px; color:#555; margin-top:4px; display:block; letter-spacing:0.05em;">
+            <span onclick="clearSession()" style="cursor:pointer; text-decoration:underline; text-underline-offset:2px;">Log Out ↺</span>
+          </span>
+          <span id="sync-status" style="font-size:11px; margin-top:3px; display:block; letter-spacing:0.05em; transition: opacity 1s;"></span>
+        </div>
+        <div class="progress-pill">
+          <div class="prog-num"><span id="prog-done">0</span>/<span id="prog-total">6</span></div>
+          <div class="prog-label">Completed</div>
+        </div>
       </div>
-      <div class="module-action">
-        <span>Open</span>
-        <div class="check-icon" id="check-mod-a2">✓</div>
-      </div>
-    </a>
 
-    <a class="module-btn" id="mod-a3" href="#" target="_blank" onclick="markComplete('mod-a3', event)">
-      <span class="module-num">03</span>
-      <div class="module-info">
-        <div class="module-name" id="name-mod-a3">AREA Module 3</div>
-        <div class="module-sub"  id="sub-mod-a3">AREA · Training</div>
-      </div>
-      <div class="module-action">
-        <span>Open</span>
-        <div class="check-icon" id="check-mod-a3">✓</div>
-      </div>
-    </a>
-  </div>
+      <!-- AREA MODULES -->
+      <div class="module-section">
+        <div class="section-header">
+          <span class="section-tag">AREA</span>
+          <span class="section-title">AREA Modules</span>
+        </div>
 
-  <!-- ATTICUS MODULES -->
-  <div class="module-section">
-    <div class="section-header">
-      <span class="section-tag atticus">ATTICUS</span>
-      <span class="section-title">Atticus Modules</span>
+        <a class="module-btn" id="mod-a1" href="#" target="_blank" onclick="markComplete('mod-a1', event)">
+          <span class="module-num">01</span>
+          <div class="module-info">
+            <div class="module-name" id="name-mod-a1">AREA Module 1</div>
+            <div class="module-sub"  id="sub-mod-a1">AREA · Training</div>
+          </div>
+          <div class="module-action">
+            <span>Open</span>
+            <div class="check-icon" id="check-mod-a1">✓</div>
+          </div>
+        </a>
+
+        <a class="module-btn" id="mod-a2" href="#" target="_blank" onclick="markComplete('mod-a2', event)">
+          <span class="module-num">02</span>
+          <div class="module-info">
+            <div class="module-name" id="name-mod-a2">AREA Module 2</div>
+            <div class="module-sub"  id="sub-mod-a2">AREA · Training</div>
+          </div>
+          <div class="module-action">
+            <span>Open</span>
+            <div class="check-icon" id="check-mod-a2">✓</div>
+          </div>
+        </a>
+
+        <a class="module-btn" id="mod-a3" href="#" target="_blank" onclick="markComplete('mod-a3', event)">
+          <span class="module-num">03</span>
+          <div class="module-info">
+            <div class="module-name" id="name-mod-a3">AREA Module 3</div>
+            <div class="module-sub"  id="sub-mod-a3">AREA · Training</div>
+          </div>
+          <div class="module-action">
+            <span>Open</span>
+            <div class="check-icon" id="check-mod-a3">✓</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- ATTICUS MODULES -->
+      <div class="module-section">
+        <div class="section-header">
+          <span class="section-tag atticus">ATTICUS</span>
+          <span class="section-title">Atticus Modules</span>
+        </div>
+
+        <a class="module-btn" id="mod-t1" href="#" target="_blank" onclick="markComplete('mod-t1', event)">
+          <span class="module-num">04</span>
+          <div class="module-info">
+            <div class="module-name" id="name-mod-t1">Atticus Module 1</div>
+            <div class="module-sub"  id="sub-mod-t1">Atticus · Training</div>
+          </div>
+          <div class="module-action">
+            <span>Open</span>
+            <div class="check-icon" id="check-mod-t1">✓</div>
+          </div>
+        </a>
+
+        <a class="module-btn" id="mod-t2" href="#" target="_blank" onclick="markComplete('mod-t2', event)">
+          <span class="module-num">05</span>
+          <div class="module-info">
+            <div class="module-name" id="name-mod-t2">Atticus Module 2</div>
+            <div class="module-sub"  id="sub-mod-t2">Atticus · Training</div>
+          </div>
+          <div class="module-action">
+            <span>Open</span>
+            <div class="check-icon" id="check-mod-t2">✓</div>
+          </div>
+        </a>
+
+        <a class="module-btn" id="mod-t3" href="#" target="_blank" onclick="markComplete('mod-t3', event)">
+          <span class="module-num">06</span>
+          <div class="module-info">
+            <div class="module-name" id="name-mod-t3">Atticus Module 3</div>
+            <div class="module-sub"  id="sub-mod-t3">Atticus · Training</div>
+          </div>
+          <div class="module-action">
+            <span>Open</span>
+            <div class="check-icon" id="check-mod-t3">✓</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- COMPLETION BANNER -->
+      <div id="complete-banner">
+        <h2>All Done! 🎉</h2>
+        <p>You've completed all <span id="banner-mod-count">6</span> modules for this month. Great work.</p>
+      </div>
+
+      <footer>adidas Training Hub &nbsp;·&nbsp; <span id="footer-month"></span></footer>
     </div>
-
-    <a class="module-btn" id="mod-t1" href="#" target="_blank" onclick="markComplete('mod-t1', event)">
-      <span class="module-num">04</span>
-      <div class="module-info">
-        <div class="module-name" id="name-mod-t1">Atticus Module 1</div>
-        <div class="module-sub"  id="sub-mod-t1">Atticus · Training</div>
-      </div>
-      <div class="module-action">
-        <span>Open</span>
-        <div class="check-icon" id="check-mod-t1">✓</div>
-      </div>
-    </a>
-
-    <a class="module-btn" id="mod-t2" href="#" target="_blank" onclick="markComplete('mod-t2', event)">
-      <span class="module-num">05</span>
-      <div class="module-info">
-        <div class="module-name" id="name-mod-t2">Atticus Module 2</div>
-        <div class="module-sub"  id="sub-mod-t2">Atticus · Training</div>
-      </div>
-      <div class="module-action">
-        <span>Open</span>
-        <div class="check-icon" id="check-mod-t2">✓</div>
-      </div>
-    </a>
-
-    <a class="module-btn" id="mod-t3" href="#" target="_blank" onclick="markComplete('mod-t3', event)">
-      <span class="module-num">06</span>
-      <div class="module-info">
-        <div class="module-name" id="name-mod-t3">Atticus Module 3</div>
-        <div class="module-sub"  id="sub-mod-t3">Atticus · Training</div>
-      </div>
-      <div class="module-action">
-        <span>Open</span>
-        <div class="check-icon" id="check-mod-t3">✓</div>
-      </div>
-    </a>
-  </div>
-
-  <!-- COMPLETION BANNER -->
-  <div id="complete-banner">
-    <h2>All Done! 🎉</h2>
-    <p>You've completed all <span id="banner-mod-count">6</span> modules for this month. Great work.</p>
-  </div>
-
-  <footer>adidas Training Hub &nbsp;·&nbsp; <span id="footer-month"></span></footer>
-</div>
-```
 
   </div>
 
   <!-- ─── MUSIC PLAYER ─── -->
-
   <div id="music-player">
     <button id="play-btn" onclick="togglePlay()" title="Play / Pause">
       <svg id="icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
@@ -920,58 +864,13 @@ body { padding-bottom: 72px; }
     • Upload an MP3 to your GitHub Pages repo and use: "./your-song.mp3"
     • Or paste any direct MP3 URL from a royalty-free site (pixabay.com, bensound.com)
   -->
-
   <audio id="bg-audio" loop preload="auto">
     <source src="https://www.bensound.com/bensound-music/bensound-moose.mp3" type="audio/mpeg"/>
   </audio>
 
   <script>
-    // ─── FIREBASE SETUP SCREEN ───
-    function checkFirebaseSetup() {
-      try {
-        const cfg = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
-        const skipped = localStorage.getItem('adidas_fb_skipped');
-        if ((!cfg || cfg.apiKey.includes('YOUR_')) && !skipped) {
-          document.getElementById('step-firebase').style.display = 'block';
-          document.getElementById('step-identity').style.display = 'none';
-          return false;
-        }
-      } catch(e) {}
-      return true;
-    }
-
-    function saveFirebaseConfig() {
-      const cfg = {
-        apiKey:            document.getElementById('fb-api-key').value.trim(),
-        authDomain:        document.getElementById('fb-auth-domain').value.trim(),
-        databaseURL:       document.getElementById('fb-db-url').value.trim(),
-        projectId:         document.getElementById('fb-project-id').value.trim(),
-        storageBucket:     document.getElementById('fb-project-id').value.trim() + '.appspot.com',
-        messagingSenderId: '',
-        appId:             document.getElementById('fb-app-id').value.trim(),
-      };
-      if (!cfg.apiKey || !cfg.authDomain || !cfg.databaseURL || !cfg.projectId || !cfg.appId) {
-        document.getElementById('fb-error').style.display = 'block';
-        return;
-      }
-      document.getElementById('fb-error').style.display = 'none';
-      localStorage.setItem('adidas_fb_config', JSON.stringify(cfg));
-      document.dispatchEvent(new CustomEvent('firebase-config-saved', { detail: cfg }));
-      document.getElementById('step-firebase').style.display = 'none';
-      document.getElementById('step-identity').style.display = 'block';
-    }
-
-    function skipFirebase() {
-      localStorage.setItem('adidas_fb_skipped', '1');
-      document.getElementById('step-firebase').style.display = 'none';
-      document.getElementById('step-identity').style.display = 'block';
-    }
-
-    function resetFirebaseConfig() {
-      localStorage.removeItem('adidas_fb_config');
-      localStorage.removeItem('adidas_fb_skipped');
-      location.reload();
-    }
+    // Firebase config is baked in — no setup needed
+    function checkFirebaseSetup() { return true; }
 
     // ─── MONTH KEY ───
     const monthKey  = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
@@ -1219,6 +1118,5 @@ body { padding-bottom: 72px; }
       }
     }, { once: true });
   </script>
-
 </body>
 </html>
