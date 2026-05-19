@@ -1140,8 +1140,9 @@
             <div class="select-wrap">
               <select id="export-period" onchange="updateExportPreview()">
                 <option value="mtd">This Month (MTD)</option>
-                <option value="last_month">Last Month</option>
+                <option value="last_month">Previous Month (PM)</option>
                 <option value="wtd">This Week (WTD)</option>
+                <option value="last_week">Previous Week (PW)</option>
                 <option value="ytd">This Year (YTD)</option>
                 <option value="all">All Time</option>
               </select>
@@ -1869,18 +1870,30 @@
         const d = parseAdiTimestamp(r.timestamp);
         if (!d) return false;
         if (period === 'mtd')        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-        if (period === 'last_month') { const lm = new Date(now.getFullYear(), now.getMonth()-1,1); return d.getMonth()===lm.getMonth()&&d.getFullYear()===lm.getFullYear(); }
+        if (period === 'last_month') { const lm = new Date(now.getFullYear(), now.getMonth()-1, 1); return d.getMonth()===lm.getMonth()&&d.getFullYear()===lm.getFullYear(); }
         if (period === 'wtd')        { const mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()+6)%7)); mon.setHours(0,0,0,0); return d>=mon; }
+        if (period === 'last_week')  {
+          const thisMonday = new Date(now); thisMonday.setDate(now.getDate()-((now.getDay()+6)%7)); thisMonday.setHours(0,0,0,0);
+          const lastMonday = new Date(thisMonday); lastMonday.setDate(thisMonday.getDate()-7);
+          const lastSunday = new Date(thisMonday); lastSunday.setSeconds(lastSunday.getSeconds()-1);
+          return d >= lastMonday && d <= lastSunday;
+        }
         if (period === 'ytd')        return d.getFullYear() === now.getFullYear();
-        return true; // all
+        return true;
       }).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
     }
 
     function periodLabel(period) {
       const now = new Date();
       if (period==='mtd')        return now.toLocaleString('default',{month:'long',year:'numeric'}) + ' (MTD)';
-      if (period==='last_month') { const lm=new Date(now.getFullYear(),now.getMonth()-1,1); return lm.toLocaleString('default',{month:'long',year:'numeric'}); }
-      if (period==='wtd')        return 'Week to Date';
+      if (period==='last_month') { const lm=new Date(now.getFullYear(),now.getMonth()-1,1); return lm.toLocaleString('default',{month:'long',year:'numeric'}) + ' (PM)'; }
+      if (period==='wtd')        return 'Week to Date (WTD)';
+      if (period==='last_week')  {
+        const thisMonday = new Date(now); thisMonday.setDate(now.getDate()-((now.getDay()+6)%7)); thisMonday.setHours(0,0,0,0);
+        const lastMonday = new Date(thisMonday); lastMonday.setDate(thisMonday.getDate()-7);
+        const lastSunday = new Date(thisMonday); lastSunday.setSeconds(lastSunday.getSeconds()-1);
+        return lastMonday.toLocaleDateString('en-NZ',{day:'2-digit',month:'short'}) + ' – ' + lastSunday.toLocaleDateString('en-NZ',{day:'2-digit',month:'short'}) + ' (PW)';
+      }
       if (period==='ytd')        return now.getFullYear() + ' (YTD)';
       return 'All Time';
     }
