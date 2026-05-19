@@ -616,11 +616,8 @@
     .month-chips {
       display: flex;
       gap: 8px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      flex-wrap: wrap;
       scrollbar-width: none;
-      padding-bottom: 2px;
     }
 
     .month-chips::-webkit-scrollbar { display: none; }
@@ -778,16 +775,15 @@
       .save-bar { flex-direction: column; gap: 10px; align-items: stretch; }
       .btn-save { text-align: center; }
 
-      /* Month chips — scrollable */
+      /* Month chips — scroll on mobile */
       .month-chips {
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         padding-bottom: 4px;
-        scrollbar-width: none;
+        max-width: 100%;
       }
-      .month-chips::-webkit-scrollbar { display: none; }
-      .month-chip { white-space: nowrap; font-size: 11px; padding: 5px 10px; }
+      .month-chip { white-space: nowrap; font-size: 11px; padding: 5px 10px; flex-shrink: 0; }
 
       /* Filter bar */
       .filter-bar { flex-direction: column; gap: 8px; }
@@ -1082,7 +1078,9 @@
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
                 <option value="week">This Week</option>
+                <option value="last_week">Last Week</option>
                 <option value="month" selected>This Month</option>
+                <option value="last_month">Last Month</option>
               </select>
             </div>
           </div>
@@ -1120,15 +1118,51 @@
 
       <!-- ADMIN USERS -->
       <div class="card">
-        <div class="card-header">
-          <span class="card-title">Admin Users</span>
-        </div>
-        <div class="user-list" id="admin-user-list">
-          <!-- Injected by JS -->
-        </div>
+        <div class="card-header"><span class="card-title">Admin Users</span></div>
+        <div class="user-list" id="admin-user-list"></div>
         <p style="font-size:12px; color:var(--gray-500); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
           To add or change admin credentials, log in with the default and set your own username and password on first login.
         </p>
+      </div>
+
+      <!-- ADICLUB EXPORT -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Export adiClub Data</span>
+        </div>
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          Export signup data to a spreadsheet. Choose your date range and format below.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+          <div class="form-group" style="margin:0;">
+            <label>Date Range</label>
+            <div class="select-wrap">
+              <select id="export-period">
+                <option value="mtd">This Month (MTD)</option>
+                <option value="last_month">Last Month</option>
+                <option value="wtd">This Week (WTD)</option>
+                <option value="ytd">This Year (YTD)</option>
+                <option value="all">All Time</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Format</label>
+            <div class="select-wrap">
+              <select id="export-format">
+                <option value="csv">CSV (Excel)</option>
+                <option value="pdf">PDF</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="export-preview" style="background:var(--gray-100); border:1px solid var(--gray-200); padding:12px 16px; margin-bottom:16px; font-size:12px; color:var(--gray-700); letter-spacing:0.04em;">
+          Select a range and click Export.
+        </div>
+
+        <button class="btn-save" onclick="exportAdiClub()">Export Data →</button>
       </div>
 
     </div>
@@ -1561,14 +1595,15 @@
 
     function applyModuleConfig(cfg) {
       MODULE_DEFS.forEach(m => {
-        const data = cfg[m.id];
-        if (!data) return;
+        const data  = cfg[m.id];
         const nameEl = document.getElementById('inp-name-' + m.id);
         const subEl  = document.getElementById('inp-sub-'  + m.id);
         const urlEl  = document.getElementById('inp-url-'  + m.id);
-        if (nameEl && data.name) nameEl.value = data.name;
-        if (subEl  && data.sub)  subEl.value  = data.sub;
-        if (urlEl  && data.url)  urlEl.value  = data.url;
+        if (!data) return;
+        if (nameEl) nameEl.value = data.name && data.name !== m.defaultName ? data.name : (data.name || '');
+        if (subEl)  subEl.value  = data.sub  && data.sub  !== m.defaultSub  ? data.sub  : (data.sub  || '');
+        // Only populate URL if it's a real URL (not the # placeholder)
+        if (urlEl)  urlEl.value  = (data.url && data.url !== '#') ? data.url : '';
       });
     }
 
@@ -1880,7 +1915,7 @@
       const panels = ['tab-modules','tab-progress','tab-adiclub','tab-settings'];
       document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
       document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
-      if (name === 'settings') loadFbConfigToForm();
+      if (name === 'settings') renderAdminUsers();
       if (name === 'adiclub') loadAdiClub();
     }
 
@@ -1941,12 +1976,26 @@
           if (period === 'today') {
             if (d.toDateString() !== now.toDateString()) return false;
           } else if (period === 'week') {
+            // This week: Mon 00:00 → now
             const monday = new Date(now);
             monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
             monday.setHours(0, 0, 0, 0);
             if (d < monday) return false;
+          } else if (period === 'last_week') {
+            // Last week: Mon 00:00 → Sun 23:59 of previous week
+            const thisMonday = new Date(now);
+            thisMonday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+            thisMonday.setHours(0, 0, 0, 0);
+            const lastMonday = new Date(thisMonday);
+            lastMonday.setDate(thisMonday.getDate() - 7);
+            const lastSunday = new Date(thisMonday);
+            lastSunday.setSeconds(lastSunday.getSeconds() - 1);
+            if (d < lastMonday || d > lastSunday) return false;
           } else if (period === 'month') {
             if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false;
+          } else if (period === 'last_month') {
+            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            if (d.getMonth() !== lastMonth.getMonth() || d.getFullYear() !== lastMonth.getFullYear()) return false;
           }
         }
         return true;
