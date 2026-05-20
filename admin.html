@@ -311,7 +311,6 @@
     }
 
     .module-row .form-group { margin-bottom: 0; }
-
     .module-row input { font-size: 13px; padding: 10px 12px; }
 
     .save-bar {
@@ -433,9 +432,7 @@
     .btn-refresh:hover { background: #222; }
 
     /* ─── PROGRESS TABLE ─── */
-    .table-wrap {
-      overflow-x: auto;
-    }
+    .table-wrap { overflow-x: auto; }
 
     table {
       width: 100%;
@@ -541,77 +538,6 @@
 
     .empty-state span { font-size: 13px; display: block; margin-top: 6px; }
 
-    /* ─── MODULE TOGGLE ─── */
-    .mod-toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: var(--gray-100);
-      border: 1.5px solid var(--gray-200);
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .mod-toggle-row.active {
-      background: #f0fdf5;
-      border-color: rgba(46,204,113,0.4);
-    }
-
-    .mod-toggle-label {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .mod-toggle-label.inactive { color: var(--gray-400); }
-
-    .toggle-switch {
-      position: relative;
-      width: 40px;
-      height: 22px;
-      flex-shrink: 0;
-    }
-
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-
-    .toggle-slider {
-      position: absolute;
-      inset: 0;
-      background: var(--gray-200);
-      cursor: pointer;
-      border-radius: 22px;
-      transition: background 0.2s;
-    }
-
-    .toggle-slider::before {
-      content: '';
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      left: 3px;
-      top: 3px;
-      background: var(--white);
-      border-radius: 50%;
-      transition: transform 0.2s;
-    }
-
-    .toggle-switch input:checked + .toggle-slider { background: var(--green); }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
-
-    /* ─── LOADING SPINNER ─── */
-    .loading-spinner {
-      text-align: center;
-      padding: 30px;
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-    }
-
     /* ─── MONTH SELECTOR ─── */
     .month-chips {
       display: flex;
@@ -645,15 +571,109 @@
 
     .month-chip:hover:not(.active) { border-color: var(--black); }
 
-    /* ─── SETTINGS ─── */
-    .settings-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-      flex-wrap: wrap;
+    /* ─── LOADING SPINNER ─── */
+    .loading-spinner {
+      text-align: center;
+      padding: 30px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
     }
 
-    .settings-row .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
+    /* ─── TEAM MEMBERS ─── */
+    .team-member-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .team-member-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
+      transition: border-color 0.2s;
+    }
+
+    .team-member-item:hover { border-color: #bbb; }
+
+    .team-member-drag {
+      color: var(--gray-400);
+      font-size: 16px;
+      cursor: grab;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .team-member-name {
+      flex: 1;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-remove-member {
+      width: 30px;
+      height: 30px;
+      background: none;
+      border: 1.5px solid var(--gray-200);
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-member:hover {
+      background: var(--red);
+      color: var(--white);
+      border-color: var(--red);
+    }
+
+    .add-member-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .add-member-row .form-group {
+      flex: 1;
+      margin: 0;
+    }
+
+    .add-member-row input {
+      padding: 12px 14px;
+      font-size: 15px;
+    }
+
+    .btn-add-member {
+      padding: 12px 22px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-add-member:hover { background: #222; }
 
     /* ─── ADMIN USERS ─── */
     .user-list { display: flex; flex-direction: column; gap: 10px; }
@@ -694,7 +714,8 @@
       padding: 4px 10px;
     }
 
-    /* ─── NOTIFICATIONS ─── */
+    /* ─── ADICLUB ─── */
+    /* ─── TOAST ─── */
     .toast {
       position: fixed;
       bottom: 28px;
@@ -787,18 +808,12 @@
       .pct-label { min-width: 28px; font-size: 12px; }
       .progress-bar { min-width: 36px; }
 
-      tbody td button { padding: 4px 8px; font-size: 10px; }
+      .add-member-row { flex-direction: column; }
+      .btn-add-member { width: 100%; text-align: center; }
 
       .toast { bottom: 14px; right: 14px; left: 14px; font-size: 12px; padding: 12px 16px; }
 
       .user-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-      #fb-config-fields { grid-template-columns: 1fr !important; }
-
-      #hash-result > div:first-child > div { flex-direction: column; }
-      #copy-hash-btn { width: 100%; }
-
-      #tab-adiclub .filter-bar { flex-direction: column; }
-      #tab-adiclub .select-wrap { width: 100%; }
     }
 
     @media (max-width: 400px) {
@@ -880,10 +895,6 @@
 
       <p class="error-msg" id="setup-error"></p>
       <button class="btn-primary" onclick="saveNewCredentials()">Save & Continue →</button>
-
-      <p style="font-size:11px; color:var(--gray-400); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
-        Other admins can do the same — they log in with the default and set their own credentials.
-      </p>
     </div>
   </div>
 
@@ -893,6 +904,7 @@
     <!-- TABS -->
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('modules')">Module Editor</button>
+      <button class="tab-btn" onclick="switchTab('team')">Team Members</button>
       <button class="tab-btn" onclick="switchTab('progress')">Worker Progress</button>
       <button class="tab-btn" onclick="switchTab('adiclub')">adiClub Signups</button>
       <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
@@ -920,11 +932,7 @@
           <span class="card-title">AREA Modules</span>
           <span class="card-tag">AREA</span>
         </div>
-
-        <div id="area-module-rows">
-          <!-- Rows injected by JS -->
-        </div>
-
+        <div id="area-module-rows"></div>
         <div class="save-bar">
           <span class="save-status" id="save-status-area"></span>
           <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
@@ -937,11 +945,7 @@
           <span class="card-title">Atticus Modules</span>
           <span class="card-tag outline">ATTICUS</span>
         </div>
-
-        <div id="atticus-module-rows">
-          <!-- Rows injected by JS -->
-        </div>
-
+        <div id="atticus-module-rows"></div>
         <div class="save-bar">
           <span class="save-status" id="save-status-atticus"></span>
           <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
@@ -950,6 +954,46 @@
 
       <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding: 0 4px;">
         ℹ️ Changes are saved to Firebase instantly and reflected in the worker app within seconds — no GitHub push required.
+      </p>
+    </div>
+
+    <!-- ─── TAB: TEAM MEMBERS ─── -->
+    <div class="tab-panel" id="tab-team">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Team Members</span>
+          <span class="card-tag">Worker Names</span>
+        </div>
+
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          These names appear in the dropdown on the worker page. Changes save to Firebase instantly and are reflected immediately.
+        </p>
+
+        <!-- Name list -->
+        <div class="team-member-list" id="team-member-list">
+          <div class="loading-spinner">Loading team members…</div>
+        </div>
+
+        <!-- Add new member -->
+        <div style="border-top:1px solid var(--gray-200); padding-top:20px; margin-top:4px;">
+          <label style="margin-bottom:10px; display:block;">Add New Member</label>
+          <div class="add-member-row">
+            <div class="form-group">
+              <input type="text" id="new-member-input" placeholder="e.g. Jordan"
+                     onkeydown="if(event.key==='Enter') addTeamMember()"/>
+            </div>
+            <button class="btn-add-member" onclick="addTeamMember()">+ Add</button>
+          </div>
+        </div>
+
+        <div class="save-bar" style="margin-top:24px;">
+          <span class="save-status" id="save-status-team"></span>
+          <button class="btn-save" onclick="saveTeamMembers()">Save Team →</button>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
+        ℹ️ The worker page dropdown refreshes on every page load — workers will see the updated list immediately after saving.
       </p>
     </div>
 
@@ -981,9 +1025,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div>
             <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;">Viewing Month</p>
-            <div class="month-chips" id="month-chips">
-              <!-- chips injected by JS -->
-            </div>
+            <div class="month-chips" id="month-chips"></div>
           </div>
           <button class="btn-refresh" onclick="refreshProgressTab()">↻ Refresh</button>
         </div>
@@ -1026,13 +1068,10 @@
           </table>
         </div>
       </div>
-
     </div>
 
     <!-- ─── TAB: ADICLUB SIGNUPS ─── -->
     <div class="tab-panel" id="tab-adiclub">
-
-      <!-- STATS -->
       <div class="stats-row">
         <div class="stat-box">
           <div class="stat-num" id="ac-stat-total">–</div>
@@ -1052,7 +1091,6 @@
         </div>
       </div>
 
-      <!-- CONTROLS -->
       <div class="card" style="padding:18px 24px; margin-bottom:16px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div class="filter-bar" style="margin:0; flex:1;">
@@ -1072,7 +1110,6 @@
         </div>
       </div>
 
-      <!-- TABLE -->
       <div class="card" style="padding:0;">
         <div class="table-wrap">
           <table>
@@ -1094,7 +1131,6 @@
           </table>
         </div>
       </div>
-
     </div>
 
     <!-- ─── TAB: SETTINGS ─── -->
@@ -1184,6 +1220,12 @@
   </script>
 
   <script>
+    // ─── DEFAULT NAMES (fallback if nothing in Firebase yet) ───
+    const DEFAULT_NAMES = ['David','Cheyne','Alex','Charli','Robin','Bailey'];
+
+    // ─── Current team members list (in-memory, edited before saving) ───
+    let teamMembers = [...DEFAULT_NAMES];
+
     // ─── Module definitions ───
     const MODULE_DEFS = [
       { id: 'mod-a1', num: '01', group: 'area',    defaultName: 'AREA Module 1',    defaultSub: 'AREA · Training' },
@@ -1199,6 +1241,8 @@
     let allProgress = [];
     let selectedMonth = getCurrentMonthKey();
     let allMonths = [];
+    let adminActiveModules = [];
+    let selectedModuleMonth = getCurrentMonthKey();
 
     // ─── Month helpers ───
     function getCurrentMonthKey() {
@@ -1215,15 +1259,14 @@
       return months;
     }
 
-    // ─── SAFE KEY ───
     function safeKey(str) { return str.replace(/\./g, ','); }
     function unsafeKey(str) { return str.replace(/,/g, '.'); }
+
     async function sha256(str) {
       const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
 
-    // ─── DEFAULT CREDENTIALS ───
     const DEFAULT_USER = 'admin';
     const DEFAULT_PASS = 'adidas123';
 
@@ -1296,21 +1339,13 @@
       const err     = document.getElementById('setup-error');
       err.style.display = 'none';
 
-      if (!user) {
-        err.textContent = 'Please choose a username.'; err.style.display = 'block'; return;
-      }
-      if (pass.length < 8) {
-        err.textContent = 'Password must be at least 8 characters.'; err.style.display = 'block'; return;
-      }
-      if (pass !== confirm) {
-        err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return;
-      }
-      if (user === DEFAULT_USER && pass === DEFAULT_PASS) {
-        err.textContent = 'Please choose a different username or password from the default.'; err.style.display = 'block'; return;
-      }
+      if (!user) { err.textContent = 'Please choose a username.'; err.style.display = 'block'; return; }
+      if (pass.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display = 'block'; return; }
+      if (pass !== confirm) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
+      if (user === DEFAULT_USER && pass === DEFAULT_PASS) { err.textContent = 'Please choose different credentials from the default.'; err.style.display = 'block'; return; }
 
       if (!window._firebaseReady) {
-        err.textContent = 'Firebase not connected — credentials cannot be saved yet. Try again in a moment.';
+        err.textContent = 'Firebase not connected — try again in a moment.';
         err.style.display = 'block'; return;
       }
 
@@ -1358,27 +1393,20 @@
       loadFbConfigToForm();
       buildMonthChips();
       buildModuleMonthChips();
-      buildReqMonthSelect();
-      buildReqToggles(['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']);
 
       waitForFirebase(async () => {
-        // Load module config first so adminActiveModules is correct
         await loadModuleConfig();
-        // Then load progress with the correct active module list
         await loadProgress();
-        loadRequiredForMonth();
+        await loadTeamMembersAdmin();
       });
     }
 
-    // ─── WAIT FOR FIREBASE ───
     function waitForFirebase(cb) {
       if (window._firebaseReady) return cb();
       document.addEventListener('firebase-ready', cb, { once: true });
     }
 
     // ─── BUILD MODULE ROWS ───
-    // FIX: inputs use type="text" not type="url" so browsers don't silently
-    //      reject programmatic value assignments for non-standard URL formats.
     function buildModuleRows() {
       const areaEl    = document.getElementById('area-module-rows');
       const atticusEl = document.getElementById('atticus-module-rows');
@@ -1398,7 +1426,7 @@
             <label>Subtitle</label>
             <input type="text" id="inp-sub-${m.id}" placeholder="${m.defaultSub}"/>
           </div>
-          <div class="form-group url-field">
+          <div class="form-group">
             <label>Training URL</label>
             <input type="text" id="inp-url-${m.id}" placeholder="https://…"/>
           </div>
@@ -1407,122 +1435,89 @@
       });
     }
 
-    // ─── REQUIRED MODULES ───
-    const REQ_MODULE_DEFS = [
-      { id: 'mod-a1', label: 'AREA Module 1',    group: 'area' },
-      { id: 'mod-a2', label: 'AREA Module 2',    group: 'area' },
-      { id: 'mod-a3', label: 'AREA Module 3',    group: 'area' },
-      { id: 'mod-t1', label: 'Atticus Module 1', group: 'atticus' },
-      { id: 'mod-t2', label: 'Atticus Module 2', group: 'atticus' },
-      { id: 'mod-t3', label: 'Atticus Module 3', group: 'atticus' },
-    ];
+    // ─── TEAM MEMBERS ───
 
-    function buildReqMonthSelect() {
-      const months = getRecentMonths(3).concat(
-        (() => {
-          const future = [];
-          const d = new Date();
-          for (let i = 1; i <= 3; i++) {
-            d.setMonth(d.getMonth() + 1);
-            future.push(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
-          }
-          return future;
-        })()
-      );
-      const sel = document.getElementById('req-month-select');
-      if (!sel) return;
-      const current = getCurrentMonthKey();
-      sel.innerHTML = months.map(m =>
-        `<option value="${m}"${m === current ? ' selected' : ''}>${m}</option>`
-      ).join('');
+    // Load from Firebase into admin panel
+    async function loadTeamMembersAdmin() {
+      if (!window._firebaseReady) return;
+      try {
+        const snap = await window._fbGet(window._fbRef(window._db, 'config/team_members'));
+        if (snap.exists()) {
+          const data = snap.val();
+          teamMembers = Array.isArray(data) ? [...data] : [...Object.values(data)];
+          teamMembers = teamMembers.filter(Boolean);
+        } else {
+          teamMembers = [...DEFAULT_NAMES];
+        }
+      } catch(e) {
+        teamMembers = [...DEFAULT_NAMES];
+      }
+      renderTeamMemberList();
     }
 
-    function buildReqToggles(required = []) {
-      ['area', 'atticus'].forEach(group => {
-        const el = document.getElementById('req-' + group + '-toggles');
-        if (!el) return;
-        el.innerHTML = '';
-        REQ_MODULE_DEFS.filter(m => m.group === group).forEach(m => {
-          const isActive = required.includes(m.id);
-          const nameEl = document.getElementById('inp-name-' + m.id);
-          const label  = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : m.label;
+    // Render the editable list in the Team Members tab
+    function renderTeamMemberList() {
+      const list = document.getElementById('team-member-list');
+      if (teamMembers.length === 0) {
+        list.innerHTML = '<p style="font-size:13px; color:var(--gray-500); padding:8px 0;">No team members yet. Add some below.</p>';
+        return;
+      }
 
-          const row = document.createElement('div');
-          row.className = 'mod-toggle-row' + (isActive ? ' active' : '');
-          row.id = 'req-row-' + m.id;
-          row.innerHTML = `
-            <span class="mod-toggle-label${isActive ? '' : ' inactive'}" id="req-label-${m.id}">${label}</span>
-            <label class="toggle-switch">
-              <input type="checkbox" id="req-chk-${m.id}" ${isActive ? 'checked' : ''} onchange="updateToggleStyle('${m.id}')"/>
-              <span class="toggle-slider"></span>
-            </label>
-          `;
-          el.appendChild(row);
-        });
+      list.innerHTML = '';
+      teamMembers.forEach((name, idx) => {
+        const item = document.createElement('div');
+        item.className = 'team-member-item';
+        item.innerHTML = `
+          <span class="team-member-drag" title="Drag to reorder">⠿</span>
+          <span class="team-member-name">${escHtml(name)}</span>
+          <button class="btn-remove-member" onclick="removeMember(${idx})" title="Remove ${escHtml(name)}">✕</button>
+        `;
+        list.appendChild(item);
       });
     }
 
-    function updateToggleStyle(modId) {
-      const chk   = document.getElementById('req-chk-' + modId);
-      const row   = document.getElementById('req-row-' + modId);
-      const label = document.getElementById('req-label-' + modId);
-      if (chk.checked) {
-        row.classList.add('active');
-        label.classList.remove('inactive');
-      } else {
-        row.classList.remove('active');
-        label.classList.add('inactive');
+    function addTeamMember() {
+      const input = document.getElementById('new-member-input');
+      const name  = input.value.trim();
+      if (!name) { showToast('Enter a name first', 'error'); return; }
+      if (teamMembers.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+        showToast('That name already exists', 'error'); return;
       }
+      // Capitalise first letter
+      const formatted = name.charAt(0).toUpperCase() + name.slice(1);
+      teamMembers.push(formatted);
+      input.value = '';
+      renderTeamMemberList();
+      showToast('Added ' + formatted + ' — click Save Team to apply', '');
     }
 
-    async function loadRequiredForMonth() {
-      if (!window._firebaseReady) return;
-      const sel = document.getElementById('req-month-select');
-      if (!sel) return;
-      const month = sel.value;
-      const key   = 'config/required/' + month.replace(/[^a-zA-Z0-9]/g, '_');
-      try {
-        const snap = await window._fbGet(window._fbRef(window._db, key));
-        const required = snap.exists() ? snap.val() : ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
-        buildReqToggles(required);
-      } catch(e) {
-        buildReqToggles(['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']);
-      }
+    function removeMember(idx) {
+      const name = teamMembers[idx];
+      if (!confirm(`Remove "${name}" from the team list?`)) return;
+      teamMembers.splice(idx, 1);
+      renderTeamMemberList();
+      showToast('Removed ' + name + ' — click Save Team to apply', '');
     }
 
-    async function saveRequiredModules() {
+    async function saveTeamMembers() {
       if (!window._firebaseReady) {
         showToast('Firebase not connected', 'error'); return;
       }
-      const sel = document.getElementById('req-month-select');
-      if (!sel) return;
-      const month    = sel.value;
-      const key      = 'config/required/' + month.replace(/[^a-zA-Z0-9]/g, '_');
-      const required = REQ_MODULE_DEFS.filter(m =>
-        document.getElementById('req-chk-' + m.id)?.checked
-      ).map(m => m.id);
-
       try {
-        await window._fbSet(window._fbRef(window._db, key), required);
-        const el = document.getElementById('save-status-required');
+        await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
+        const el = document.getElementById('save-status-team');
         if (el) {
-          el.textContent = '✓ Saved for ' + month;
+          el.textContent = '✓ Saved — worker page updated';
           el.style.color = 'var(--green)';
           setTimeout(() => { el.textContent = ''; }, 4000);
         }
-        showToast('✓ Required modules saved for ' + month, 'success');
+        showToast('✓ Team members saved', 'success');
       } catch(e) {
         showToast('Save failed — ' + e.message, 'error');
       }
     }
 
-    // ─── ACTIVE MODULES (used by renderTable) ───
-    // Starts empty — set by loadModuleConfig once Firebase data is read.
-    // An empty array means "no config loaded yet"; all 6 shown as fallback
-    // only if Firebase has no record for this month.
-    let adminActiveModules  = [];
-    let selectedModuleMonth = getCurrentMonthKey();
-
+    // ─── MODULE CONFIG ───
     function monthToKey(m) { return m.replace(/\s+/g, '_'); }
     function moduleConfigPath(m) { return 'config/modules/' + monthToKey(m || selectedModuleMonth); }
 
@@ -1555,10 +1550,6 @@
       });
     }
 
-    // ─── LOAD MODULE CONFIG FROM FIREBASE ───
-    // FIX: Now returns a Promise so callers can await it before rendering.
-    // FIX: When no config exists for a month, defaults to all 6 (not empty),
-    //      so workers aren't shown with 0 required modules.
     async function loadModuleConfig(month) {
       month = month || selectedModuleMonth;
       if (!window._firebaseReady) return;
@@ -1567,12 +1558,10 @@
         if (snap.exists()) {
           const cfg = snap.val();
           applyModuleConfig(cfg);
-          // Only count modules that have a real URL as "active"
           adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id =>
             cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url.trim() !== ''
           );
         } else {
-          // No config saved for this month — clear the editor fields
           MODULE_DEFS.forEach(m => {
             const nameEl = document.getElementById('inp-name-' + m.id);
             const subEl  = document.getElementById('inp-sub-'  + m.id);
@@ -1581,7 +1570,6 @@
             if (subEl)  subEl.value  = '';
             if (urlEl)  urlEl.value  = '';
           });
-          // No config → treat all 6 as active so progress table shows all columns
           adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
         }
       } catch(e) { console.warn('Could not load module config', e); }
@@ -1596,15 +1584,13 @@
         if (!data) return;
         if (nameEl) nameEl.value = data.name || '';
         if (subEl)  subEl.value  = data.sub  || '';
-        // Show URL only if it's a real value (not the '#' placeholder)
         if (urlEl)  urlEl.value  = (data.url && data.url !== '#') ? data.url : '';
       });
     }
 
-    // ─── SAVE MODULE CONFIG ───
     async function saveModuleConfig() {
       if (!window._firebaseReady) {
-        showToast('Firebase not connected — check Settings tab', 'error');
+        showToast('Firebase not connected', 'error');
         return;
       }
 
@@ -1619,7 +1605,6 @@
 
       try {
         await window._fbSet(window._fbRef(window._db, moduleConfigPath(selectedModuleMonth)), cfg);
-        // Immediately update active modules so progress tab reflects the save
         adminActiveModules = MODULE_DEFS.filter(m =>
           cfg[m.id] && cfg[m.id].url && cfg[m.id].url !== '#' && cfg[m.id].url.trim() !== ''
         ).map(m => m.id);
@@ -1652,8 +1637,6 @@
           selectedMonth = m;
           wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
-          // FIX: load module config for the chosen month first so active
-          //      module columns update correctly before re-rendering the table
           await loadModuleConfig(m);
           renderTable();
           updateStats();
@@ -1662,20 +1645,18 @@
       });
     }
 
-    // ─── REFRESH PROGRESS TAB (called by Refresh button) ───
     async function refreshProgressTab() {
       await loadModuleConfig(selectedMonth);
       await loadProgress();
     }
 
-    // ─── LOAD PROGRESS ───
     async function loadProgress() {
       if (!window._firebaseReady) {
         document.getElementById('progress-tbody').innerHTML = `
           <tr><td colspan="10">
             <div class="empty-state">
               <p>Firebase Not Connected</p>
-              <span>Configure Firebase in the Settings tab to view progress data.</span>
+              <span>Configure Firebase in the Settings tab.</span>
             </div>
           </td></tr>`;
         return;
@@ -1700,7 +1681,7 @@
           <tr><td colspan="10">
             <div class="empty-state">
               <p>Could not load data</p>
-              <span>Check your Firebase connection and database rules.</span>
+              <span>Check Firebase connection and database rules.</span>
             </div>
           </td></tr>`;
       }
@@ -1734,7 +1715,6 @@
       const modLabels = { 'mod-a1':'A1','mod-a2':'A2','mod-a3':'A3','mod-t1':'T1','mod-t2':'T2','mod-t3':'T3' };
       const modTitles = { 'mod-a1':'AREA Module 1','mod-a2':'AREA Module 2','mod-a3':'AREA Module 3','mod-t1':'Atticus Module 1','mod-t2':'Atticus Module 2','mod-t3':'Atticus Module 3' };
 
-      // Update column headers to only show active modules
       const thead = document.getElementById('progress-thead');
       if (thead) {
         thead.innerHTML = `<tr>
@@ -1838,30 +1818,138 @@
       }
     }
 
-    // ─── HASH GENERATOR ───
-    async function generateHash() {
-      const username = document.getElementById('hash-username').value.trim();
-      const password = document.getElementById('hash-password').value;
-      if (!username || !password) {
-        showToast('Enter both a username and password', 'error'); return;
+    // ─── TABS ───
+    function switchTab(name) {
+      const names  = ['modules','team','progress','adiclub','settings'];
+      const panels = ['tab-modules','tab-team','tab-progress','tab-adiclub','tab-settings'];
+      document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
+      document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
+
+      if (name === 'progress') {
+        waitForFirebase(async () => {
+          await loadModuleConfig(selectedMonth);
+          await loadProgress();
+        });
       }
-      const hash = await sha256(password);
-      document.getElementById('hash-path').textContent  = 'config/admins/' + username;
-      document.getElementById('hash-value').textContent = hash;
-      document.getElementById('hash-key-hint').textContent = username;
-      document.getElementById('hash-result').style.display = 'block';
-      document.getElementById('copy-hash-btn').textContent = 'Copy Hash';
+      if (name === 'team') {
+        waitForFirebase(() => loadTeamMembersAdmin());
+      }
+      if (name === 'settings') { renderAdminUsers(); updateExportPreview(); }
+      if (name === 'adiclub') loadAdiClub();
     }
 
-    function copyHash() {
-      const hash = document.getElementById('hash-value').textContent;
-      navigator.clipboard.writeText(hash).then(() => {
-        document.getElementById('copy-hash-btn').textContent = '✓ Copied!';
-        setTimeout(() => { document.getElementById('copy-hash-btn').textContent = 'Copy Hash'; }, 2000);
+    // ─── ADICLUB DATA ───
+    let allAdiClub = [];
+
+    async function loadAdiClub() {
+      allAdiClub = [];
+      document.getElementById('adiclub-tbody').innerHTML =
+        '<tr><td colspan="6"><div class="loading-spinner">Loading adiClub data…</div></td></tr>';
+
+      if (!window._firebaseReady) {
+        document.getElementById('adiclub-tbody').innerHTML =
+          '<tr><td colspan="6"><div class="empty-state"><p>Firebase Not Connected</p></div></td></tr>';
+        return;
+      }
+
+      try {
+        const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
+        if (snap.exists()) {
+          snap.forEach(child => {
+            const val = child.val();
+            if (val && val.timestamp) allAdiClub.push({ key: child.key, ...val });
+          });
+        }
+        allAdiClub.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        renderAdiClubTable();
+        updateAdiClubStats();
+        showToast('✓ Loaded ' + allAdiClub.length + ' entries', 'success');
+      } catch(e) {
+        document.getElementById('adiclub-tbody').innerHTML =
+          '<tr><td colspan="6"><div class="empty-state"><p>Could Not Load</p><span>' + e.message + '</span></div></td></tr>';
+      }
+    }
+
+    function parseAdiTimestamp(ts) {
+      if (!ts) return null;
+      const local = ts.replace('Z', '').replace('T', ' ');
+      const d = new Date(local);
+      return isNaN(d) ? new Date(ts) : d;
+    }
+
+    function getAdiClubFiltered() {
+      const search = document.getElementById('ac-search').value.toLowerCase();
+      const period = document.getElementById('ac-filter-period').value;
+      const now    = new Date();
+
+      return allAdiClub.filter(r => {
+        if (search && !( (r.name||'').toLowerCase().includes(search) || (r.id||'').toLowerCase().includes(search) )) return false;
+        if (period !== 'all') {
+          const d = parseAdiTimestamp(r.timestamp);
+          if (!d) return false;
+          if (period === 'today') {
+            if (d.toDateString() !== now.toDateString()) return false;
+          } else if (period === 'week') {
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+            monday.setHours(0, 0, 0, 0);
+            if (d < monday) return false;
+          } else if (period === 'last_week') {
+            const thisMonday = new Date(now); thisMonday.setDate(now.getDate()-((now.getDay()+6)%7)); thisMonday.setHours(0,0,0,0);
+            const lastMonday = new Date(thisMonday); lastMonday.setDate(thisMonday.getDate()-7);
+            const lastSunday = new Date(thisMonday); lastSunday.setSeconds(lastSunday.getSeconds()-1);
+            if (d < lastMonday || d > lastSunday) return false;
+          } else if (period === 'month') {
+            if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false;
+          } else if (period === 'last_month') {
+            const lastMonth = new Date(now.getFullYear(), now.getMonth()-1, 1);
+            if (d.getMonth() !== lastMonth.getMonth() || d.getFullYear() !== lastMonth.getFullYear()) return false;
+          }
+        }
+        return true;
       });
     }
 
-    // ─── ADICLUB EXPORT ───
+    function renderAdiClubTable() {
+      const rows  = getAdiClubFiltered();
+      const tbody = document.getElementById('adiclub-tbody');
+
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>No Signups Found</p><span>No adiClub signups match your filter.</span></div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rows.map((r, i) => {
+        const d    = parseAdiTimestamp(r.timestamp);
+        const date = d ? d.toLocaleDateString('en-NZ', { day:'2-digit', month:'short', year:'numeric' }) : '–';
+        const time = d ? d.toLocaleTimeString('en-NZ', { hour:'2-digit', minute:'2-digit' }) : '–';
+        return `<tr>
+          <td style="color:var(--gray-400); font-size:12px;">${rows.length - i}</td>
+          <td class="td-name">${escHtml(r.name || '–')}</td>
+          <td style="font-family:var(--font-display); font-size:15px; font-weight:700; letter-spacing:0.05em;">${escHtml(r.id || '–')}</td>
+          <td class="td-date">${date}</td>
+          <td class="td-date">${time}</td>
+          <td>
+            <button onclick="deleteAdiClub('${r.key}', '${escHtml(r.name||'')}')" style="padding:5px 10px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:var(--red); transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function updateAdiClubStats() {
+      const now   = new Date();
+      const total = allAdiClub.length;
+      const today = allAdiClub.filter(r => { const d=parseAdiTimestamp(r.timestamp); return d && d.toDateString()===now.toDateString(); }).length;
+      const month = allAdiClub.filter(r => { const d=parseAdiTimestamp(r.timestamp); return d && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); }).length;
+      const unique = new Set(allAdiClub.map(r => (r.id||r.name||'').toLowerCase()).filter(Boolean)).size;
+
+      document.getElementById('ac-stat-total').textContent  = total;
+      document.getElementById('ac-stat-today').textContent  = today;
+      document.getElementById('ac-stat-month').textContent  = month;
+      document.getElementById('ac-stat-unique').textContent = unique;
+    }
+
+    // ─── EXPORT ───
     function getExportRows(period) {
       const now = new Date();
       return allAdiClub.filter(r => {
@@ -1902,38 +1990,25 @@
       const label  = periodLabel(period);
       const btn    = document.querySelector('#tab-settings .btn-save');
 
-      btn.textContent = 'Loading data…';
-      btn.disabled = true;
+      btn.textContent = 'Loading data…'; btn.disabled = true;
 
       try {
         if (!allAdiClub.length) {
           const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
           allAdiClub = [];
-          if (snap.exists()) {
-            snap.forEach(child => {
-              const val = child.val();
-              if (val && val.timestamp) allAdiClub.push({ key: child.key, ...val });
-            });
-          }
-          allAdiClub.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+          if (snap.exists()) { snap.forEach(child => { const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); }); }
+          allAdiClub.sort((a,b) => new Date(a.timestamp)-new Date(b.timestamp));
         }
 
         const rows = getExportRows(period);
         document.getElementById('export-preview').textContent = rows.length + ' entries · ' + label;
-
-        if (rows.length === 0) {
-          showToast('No data for selected period', 'error');
-          return;
-        }
-
+        if (rows.length === 0) { showToast('No data for selected period', 'error'); return; }
         if (format === 'csv') exportCSV(rows, label);
         else exportPDF(rows, label);
-
       } catch(e) {
         showToast('Export failed — ' + e.message, 'error');
       } finally {
-        btn.textContent = 'Export Data →';
-        btn.disabled = false;
+        btn.textContent = 'Export Data →'; btn.disabled = false;
       }
     }
 
@@ -1971,32 +2046,11 @@
 
       const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
         <title>adiClub Signups – ${label}</title>
-        <style>
-          body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 32px; color: #000; }
-          .header { background: #000; color: #fff; padding: 24px 28px; margin-bottom: 24px; display:flex; justify-content:space-between; align-items:center; }
-          .header h1 { font-size: 22px; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; margin:0; }
-          .header p  { font-size: 12px; color: #888; margin: 4px 0 0; letter-spacing: 0.08em; text-transform: uppercase; }
-          .meta { display:flex; gap:24px; margin-bottom:20px; }
-          .meta-box { background:#f5f5f5; padding:14px 18px; flex:1; text-align:center; }
-          .meta-box .num { font-size:28px; font-weight:900; }
-          .meta-box .lbl { font-size:10px; color:#888; letter-spacing:0.1em; text-transform:uppercase; }
-          table { width:100%; border-collapse:collapse; }
-          thead th { background:#000; color:#fff; padding:10px; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; text-align:left; }
-          .footer { margin-top:24px; font-size:10px; color:#aaa; text-align:center; letter-spacing:0.06em; text-transform:uppercase; }
-          @media print { body { padding:16px; } }
-        </style></head><body>
-        <div class="header">
-          <div><h1>adidas · adiClub Signups</h1><p>${label}</p></div>
-          <div style="font-size:11px;color:#888;letter-spacing:0.06em;text-transform:uppercase;">Exported ${now}</div>
-        </div>
-        <div class="meta">
-          <div class="meta-box"><div class="num">${rows.length}</div><div class="lbl">Total Signups</div></div>
-          <div class="meta-box"><div class="num">${new Set(rows.map(r=>(r.id||r.name||'').toLowerCase()).filter(Boolean)).size}</div><div class="lbl">Unique Members</div></div>
-        </div>
-        <table><thead><tr><th>#</th><th>Name</th><th>ID</th><th>Date</th><th>Time</th></tr></thead>
-        <tbody>${tableRows}</tbody></table>
-        <div class="footer">adidas Training Hub · adiClub Data Export · ${now}</div>
-        </body></html>`;
+        <style>body{font-family:'Helvetica Neue',Arial,sans-serif;margin:0;padding:32px;color:#000;}.header{background:#000;color:#fff;padding:24px 28px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;}.header h1{font-size:22px;font-weight:900;letter-spacing:0.05em;text-transform:uppercase;margin:0;}.header p{font-size:12px;color:#888;margin:4px 0 0;letter-spacing:0.08em;text-transform:uppercase;}.meta{display:flex;gap:24px;margin-bottom:20px;}.meta-box{background:#f5f5f5;padding:14px 18px;flex:1;text-align:center;}.meta-box .num{font-size:28px;font-weight:900;}.meta-box .lbl{font-size:10px;color:#888;letter-spacing:0.1em;text-transform:uppercase;}table{width:100%;border-collapse:collapse;}thead th{background:#000;color:#fff;padding:10px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;}.footer{margin-top:24px;font-size:10px;color:#aaa;text-align:center;letter-spacing:0.06em;text-transform:uppercase;}@media print{body{padding:16px;}}</style></head><body>
+        <div class="header"><div><h1>adidas · adiClub Signups</h1><p>${label}</p></div><div style="font-size:11px;color:#888;letter-spacing:0.06em;text-transform:uppercase;">Exported ${now}</div></div>
+        <div class="meta"><div class="meta-box"><div class="num">${rows.length}</div><div class="lbl">Total Signups</div></div><div class="meta-box"><div class="num">${new Set(rows.map(r=>(r.id||r.name||'').toLowerCase()).filter(Boolean)).size}</div><div class="lbl">Unique Members</div></div></div>
+        <table><thead><tr><th>#</th><th>Name</th><th>ID</th><th>Date</th><th>Time</th></tr></thead><tbody>${tableRows}</tbody></table>
+        <div class="footer">adidas Training Hub · adiClub Data Export · ${now}</div></body></html>`;
 
       const win = window.open('','_blank');
       win.document.write(html);
@@ -2006,209 +2060,31 @@
     }
 
     async function updateExportPreview() {
-      const period = document.getElementById('export-period')?.value;
-      if (!period) return;
+      const period  = document.getElementById('export-period')?.value;
       const preview = document.getElementById('export-preview');
-      if (!preview) return;
+      if (!period || !preview) return;
 
       if (!allAdiClub.length && window._firebaseReady) {
         preview.textContent = 'Loading…';
         try {
           const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
           allAdiClub = [];
-          if (snap.exists()) {
-            snap.forEach(child => {
-              const val = child.val();
-              if (val && val.timestamp) allAdiClub.push({ key: child.key, ...val });
-            });
-          }
+          if (snap.exists()) { snap.forEach(child => { const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); }); }
         } catch(e) {}
       }
 
       const rows  = getExportRows(period);
       const label = periodLabel(period);
-      preview.textContent = rows.length
-        ? rows.length + ' entries · ' + label
-        : 'No entries for ' + label;
+      preview.textContent = rows.length ? rows.length + ' entries · ' + label : 'No entries for ' + label;
     }
 
     function loadFbConfigToForm() {
-      try {
-        const cfg = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
-        if (!cfg) {
-          const box = document.getElementById('fb-status-box');
-          if (box) box.innerHTML = `
-            <div style="padding:12px 16px; background:#fff8e1; border:1px solid #f0c040; font-size:12px; color:#7a6a00; letter-spacing:0.04em;">
-              ⚠ Firebase not configured. Enter your config below.
-            </div>`;
-          return;
-        }
-        const apiEl  = document.getElementById('fb-api-key');
-        const authEl = document.getElementById('fb-auth-domain');
-        const dbEl   = document.getElementById('fb-db-url');
-        const pidEl  = document.getElementById('fb-project-id');
-        const appEl  = document.getElementById('fb-app-id');
-        if (apiEl)  apiEl.value  = cfg.apiKey     || '';
-        if (authEl) authEl.value = cfg.authDomain  || '';
-        if (dbEl)   dbEl.value   = cfg.databaseURL || '';
-        if (pidEl)  pidEl.value  = cfg.projectId   || '';
-        if (appEl)  appEl.value  = cfg.appId       || '';
-        const box = document.getElementById('fb-status-box');
-        if (box) box.innerHTML = `
-          <div style="padding:12px 16px; background:#f0fdf5; border:1px solid rgba(46,204,113,0.4); font-size:12px; color:#1a5c38; letter-spacing:0.04em;">
-            ✓ Firebase connected · Project: <strong>${escHtml(cfg.projectId || '')}</strong>
-          </div>`;
-      } catch(e) {}
-    }
-
-    // ─── TABS ───
-    // FIX: Switching to 'progress' now auto-loads module config + progress data
-    //      so you don't need to manually hit Refresh.
-    function switchTab(name) {
-      const names  = ['modules','progress','adiclub','settings'];
-      const panels = ['tab-modules','tab-progress','tab-adiclub','tab-settings'];
-      document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
-      document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
-
-      if (name === 'progress') {
-        // Always reload module config + progress when entering the tab
-        waitForFirebase(async () => {
-          await loadModuleConfig(selectedMonth);
-          await loadProgress();
-        });
-      }
-      if (name === 'settings') { renderAdminUsers(); updateExportPreview(); }
-      if (name === 'adiclub') loadAdiClub();
-    }
-
-    // ─── ADICLUB DATA ───
-    let allAdiClub = [];
-
-    async function loadAdiClub() {
-      window._acLoaded = true;
-      allAdiClub = [];
-      document.getElementById('adiclub-tbody').innerHTML =
-        '<tr><td colspan="5"><div class="loading-spinner">Loading adiClub data…</div></td></tr>';
-
-      if (!window._firebaseReady) {
-        document.getElementById('adiclub-tbody').innerHTML =
-          '<tr><td colspan="5"><div class="empty-state"><p>Firebase Not Connected</p></div></td></tr>';
-        return;
-      }
-
-      try {
-        const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
-        if (snap.exists()) {
-          snap.forEach(child => {
-            const val = child.val();
-            if (val && val.timestamp) {
-              allAdiClub.push({ key: child.key, ...val });
-            }
-          });
-        }
-        allAdiClub.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        renderAdiClubTable();
-        updateAdiClubStats();
-        showToast('✓ Loaded ' + allAdiClub.length + ' entries', 'success');
-      } catch(e) {
-        document.getElementById('adiclub-tbody').innerHTML =
-          '<tr><td colspan="5"><div class="empty-state"><p>Could Not Load</p><span>' + e.message + '</span></div></td></tr>';
-        showToast('Load failed: ' + e.message, 'error');
-      }
-    }
-
-    function parseAdiTimestamp(ts) {
-      if (!ts) return null;
-      const local = ts.replace('Z', '').replace('T', ' ');
-      const d = new Date(local);
-      return isNaN(d) ? new Date(ts) : d;
-    }
-
-    function getAdiClubFiltered() {
-      const search = document.getElementById('ac-search').value.toLowerCase();
-      const period = document.getElementById('ac-filter-period').value;
-      const now    = new Date();
-
-      return allAdiClub.filter(r => {
-        if (search && !( (r.name||'').toLowerCase().includes(search) || (r.id||'').toLowerCase().includes(search) )) return false;
-        if (period !== 'all') {
-          const d = parseAdiTimestamp(r.timestamp);
-          if (!d) return false;
-          if (period === 'today') {
-            if (d.toDateString() !== now.toDateString()) return false;
-          } else if (period === 'week') {
-            const monday = new Date(now);
-            monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-            monday.setHours(0, 0, 0, 0);
-            if (d < monday) return false;
-          } else if (period === 'last_week') {
-            const thisMonday = new Date(now);
-            thisMonday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-            thisMonday.setHours(0, 0, 0, 0);
-            const lastMonday = new Date(thisMonday);
-            lastMonday.setDate(thisMonday.getDate() - 7);
-            const lastSunday = new Date(thisMonday);
-            lastSunday.setSeconds(lastSunday.getSeconds() - 1);
-            if (d < lastMonday || d > lastSunday) return false;
-          } else if (period === 'month') {
-            if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false;
-          } else if (period === 'last_month') {
-            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-            if (d.getMonth() !== lastMonth.getMonth() || d.getFullYear() !== lastMonth.getFullYear()) return false;
-          }
-        }
-        return true;
-      });
-    }
-
-    function renderAdiClubTable() {
-      const rows  = getAdiClubFiltered();
-      const tbody = document.getElementById('adiclub-tbody');
-
-      if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>No Signups Found</p><span>No adiClub signups match your filter.</span></div></td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = rows.map((r, i) => {
-        let d = null;
-        if (r.timestamp) {
-          const ts = r.timestamp.replace('Z', '').replace('T', ' ');
-          d = new Date(ts);
-          if (isNaN(d)) d = new Date(r.timestamp);
-        }
-        const date = d ? d.toLocaleDateString('en-NZ', { day:'2-digit', month:'short', year:'numeric' }) : '–';
-        const time = d ? d.toLocaleTimeString('en-NZ', { hour:'2-digit', minute:'2-digit' }) : '–';
-        return `<tr>
-          <td style="color:var(--gray-400); font-size:12px;">${rows.length - i}</td>
-          <td class="td-name">${escHtml(r.name || '–')}</td>
-          <td style="font-family:var(--font-display); font-size:15px; font-weight:700; letter-spacing:0.05em;">${escHtml(r.id || '–')}</td>
-          <td class="td-date">${date}</td>
-          <td class="td-date">${time}</td>
-          <td>
-            <button onclick="deleteAdiClub('${r.key}', '${escHtml(r.name||'')}')" style="padding:5px 10px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:var(--red); transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button>
-          </td>
-        </tr>`;
-      }).join('');
-    }
-
-    function updateAdiClubStats() {
-      const now   = new Date();
-      const total = allAdiClub.length;
-      const today = allAdiClub.filter(r => {
-        const d = parseAdiTimestamp(r.timestamp);
-        return d && d.toDateString() === now.toDateString();
-      }).length;
-      const month = allAdiClub.filter(r => {
-        const d = parseAdiTimestamp(r.timestamp);
-        return d && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-      }).length;
-      const unique = new Set(allAdiClub.map(r => (r.id || r.name || '').toLowerCase()).filter(Boolean)).size;
-
-      document.getElementById('ac-stat-total').textContent  = total;
-      document.getElementById('ac-stat-today').textContent  = today;
-      document.getElementById('ac-stat-month').textContent  = month;
-      document.getElementById('ac-stat-unique').textContent = unique;
+      // Firebase is baked in — show connected status
+      const box = document.getElementById('fb-status-box');
+      if (box) box.innerHTML = `
+        <div style="padding:12px 16px; background:#f0fdf5; border:1px solid rgba(46,204,113,0.4); font-size:12px; color:#1a5c38; letter-spacing:0.04em;">
+          ✓ Firebase connected · Project: <strong>adidas-training-mtd</strong>
+        </div>`;
     }
 
     // ─── TOAST ───
@@ -2240,7 +2116,7 @@
       }
     }
 
-    // ─── COMPLETE MODULE ───
+    // ─── COMPLETE / UNCOMPLETE MODULE ───
     async function completeModule(key, modId) {
       const row = allProgress.find(r => r.key === key);
       if (!row) return;
@@ -2251,15 +2127,11 @@
         const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
         await update(ref(window._db, 'progress/' + key), { completed: newCompleted });
         row.completed = newCompleted;
-        renderTable();
-        updateStats();
+        renderTable(); updateStats();
         showToast('✓ Module marked complete', 'success');
-      } catch(e) {
-        showToast('Update failed — ' + e.message, 'error');
-      }
+      } catch(e) { showToast('Update failed — ' + e.message, 'error'); }
     }
 
-    // ─── UNCOMPLETE MODULE ───
     async function uncompleteModule(key, modId) {
       const row = allProgress.find(r => r.key === key);
       if (!row) return;
@@ -2270,12 +2142,9 @@
         const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
         await update(ref(window._db, 'progress/' + key), { completed: newCompleted });
         row.completed = newCompleted;
-        renderTable();
-        updateStats();
+        renderTable(); updateStats();
         showToast('✓ Module unmarked', 'success');
-      } catch(e) {
-        showToast('Update failed — ' + e.message, 'error');
-      }
+      } catch(e) { showToast('Update failed — ' + e.message, 'error'); }
     }
 
     // ─── DELETE ADICLUB ENTRY ───
@@ -2285,12 +2154,9 @@
         const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
         await remove(ref(window._db, 'adiclub/' + key));
         allAdiClub = allAdiClub.filter(r => r.key !== key);
-        renderAdiClubTable();
-        updateAdiClubStats();
+        renderAdiClubTable(); updateAdiClubStats();
         showToast('✓ Entry deleted', 'success');
-      } catch(e) {
-        showToast('Delete failed — ' + e.message, 'error');
-      }
+      } catch(e) { showToast('Delete failed — ' + e.message, 'error'); }
     }
 
     // ─── AUTO-LOGIN ───
