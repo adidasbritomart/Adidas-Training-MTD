@@ -569,17 +569,14 @@
 
     /* ─── MOBILE RESPONSIVE ─── */
     @media (max-width: 640px) {
-      /* Header */
       header { padding: 14px 16px; gap: 12px; }
       .adidas-logo { font-size: 24px; }
       .header-text h1 { font-size: 15px; }
       .header-text p { font-size: 10px; }
       .header-month { font-size: 11px; letter-spacing: 0.06em; }
 
-      /* Container */
       .container { padding: 20px 14px 80px; }
 
-      /* Identity / returning screens */
       #step-identity { padding: 24px 18px; }
       #step-returning { padding: 0; }
       .step-title { font-size: 26px; }
@@ -587,7 +584,6 @@
       input, select { padding: 12px 14px; font-size: 15px; }
       .btn-start { font-size: 16px; padding: 16px; }
 
-      /* User banner */
       .user-banner { padding: 14px 16px; }
       .user-banner-info strong { font-size: 15px; }
       .user-banner-info span { font-size: 11px; }
@@ -595,7 +591,6 @@
       .progress-pill .prog-num { font-size: 18px; }
       .progress-pill .prog-label { font-size: 9px; }
 
-      /* Module buttons */
       .module-btn { padding: 14px 14px; margin-bottom: 8px; }
       .module-num { font-size: 22px; min-width: 32px; }
       .module-name { font-size: 15px; }
@@ -604,17 +599,14 @@
       .module-action { font-size: 11px; gap: 6px; }
       .check-icon { width: 18px; height: 18px; font-size: 10px; }
 
-      /* Section headers */
       .section-tag { font-size: 10px; padding: 3px 8px; }
       .section-title { font-size: 17px; }
       .section-header { gap: 8px; margin-bottom: 10px; }
 
-      /* Completion banner */
       #complete-banner { padding: 22px 20px; }
       #complete-banner h2 { font-size: 26px; }
       #complete-banner p { font-size: 13px; }
 
-      /* Music player */
       #music-player { padding: 0 12px; gap: 10px; height: 58px; }
       .player-title { font-size: 12px; }
       .player-sub { font-size: 9px; }
@@ -631,8 +623,7 @@
     }
   </style>
 
-
-  <!-- Firebase SDK — config baked in, works on any device -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp }                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, get }       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -653,6 +644,8 @@
     window._db     = db;
     window._fbSave = async (key, data) => { try { await set(ref(db, 'progress/' + key), data); } catch(e) {} };
     window._fbLoad = async (key) => { try { const s = await get(ref(db, 'progress/' + key)); return s.exists() ? s.val() : null; } catch(e) { return null; } };
+    window._fbGet  = get;
+    window._fbRef  = ref;
     window._firebaseReady = true;
     document.dispatchEvent(new Event('firebase-ready'));
   </script>
@@ -696,10 +689,15 @@
       <p class="step-label">Step 1 of 1</p>
       <h2 class="step-title">Let's Get<br>Started</h2>
 
+      <!-- NAME DROPDOWN (populated from Firebase or defaults) -->
       <div class="form-group">
-        <label for="worker-name">Your Full Name</label>
-        <input type="text" id="worker-name" placeholder="e.g. Jordan Smith" autocomplete="name"/>
-        <p class="error-msg" id="name-error">Please enter your name.</p>
+        <label for="worker-name">Your Name</label>
+        <div class="select-wrap">
+          <select id="worker-name">
+            <option value="">— Select your name —</option>
+          </select>
+        </div>
+        <p class="error-msg" id="name-error">Please select your name.</p>
       </div>
 
       <div class="form-group">
@@ -841,7 +839,6 @@
       <svg id="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
     </button>
     <div class="player-track">
-      <!-- ✏️ Change this to your song name -->
       <div class="player-title" id="track-title">Background Vibes</div>
       <div class="player-sub">adidas Training Hub</div>
     </div>
@@ -858,18 +855,15 @@
     </div>
   </div>
 
-  <!--
-    ✏️ HOW TO ADD YOUR MUSIC:
-    Replace the src below with a direct .mp3 link.
-    • Upload an MP3 to your GitHub Pages repo and use: "./your-song.mp3"
-    • Or paste any direct MP3 URL from a royalty-free site (pixabay.com, bensound.com)
-  -->
   <audio id="bg-audio" loop preload="auto">
     <source src="https://www.bensound.com/bensound-music/bensound-moose.mp3" type="audio/mpeg"/>
   </audio>
 
   <script>
-    // Firebase config is baked in — no setup needed
+    // ─── DEFAULT TEAM MEMBERS ───
+    // Used as fallback if Firebase has no config/team_members saved yet
+    const DEFAULT_NAMES = ['David','Cheyne','Alex','Charli','Robin','Bailey'];
+
     function checkFirebaseSetup() { return true; }
 
     // ─── MONTH KEY ───
@@ -877,7 +871,6 @@
     const LOCAL_KEY = 'adidas_modules_' + monthKey.replace(/\s/g, '_');
     const MODULE_IDS = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
 
-    // Safe Firebase key: name + store + month
     function makeKey(name, store) {
       return [name, store, monthKey].join('__').replace(/[^a-zA-Z0-9_\-]/g, '_').substring(0, 200);
     }
@@ -891,9 +884,42 @@
     const completed  = {};
     let completedCount = 0;
     let currentFbKey   = null;
-    let activeModules  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']; // updated by initModuleConfigLoader
+    let activeModules  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
 
-    // ─── SYNC STATUS INDICATOR ───
+    // ─── POPULATE NAME DROPDOWN ───
+    function populateNameDropdown(names) {
+      const sel = document.getElementById('worker-name');
+      // keep the placeholder option
+      sel.innerHTML = '<option value="">— Select your name —</option>';
+      names.sort().forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = n;
+        sel.appendChild(opt);
+      });
+    }
+
+    // Load names from Firebase config/team_members, fallback to defaults
+    function loadTeamMembers() {
+      if (window._firebaseReady && window._fbRef && window._fbGet) {
+        window._fbGet(window._fbRef(window._db, 'config/team_members'))
+          .then(snap => {
+            if (snap.exists()) {
+              const data = snap.val();
+              // stored as an array or object
+              const names = Array.isArray(data) ? data : Object.values(data);
+              populateNameDropdown(names.filter(Boolean));
+            } else {
+              populateNameDropdown(DEFAULT_NAMES);
+            }
+          })
+          .catch(() => populateNameDropdown(DEFAULT_NAMES));
+      } else {
+        populateNameDropdown(DEFAULT_NAMES);
+      }
+    }
+
+    // ─── SYNC STATUS ───
     function showSyncStatus(msg, color) {
       const el = document.getElementById('sync-status');
       if (!el) return;
@@ -916,7 +942,7 @@
       recalcProgress();
     }
 
-    // ─── RECALC PROGRESS (always based on activeModules) ───
+    // ─── RECALC PROGRESS ───
     function recalcProgress() {
       const activeDone = activeModules.filter(id => completed[id]).length;
       completedCount   = activeDone;
@@ -930,7 +956,7 @@
       }
     }
 
-    // ─── SAVE (Firebase + localStorage backup) ───
+    // ─── SAVE ───
     async function saveState() {
       const name  = document.getElementById('banner-name').textContent;
       const store = document.getElementById('banner-store').textContent;
@@ -942,7 +968,7 @@
       }
     }
 
-    // ─── LOAD (Firebase first, fallback localStorage) ───
+    // ─── LOAD ───
     async function loadState(name, store) {
       currentFbKey = makeKey(name, store);
       let saved = null;
@@ -963,7 +989,7 @@
 
     // ─── START ───
     async function startModules() {
-      const name  = document.getElementById('worker-name').value.trim();
+      const name  = document.getElementById('worker-name').value;
       const store = document.getElementById('store-select').value;
       let valid = true;
       document.getElementById('name-error').style.display  = 'none';
@@ -990,38 +1016,14 @@
       location.reload();
     }
 
-    // ─── LOAD MODULE CONFIG FROM FIREBASE ───
-    // Reads module names, subtitles, and URLs from Firebase config/modules
-    // so admins can update them without touching this file.
-    async function loadModuleConfig() {
-      if (!window._fbLoad) return;
-      try {
-        const data = await window._fbLoad('__config_modules__');
-        if (!data) return;
-        const ids = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
-        ids.forEach(id => {
-          const m = data[id];
-          if (!m) return;
-          const btn = document.getElementById(id);
-          if (btn) {
-            if (m.url) btn.href = m.url;
-            const nameEl = document.getElementById('name-' + id);
-            const subEl  = document.getElementById('sub-'  + id);
-            if (nameEl && m.name) nameEl.textContent = m.name;
-            if (subEl  && m.sub)  subEl.textContent  = m.sub;
-          }
-        });
-      } catch(e) { console.warn('Could not load module config', e); }
-    }
-
-    // Override _fbLoad for config — reads from config/modules node directly
+    // ─── MODULE CONFIG FROM FIREBASE ───
     function initModuleConfigLoader() {
       if (!window._firebaseReady || !window._db) return;
-      const ids      = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
-      const fbMonthKey = monthKey.replace(/\s+/g, '_'); // e.g. "May_2026"
+      const ids        = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+      const fbMonthKey = monthKey.replace(/\s+/g, '_');
       import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({ ref, get }) => {
         get(ref(window._db, 'config/modules/' + fbMonthKey)).then(snap => {
-          if (!snap.exists()) return; // no config = show nothing (all hidden by default href="#")
+          if (!snap.exists()) return;
           const cfg      = snap.val();
           const newActive = [];
           ids.forEach(id => {
@@ -1047,17 +1049,18 @@
       }).catch(() => {});
     }
 
-    // Hook into firebase-ready event to load module config
+    // ─── INIT ───
     if (window._firebaseReady) {
       initModuleConfigLoader();
+      loadTeamMembers();
     } else {
-      document.addEventListener('firebase-ready', initModuleConfigLoader);
+      document.addEventListener('firebase-ready', () => {
+        initModuleConfigLoader();
+        loadTeamMembers();
+      });
     }
 
-    // ─── ENTER KEY ───
-    document.getElementById('worker-name').addEventListener('keydown', e => { if (e.key === 'Enter') startModules(); });
-
-    // ─── CONTINUE SESSION (returning user taps Continue) ───
+    // ─── CONTINUE SESSION ───
     function continueSession() {
       const name  = document.getElementById('returning-name').textContent;
       const store = document.getElementById('returning-store').textContent;
@@ -1068,13 +1071,12 @@
       loadState(name, store);
     }
 
-    // ─── AUTO-RESTORE: show returning-user screen instead of jumping straight in ───
+    // ─── AUTO-RESTORE ───
     (function tryAutoRestore() {
       if (!checkFirebaseSetup()) return;
       try {
         const saved = JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null');
         if (!saved || !saved.name || !saved.store) return;
-        // Show the returning-user interstitial so others can log out
         document.getElementById('returning-name').textContent  = saved.name;
         document.getElementById('returning-store').textContent = saved.store;
         document.getElementById('step-identity').style.display  = 'none';
