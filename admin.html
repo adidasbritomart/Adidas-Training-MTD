@@ -726,7 +726,6 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 640px) {
-      /* Header */
       header { padding: 12px 16px; gap: 10px; }
       .adidas-logo { font-size: 22px; }
       .header-text h1 { font-size: 13px; }
@@ -734,15 +733,12 @@
       #admin-badge { display: none !important; }
       #btn-logout { font-size: 11px; padding: 5px 10px; }
 
-      /* Page */
       .page { padding: 20px 12px 40px; }
 
-      /* Login */
       #screen-login { padding-top: 32px; }
       .login-box { padding: 28px 20px; }
       .login-box h2 { font-size: 30px; }
 
-      /* Tabs — scrollable horizontal */
       .tabs {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -753,15 +749,12 @@
       .tabs::-webkit-scrollbar { display: none; }
       .tab-btn { padding: 12px 14px; font-size: 12px; white-space: nowrap; }
 
-      /* Stats */
       .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
       .stat-num { font-size: 28px; }
 
-      /* Cards */
       .card { padding: 18px 14px; }
       .card-title { font-size: 16px; }
 
-      /* Module editor — stack fields vertically */
       .module-row {
         grid-template-columns: 32px 1fr;
         gap: 6px;
@@ -771,11 +764,9 @@
       .module-num-label { font-size: 22px; padding-top: 10px; }
       .module-row input { font-size: 12px; padding: 9px 10px; }
 
-      /* Save bar */
       .save-bar { flex-direction: column; gap: 10px; align-items: stretch; }
       .btn-save { text-align: center; }
 
-      /* Month chips — scroll on mobile */
       .month-chips {
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -785,12 +776,10 @@
       }
       .month-chip { white-space: nowrap; font-size: 11px; padding: 5px 10px; flex-shrink: 0; }
 
-      /* Filter bar */
       .filter-bar { flex-direction: column; gap: 8px; }
       .filter-bar input, .filter-bar .select-wrap, .select-wrap { min-width: unset; width: 100%; }
       .btn-refresh { width: 100%; text-align: center; }
 
-      /* Progress table — horizontal scroll */
       .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       table { min-width: 480px; }
       thead th { padding: 8px 8px; font-size: 10px; }
@@ -798,21 +787,16 @@
       .pct-label { min-width: 28px; font-size: 12px; }
       .progress-bar { min-width: 36px; }
 
-      /* Delete buttons in table */
       tbody td button { padding: 4px 8px; font-size: 10px; }
 
-      /* Toast */
       .toast { bottom: 14px; right: 14px; left: 14px; font-size: 12px; padding: 12px 16px; }
 
-      /* Settings */
       .user-item { flex-direction: column; align-items: flex-start; gap: 8px; }
       #fb-config-fields { grid-template-columns: 1fr !important; }
 
-      /* Hash generator */
       #hash-result > div:first-child > div { flex-direction: column; }
       #copy-hash-btn { width: 100%; }
 
-      /* adiClub filter */
       #tab-adiclub .filter-bar { flex-direction: column; }
       #tab-adiclub .select-wrap { width: 100%; }
     }
@@ -871,7 +855,7 @@
     </div>
   </div>
 
-  <!-- SCREEN: SET UP ACCOUNT (shown after first default login) -->
+  <!-- SCREEN: SET UP ACCOUNT -->
   <div class="page" id="screen-setup" style="display:none;">
     <div class="login-box">
       <p class="step-label">First Login Detected</p>
@@ -1001,7 +985,7 @@
               <!-- chips injected by JS -->
             </div>
           </div>
-          <button class="btn-refresh" onclick="loadProgress()">↻ Refresh</button>
+          <button class="btn-refresh" onclick="refreshProgressTab()">↻ Refresh</button>
         </div>
       </div>
 
@@ -1173,7 +1157,7 @@
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <!-- FIREBASE SDK — config baked in, works on any device -->
+  <!-- FIREBASE SDK -->
   <script type="module">
     import { initializeApp }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -1200,8 +1184,6 @@
   </script>
 
   <script>
-    // Credentials live in Firebase under config/admins — nothing stored here.
-
     // ─── Module definitions ───
     const MODULE_DEFS = [
       { id: 'mod-a1', num: '01', group: 'area',    defaultName: 'AREA Module 1',    defaultSub: 'AREA · Training' },
@@ -1233,7 +1215,7 @@
       return months;
     }
 
-    // ─── SAFE KEY (encodes dots so emails work as usernames) ───
+    // ─── SAFE KEY ───
     function safeKey(str) { return str.replace(/\./g, ','); }
     function unsafeKey(str) { return str.replace(/,/g, '.'); }
     async function sha256(str) {
@@ -1241,8 +1223,7 @@
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
 
-    // ─── DEFAULT CREDENTIALS (used only until each admin sets their own) ───
-    // ✏️ You can change this default password before deploying
+    // ─── DEFAULT CREDENTIALS ───
     const DEFAULT_USER = 'admin';
     const DEFAULT_PASS = 'adidas123';
 
@@ -1264,7 +1245,6 @@
       btn.disabled = true;
 
       try {
-        // 1. Check default credentials first (works even without Firebase)
         if (user === DEFAULT_USER && pass === DEFAULT_PASS) {
           currentUser = user;
           sessionStorage.setItem('adidas_admin_session', user);
@@ -1273,7 +1253,6 @@
           return;
         }
 
-        // 2. Check Firebase for saved credentials
         if (!window._firebaseReady) {
           err.textContent = 'Incorrect username or password.';
           err.style.display = 'block';
@@ -1305,13 +1284,11 @@
       }
     }
 
-    // ─── SHOW SETUP SCREEN ───
     function showSetup() {
       document.getElementById('screen-login').style.display = 'none';
       document.getElementById('screen-setup').style.display = 'flex';
     }
 
-    // ─── SAVE NEW CREDENTIALS ───
     async function saveNewCredentials() {
       const user    = document.getElementById('setup-user').value.trim();
       const pass    = document.getElementById('setup-pass').value;
@@ -1385,8 +1362,10 @@
       buildReqToggles(['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']);
 
       waitForFirebase(async () => {
-        await loadModuleConfig();  // must finish first so adminActiveModules is set
-        loadProgress();
+        // Load module config first so adminActiveModules is correct
+        await loadModuleConfig();
+        // Then load progress with the correct active module list
+        await loadProgress();
         loadRequiredForMonth();
       });
     }
@@ -1398,6 +1377,8 @@
     }
 
     // ─── BUILD MODULE ROWS ───
+    // FIX: inputs use type="text" not type="url" so browsers don't silently
+    //      reject programmatic value assignments for non-standard URL formats.
     function buildModuleRows() {
       const areaEl    = document.getElementById('area-module-rows');
       const atticusEl = document.getElementById('atticus-module-rows');
@@ -1419,7 +1400,7 @@
           </div>
           <div class="form-group url-field">
             <label>Training URL</label>
-            <input type="url" id="inp-url-${m.id}" placeholder="https://…"/>
+            <input type="text" id="inp-url-${m.id}" placeholder="https://…"/>
           </div>
         `;
         (m.group === 'area' ? areaEl : atticusEl).appendChild(row);
@@ -1449,6 +1430,7 @@
         })()
       );
       const sel = document.getElementById('req-month-select');
+      if (!sel) return;
       const current = getCurrentMonthKey();
       sel.innerHTML = months.map(m =>
         `<option value="${m}"${m === current ? ' selected' : ''}>${m}</option>`
@@ -1458,11 +1440,10 @@
     function buildReqToggles(required = []) {
       ['area', 'atticus'].forEach(group => {
         const el = document.getElementById('req-' + group + '-toggles');
+        if (!el) return;
         el.innerHTML = '';
         REQ_MODULE_DEFS.filter(m => m.group === group).forEach(m => {
           const isActive = required.includes(m.id);
-
-          // Use stored module name if available
           const nameEl = document.getElementById('inp-name-' + m.id);
           const label  = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : m.label;
 
@@ -1496,7 +1477,9 @@
 
     async function loadRequiredForMonth() {
       if (!window._firebaseReady) return;
-      const month = document.getElementById('req-month-select').value;
+      const sel = document.getElementById('req-month-select');
+      if (!sel) return;
+      const month = sel.value;
       const key   = 'config/required/' + month.replace(/[^a-zA-Z0-9]/g, '_');
       try {
         const snap = await window._fbGet(window._fbRef(window._db, key));
@@ -1511,7 +1494,9 @@
       if (!window._firebaseReady) {
         showToast('Firebase not connected', 'error'); return;
       }
-      const month    = document.getElementById('req-month-select').value;
+      const sel = document.getElementById('req-month-select');
+      if (!sel) return;
+      const month    = sel.value;
       const key      = 'config/required/' + month.replace(/[^a-zA-Z0-9]/g, '_');
       const required = REQ_MODULE_DEFS.filter(m =>
         document.getElementById('req-chk-' + m.id)?.checked
@@ -1520,26 +1505,28 @@
       try {
         await window._fbSet(window._fbRef(window._db, key), required);
         const el = document.getElementById('save-status-required');
-        el.textContent = '✓ Saved for ' + month;
-        el.style.color = 'var(--green)';
-        setTimeout(() => { el.textContent = ''; }, 4000);
+        if (el) {
+          el.textContent = '✓ Saved for ' + month;
+          el.style.color = 'var(--green)';
+          setTimeout(() => { el.textContent = ''; }, 4000);
+        }
         showToast('✓ Required modules saved for ' + month, 'success');
       } catch(e) {
         showToast('Save failed — ' + e.message, 'error');
       }
     }
 
-    // ─── LOAD MODULE CONFIG FROM FIREBASE ───
-    // ─── ACTIVE MODULES (set by loadModuleConfig, used by renderTable) ───
-    let adminActiveModules  = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
+    // ─── ACTIVE MODULES (used by renderTable) ───
+    // Starts empty — set by loadModuleConfig once Firebase data is read.
+    // An empty array means "no config loaded yet"; all 6 shown as fallback
+    // only if Firebase has no record for this month.
+    let adminActiveModules  = [];
     let selectedModuleMonth = getCurrentMonthKey();
 
-    // Convert month name to a Firebase-safe key e.g. "May 2026" → "May_2026"
     function monthToKey(m) { return m.replace(/\s+/g, '_'); }
     function moduleConfigPath(m) { return 'config/modules/' + monthToKey(m || selectedModuleMonth); }
 
     function buildModuleMonthChips() {
-      // Show 3 past months + current + 3 future
       const chips = [];
       const d = new Date();
       for (let i = 3; i >= 1; i--) {
@@ -1568,6 +1555,10 @@
       });
     }
 
+    // ─── LOAD MODULE CONFIG FROM FIREBASE ───
+    // FIX: Now returns a Promise so callers can await it before rendering.
+    // FIX: When no config exists for a month, defaults to all 6 (not empty),
+    //      so workers aren't shown with 0 required modules.
     async function loadModuleConfig(month) {
       month = month || selectedModuleMonth;
       if (!window._firebaseReady) return;
@@ -1576,11 +1567,12 @@
         if (snap.exists()) {
           const cfg = snap.val();
           applyModuleConfig(cfg);
+          // Only count modules that have a real URL as "active"
           adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id =>
-            cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url !== ''
+            cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url.trim() !== ''
           );
         } else {
-          // Clear all fields if no config for this month
+          // No config saved for this month — clear the editor fields
           MODULE_DEFS.forEach(m => {
             const nameEl = document.getElementById('inp-name-' + m.id);
             const subEl  = document.getElementById('inp-sub-'  + m.id);
@@ -1589,21 +1581,22 @@
             if (subEl)  subEl.value  = '';
             if (urlEl)  urlEl.value  = '';
           });
-          adminActiveModules = [];
+          // No config → treat all 6 as active so progress table shows all columns
+          adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
         }
       } catch(e) { console.warn('Could not load module config', e); }
     }
 
     function applyModuleConfig(cfg) {
       MODULE_DEFS.forEach(m => {
-        const data  = cfg[m.id];
+        const data   = cfg[m.id];
         const nameEl = document.getElementById('inp-name-' + m.id);
         const subEl  = document.getElementById('inp-sub-'  + m.id);
         const urlEl  = document.getElementById('inp-url-'  + m.id);
         if (!data) return;
-        if (nameEl) nameEl.value = data.name && data.name !== m.defaultName ? data.name : (data.name || '');
-        if (subEl)  subEl.value  = data.sub  && data.sub  !== m.defaultSub  ? data.sub  : (data.sub  || '');
-        // Only populate URL if it's a real URL (not the # placeholder)
+        if (nameEl) nameEl.value = data.name || '';
+        if (subEl)  subEl.value  = data.sub  || '';
+        // Show URL only if it's a real value (not the '#' placeholder)
         if (urlEl)  urlEl.value  = (data.url && data.url !== '#') ? data.url : '';
       });
     }
@@ -1626,9 +1619,9 @@
 
       try {
         await window._fbSet(window._fbRef(window._db, moduleConfigPath(selectedModuleMonth)), cfg);
-        // Update active modules immediately so progress tab reflects changes
+        // Immediately update active modules so progress tab reflects the save
         adminActiveModules = MODULE_DEFS.filter(m =>
-          cfg[m.id] && cfg[m.id].url && cfg[m.id].url !== '#' && cfg[m.id].url !== ''
+          cfg[m.id] && cfg[m.id].url && cfg[m.id].url !== '#' && cfg[m.id].url.trim() !== ''
         ).map(m => m.id);
         if (allProgress.length) { renderTable(); updateStats(); }
         showToast('✓ Modules saved for ' + selectedModuleMonth, 'success');
@@ -1645,7 +1638,7 @@
       }
     }
 
-    // ─── MONTH CHIPS ───
+    // ─── MONTH CHIPS (progress tab) ───
     function buildMonthChips() {
       allMonths = getRecentMonths(6);
       selectedMonth = getCurrentMonthKey();
@@ -1655,18 +1648,24 @@
         const chip = document.createElement('button');
         chip.className = 'month-chip' + (m === selectedMonth ? ' active' : '');
         chip.textContent = m;
-        chip.onclick = () => {
+        chip.onclick = async () => {
           selectedMonth = m;
           wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
-          // Load module config for this month so dots/% are correct
-          loadModuleConfig(m).then(() => {
-            renderTable();
-            updateStats();
-          });
+          // FIX: load module config for the chosen month first so active
+          //      module columns update correctly before re-rendering the table
+          await loadModuleConfig(m);
+          renderTable();
+          updateStats();
         };
         wrap.appendChild(chip);
       });
+    }
+
+    // ─── REFRESH PROGRESS TAB (called by Refresh button) ───
+    async function refreshProgressTab() {
+      await loadModuleConfig(selectedMonth);
+      await loadProgress();
     }
 
     // ─── LOAD PROGRESS ───
@@ -1734,9 +1733,8 @@
       const mods  = adminActiveModules;
       const modLabels = { 'mod-a1':'A1','mod-a2':'A2','mod-a3':'A3','mod-t1':'T1','mod-t2':'T2','mod-t3':'T3' };
       const modTitles = { 'mod-a1':'AREA Module 1','mod-a2':'AREA Module 2','mod-a3':'AREA Module 3','mod-t1':'Atticus Module 1','mod-t2':'Atticus Module 2','mod-t3':'Atticus Module 3' };
-      const colCount  = 3 + mods.length + 1; // name + store + dots + progress + date + actions
 
-      // Update thead dynamically
+      // Update column headers to only show active modules
       const thead = document.getElementById('progress-thead');
       if (thead) {
         thead.innerHTML = `<tr>
@@ -1746,8 +1744,10 @@
         </tr>`;
       }
 
+      const colCount = 3 + mods.length + 3;
+
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${colCount + 3}">
+        tbody.innerHTML = `<tr><td colspan="${colCount}">
           <div class="empty-state">
             <p>No Data Found</p>
             <span>No workers have logged progress for ${selectedMonth} yet.</span>
@@ -1759,7 +1759,6 @@
 
       tbody.innerHTML = rows.map(r => {
         const completed = r.completed || [];
-        // Only count completions for active modules
         const activeDone = completed.filter(m => mods.includes(m)).length;
         const pct = mods.length ? Math.round((activeDone / mods.length) * 100) : 0;
         const date = r.savedAt ? new Date(r.savedAt).toLocaleDateString('en-NZ', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '–';
@@ -1769,7 +1768,6 @@
             <span class="check-dot${done ? ' done' : ''}"
               onclick="${done ? `uncompleteModule('${r.key}', '${m}')` : `completeModule('${r.key}', '${m}')`}"
               title="${done ? 'Click to uncomplete' : 'Click to complete'}"
-              style="cursor:pointer;"
             >✓</span>
           </td>`;
         }).join('');
@@ -1814,7 +1812,7 @@
       document.getElementById('stat-rate').textContent     = total ? avgPct + '%' : '–';
     }
 
-    // ─── ADMIN USERS (loaded from Firebase) ───
+    // ─── ADMIN USERS ───
     async function renderAdminUsers() {
       const list = document.getElementById('admin-user-list');
       list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Loading…</div>';
@@ -1822,7 +1820,7 @@
         if (!window._firebaseReady) throw new Error('no firebase');
         const snap = await window._fbGet(window._fbRef(window._db, 'config/admins'));
         if (!snap.exists()) {
-          list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">No admin users found. Run the setup tool to add them.</div>';
+          list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">No admin users found.</div>';
           return;
         }
         const users = Object.keys(snap.val());
@@ -1908,7 +1906,6 @@
       btn.disabled = true;
 
       try {
-        // Always fetch fresh from Firebase so we don't rely on the adiClub tab being visited
         if (!allAdiClub.length) {
           const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
           allAdiClub = [];
@@ -1922,9 +1919,7 @@
         }
 
         const rows = getExportRows(period);
-
-        document.getElementById('export-preview').textContent =
-          rows.length + ' entries · ' + label;
+        document.getElementById('export-preview').textContent = rows.length + ' entries · ' + label;
 
         if (rows.length === 0) {
           showToast('No data for selected period', 'error');
@@ -2009,6 +2004,7 @@
       setTimeout(() => { win.print(); }, 400);
       showToast('✓ PDF ready — use Print → Save as PDF', 'success');
     }
+
     async function updateExportPreview() {
       const period = document.getElementById('export-period')?.value;
       if (!period) return;
@@ -2040,54 +2036,47 @@
       try {
         const cfg = JSON.parse(localStorage.getItem('adidas_fb_config') || 'null');
         if (!cfg) {
-          document.getElementById('fb-status-box').innerHTML = `
+          const box = document.getElementById('fb-status-box');
+          if (box) box.innerHTML = `
             <div style="padding:12px 16px; background:#fff8e1; border:1px solid #f0c040; font-size:12px; color:#7a6a00; letter-spacing:0.04em;">
               ⚠ Firebase not configured. Enter your config below.
             </div>`;
           return;
         }
-        document.getElementById('fb-api-key').value    = cfg.apiKey    || '';
-        document.getElementById('fb-auth-domain').value= cfg.authDomain|| '';
-        document.getElementById('fb-db-url').value     = cfg.databaseURL|| '';
-        document.getElementById('fb-project-id').value = cfg.projectId || '';
-        document.getElementById('fb-app-id').value     = cfg.appId     || '';
-        document.getElementById('fb-status-box').innerHTML = `
+        const apiEl  = document.getElementById('fb-api-key');
+        const authEl = document.getElementById('fb-auth-domain');
+        const dbEl   = document.getElementById('fb-db-url');
+        const pidEl  = document.getElementById('fb-project-id');
+        const appEl  = document.getElementById('fb-app-id');
+        if (apiEl)  apiEl.value  = cfg.apiKey     || '';
+        if (authEl) authEl.value = cfg.authDomain  || '';
+        if (dbEl)   dbEl.value   = cfg.databaseURL || '';
+        if (pidEl)  pidEl.value  = cfg.projectId   || '';
+        if (appEl)  appEl.value  = cfg.appId       || '';
+        const box = document.getElementById('fb-status-box');
+        if (box) box.innerHTML = `
           <div style="padding:12px 16px; background:#f0fdf5; border:1px solid rgba(46,204,113,0.4); font-size:12px; color:#1a5c38; letter-spacing:0.04em;">
             ✓ Firebase connected · Project: <strong>${escHtml(cfg.projectId || '')}</strong>
           </div>`;
       } catch(e) {}
     }
 
-    function saveFirebaseConfig() {
-      const cfg = {
-        apiKey:        document.getElementById('fb-api-key').value.trim(),
-        authDomain:    document.getElementById('fb-auth-domain').value.trim(),
-        databaseURL:   document.getElementById('fb-db-url').value.trim(),
-        projectId:     document.getElementById('fb-project-id').value.trim(),
-        storageBucket: document.getElementById('fb-project-id').value.trim() + '.appspot.com',
-        appId:         document.getElementById('fb-app-id').value.trim(),
-      };
-      if (!cfg.apiKey || !cfg.authDomain || !cfg.databaseURL || !cfg.projectId || !cfg.appId) {
-        showToast('Fill in all Firebase fields', 'error'); return;
-      }
-      localStorage.setItem('adidas_fb_config', JSON.stringify(cfg));
-      document.dispatchEvent(new CustomEvent('firebase-config-saved', { detail: cfg }));
-      loadFbConfigToForm();
-      showToast('✓ Firebase config saved — reload to reconnect', 'success');
-    }
-
-    function resetFirebaseConfig() {
-      if (!confirm('Reset Firebase config? You will need to re-enter your credentials.')) return;
-      localStorage.removeItem('adidas_fb_config');
-      location.reload();
-    }
-
     // ─── TABS ───
+    // FIX: Switching to 'progress' now auto-loads module config + progress data
+    //      so you don't need to manually hit Refresh.
     function switchTab(name) {
       const names  = ['modules','progress','adiclub','settings'];
       const panels = ['tab-modules','tab-progress','tab-adiclub','tab-settings'];
       document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
       document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
+
+      if (name === 'progress') {
+        // Always reload module config + progress when entering the tab
+        waitForFirebase(async () => {
+          await loadModuleConfig(selectedMonth);
+          await loadProgress();
+        });
+      }
       if (name === 'settings') { renderAdminUsers(); updateExportPreview(); }
       if (name === 'adiclub') loadAdiClub();
     }
@@ -2097,13 +2086,13 @@
 
     async function loadAdiClub() {
       window._acLoaded = true;
-      allAdiClub = []; // always reset
+      allAdiClub = [];
       document.getElementById('adiclub-tbody').innerHTML =
         '<tr><td colspan="5"><div class="loading-spinner">Loading adiClub data…</div></td></tr>';
 
       if (!window._firebaseReady) {
         document.getElementById('adiclub-tbody').innerHTML =
-          '<tr><td colspan="5"><div class="empty-state"><p>Firebase Not Connected</p><span>Check Settings tab and make sure your Database URL uses asia-southeast1.firebasedatabase.app</span></div></td></tr>';
+          '<tr><td colspan="5"><div class="empty-state"><p>Firebase Not Connected</p></div></td></tr>';
         return;
       }
 
@@ -2130,7 +2119,6 @@
 
     function parseAdiTimestamp(ts) {
       if (!ts) return null;
-      // Strip Z so browser treats as local NZ time not UTC
       const local = ts.replace('Z', '').replace('T', ' ');
       const d = new Date(local);
       return isNaN(d) ? new Date(ts) : d;
@@ -2149,13 +2137,11 @@
           if (period === 'today') {
             if (d.toDateString() !== now.toDateString()) return false;
           } else if (period === 'week') {
-            // This week: Mon 00:00 → now
             const monday = new Date(now);
             monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
             monday.setHours(0, 0, 0, 0);
             if (d < monday) return false;
           } else if (period === 'last_week') {
-            // Last week: Mon 00:00 → Sun 23:59 of previous week
             const thisMonday = new Date(now);
             thisMonday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
             thisMonday.setHours(0, 0, 0, 0);
@@ -2187,11 +2173,9 @@
       tbody.innerHTML = rows.map((r, i) => {
         let d = null;
         if (r.timestamp) {
-          // Strip Z suffix so browser treats as local time, not UTC
-          // (imported data was recorded in NZ local time)
           const ts = r.timestamp.replace('Z', '').replace('T', ' ');
           d = new Date(ts);
-          if (isNaN(d)) d = new Date(r.timestamp); // fallback
+          if (isNaN(d)) d = new Date(r.timestamp);
         }
         const date = d ? d.toLocaleDateString('en-NZ', { day:'2-digit', month:'short', year:'numeric' }) : '–';
         const time = d ? d.toLocaleTimeString('en-NZ', { hour:'2-digit', minute:'2-digit' }) : '–';
@@ -2309,9 +2293,8 @@
       }
     }
 
-    // ─── AUTO-LOGIN (session + keep-me-logged-in) ───
+    // ─── AUTO-LOGIN ───
     (function() {
-      // Check persistent login first
       const persistent   = localStorage.getItem('adidas_admin_persistent');
       const sessionSaved = sessionStorage.getItem('adidas_admin_session');
       const usedDefault  = sessionStorage.getItem('adidas_used_default');
