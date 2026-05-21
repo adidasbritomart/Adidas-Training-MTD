@@ -714,7 +714,92 @@
       padding: 4px 10px;
     }
 
-    /* ─── ADICLUB ─── */
+    /* ─── QR CODES ─── */
+    .qr-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 20px 16px;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .qr-card:hover { border-color: #aaa; transform: translateY(-2px); }
+
+    .qr-card canvas, .qr-card img { display: block; margin: 0 auto 12px; }
+
+    .qr-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .qr-url {
+      font-size: 10px;
+      color: var(--gray-400);
+      letter-spacing: 0.03em;
+      word-break: break-all;
+      margin-bottom: 12px;
+    }
+
+    .qr-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .btn-qr-dl {
+      flex: 1;
+      padding: 8px 10px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-qr-dl:hover { background: #333; }
+
+    .btn-qr-del {
+      padding: 8px 10px;
+      background: none;
+      color: var(--red);
+      border: 1.5px solid var(--gray-200);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-qr-del:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+
+    @media (max-width: 640px) {
+      #qr-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+      .qr-card { padding: 14px 10px; }
+      .qr-name { font-size: 15px; }
+    }
+
+    @media print {
+      header, .tabs, .card > p, #qr-base-url, .btn-refresh,
+      .btn-qr-dl, .btn-qr-del, .qr-actions,
+      div[style*="border:1.5px solid var(--gray-200)"] { display: none !important; }
+      .card { border: none !important; padding: 0 !important; }
+      #qr-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+      .qr-card { border: 1px solid #ccc !important; break-inside: avoid; }
+      .qr-url { display: block !important; }
+    }
+
     /* ─── TOAST ─── */
     .toast {
       position: fixed;
@@ -905,6 +990,7 @@
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('modules')">Module Editor</button>
       <button class="tab-btn" onclick="switchTab('team')">Team Members</button>
+      <button class="tab-btn" onclick="switchTab('qrcodes')">QR Codes</button>
       <button class="tab-btn" onclick="switchTab('progress')">Worker Progress</button>
       <button class="tab-btn" onclick="switchTab('adiclub')">adiClub Signups</button>
       <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
@@ -994,6 +1080,51 @@
 
       <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
         ℹ️ The worker page dropdown refreshes on every page load — workers will see the updated list immediately after saving.
+      </p>
+    </div>
+
+    <!-- ─── TAB: QR CODES ─── -->
+    <div class="tab-panel" id="tab-qrcodes">
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">adiClub QR Codes</span>
+          <span class="card-tag">Per Member</span>
+        </div>
+
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
+          Each QR code links to the adiClub signup page with that team member's name pre-filled. Scans and signups are automatically logged to the adiClub Signups tab.
+        </p>
+
+        <!-- Base URL config -->
+        <div style="display:flex; gap:10px; align-items:flex-end; margin-bottom:24px; flex-wrap:wrap;">
+          <div class="form-group" style="flex:1; margin:0; min-width:200px;">
+            <label>adiClub Page URL</label>
+            <input type="text" id="qr-base-url" placeholder="https://yoursite.com/adiclub.html"
+                   oninput="regenerateAllQR()" style="font-size:13px; padding:10px 12px;"/>
+          </div>
+          <button class="btn-refresh" onclick="printAllQR()">🖨 Print All</button>
+        </div>
+
+        <!-- Add member inline -->
+        <div style="border:1.5px solid var(--gray-200); padding:16px 18px; margin-bottom:24px; background:var(--gray-100);">
+          <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:10px;">Add Team Member</p>
+          <div style="display:flex; gap:10px;">
+            <input type="text" id="qr-new-member" placeholder="e.g. Jordan"
+                   onkeydown="if(event.key==='Enter') qrAddMember()"
+                   style="flex:1; font-size:14px; padding:10px 12px;"/>
+            <button class="btn-save" style="padding:10px 20px; font-size:13px;" onclick="qrAddMember()">+ Add</button>
+          </div>
+        </div>
+
+        <!-- QR grid -->
+        <div id="qr-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:16px;">
+          <div class="loading-spinner">Loading team members…</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
+        ℹ️ QR codes use the URL above — make sure it points to your live adiclub.html file. Adding or removing members here also updates the Team Members list.
       </p>
     </div>
 
@@ -1820,8 +1951,8 @@
 
     // ─── TABS ───
     function switchTab(name) {
-      const names  = ['modules','team','progress','adiclub','settings'];
-      const panels = ['tab-modules','tab-team','tab-progress','tab-adiclub','tab-settings'];
+      const names  = ['modules','team','qrcodes','progress','adiclub','settings'];
+      const panels = ['tab-modules','tab-team','tab-qrcodes','tab-progress','tab-adiclub','tab-settings'];
       document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
       document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
 
@@ -1834,8 +1965,170 @@
       if (name === 'team') {
         waitForFirebase(() => loadTeamMembersAdmin());
       }
+      if (name === 'qrcodes') {
+        waitForFirebase(() => loadQRTab());
+      }
       if (name === 'settings') { renderAdminUsers(); updateExportPreview(); }
       if (name === 'adiclub') loadAdiClub();
+    }
+
+    // ─── QR CODES ───
+    // Uses the free QRCode.js library (no server needed)
+    let qrLibLoaded = false;
+
+    function loadQRLib() {
+      return new Promise((resolve) => {
+        if (qrLibLoaded) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+        s.onload = () => { qrLibLoaded = true; resolve(); };
+        s.onerror = () => resolve(); // still resolve so UI doesn't hang
+        document.head.appendChild(s);
+      });
+    }
+
+    async function loadQRTab() {
+      await loadQRLib();
+      // Pre-fill base URL from localStorage if saved
+      const saved = localStorage.getItem('adidas_qr_base_url');
+      if (saved) document.getElementById('qr-base-url').value = saved;
+      renderQRGrid();
+    }
+
+    function getQRBaseUrl() {
+      const val = (document.getElementById('qr-base-url').value || '').trim();
+      localStorage.setItem('adidas_qr_base_url', val);
+      return val;
+    }
+
+    function buildQRUrl(name) {
+      const base = getQRBaseUrl();
+      if (!base) return '';
+      const sep = base.includes('?') ? '&' : '?';
+      return base + sep + 'name=' + encodeURIComponent(name);
+    }
+
+    function renderQRGrid() {
+      const grid = document.getElementById('qr-grid');
+      grid.innerHTML = '';
+
+      if (teamMembers.length === 0) {
+        grid.innerHTML = '<p style="color:var(--gray-500); font-size:13px; grid-column:1/-1;">No team members yet — add some in the Team Members tab.</p>';
+        return;
+      }
+
+      const base = getQRBaseUrl();
+
+      teamMembers.forEach(name => {
+        const url = buildQRUrl(name);
+        const card = document.createElement('div');
+        card.className = 'qr-card';
+        card.id = 'qr-card-' + name.replace(/\s+/g, '_');
+
+        const qrDiv = document.createElement('div');
+        qrDiv.id = 'qr-' + name.replace(/\s+/g, '_');
+        qrDiv.style.cssText = 'width:160px; height:160px; margin:0 auto 12px;';
+
+        card.innerHTML = `
+          <div class="qr-name">${escHtml(name)}</div>
+          <div class="qr-url">${escHtml(url || 'Enter URL above to generate')}</div>
+          <div class="qr-actions">
+            <button class="btn-qr-dl" onclick="downloadQR('${escHtml(name)}')">⬇ Download</button>
+            <button class="btn-qr-del" onclick="qrDeleteMember('${escHtml(name)}')">✕</button>
+          </div>
+        `;
+        // Insert qrDiv before the name
+        card.insertBefore(qrDiv, card.firstChild);
+        grid.appendChild(card);
+
+        // Generate QR
+        if (url && window.QRCode) {
+          try {
+            new QRCode(qrDiv, {
+              text: url,
+              width: 160,
+              height: 160,
+              colorDark: '#000000',
+              colorLight: '#ffffff',
+              correctLevel: QRCode.CorrectLevel.M
+            });
+          } catch(e) {}
+        } else if (!url) {
+          qrDiv.innerHTML = '<div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#aaa;font-size:11px;letter-spacing:0.05em;text-align:center;padding:16px;">Enter URL<br>above</div>';
+        }
+      });
+    }
+
+    function regenerateAllQR() {
+      // Debounce so it doesn't fire on every keystroke
+      clearTimeout(window._qrRegen);
+      window._qrRegen = setTimeout(() => renderQRGrid(), 400);
+    }
+
+    function downloadQR(name) {
+      const cardId = 'qr-' + name.replace(/\s+/g, '_');
+      const qrDiv  = document.getElementById(cardId);
+      if (!qrDiv) return;
+      const canvas = qrDiv.querySelector('canvas');
+      const img    = qrDiv.querySelector('img');
+
+      if (canvas) {
+        const link = document.createElement('a');
+        link.download = 'adiclub-qr-' + name.toLowerCase().replace(/\s+/g, '-') + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } else if (img) {
+        const link = document.createElement('a');
+        link.download = 'adiclub-qr-' + name.toLowerCase().replace(/\s+/g, '-') + '.png';
+        link.href = img.src;
+        link.click();
+      } else {
+        showToast('Enter a URL above first to generate QR codes', 'error');
+      }
+    }
+
+    function printAllQR() {
+      window.print();
+    }
+
+    // Add member from QR tab — syncs to teamMembers + Firebase
+    async function qrAddMember() {
+      const input = document.getElementById('qr-new-member');
+      const name  = input.value.trim();
+      if (!name) { showToast('Enter a name first', 'error'); return; }
+      if (teamMembers.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+        showToast('That name already exists', 'error'); return;
+      }
+      const formatted = name.charAt(0).toUpperCase() + name.slice(1);
+      teamMembers.push(formatted);
+      input.value = '';
+
+      // Save to Firebase immediately
+      if (window._firebaseReady) {
+        try {
+          await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
+          showToast('✓ ' + formatted + ' added and saved', 'success');
+        } catch(e) {
+          showToast('Added locally — Firebase save failed', 'error');
+        }
+      }
+      renderQRGrid();
+    }
+
+    // Delete member from QR tab — syncs to teamMembers + Firebase
+    async function qrDeleteMember(name) {
+      if (!confirm(`Remove "${name}" from the team list?`)) return;
+      teamMembers = teamMembers.filter(n => n !== name);
+
+      if (window._firebaseReady) {
+        try {
+          await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
+          showToast('✓ ' + name + ' removed', 'success');
+        } catch(e) {
+          showToast('Removed locally — Firebase save failed', 'error');
+        }
+      }
+      renderQRGrid();
     }
 
     // ─── ADICLUB DATA ───
