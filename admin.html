@@ -800,6 +800,41 @@
       .qr-url { display: block !important; }
     }
 
+    /* ─── BARCODE CARDS ─── */
+    .barcode-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .barcode-card:hover { border-color: #aaa; transform: translateY(-2px); }
+
+    .barcode-card svg { display: block; margin: 0 auto 12px; max-width: 100%; }
+
+    .barcode-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .barcode-val {
+      font-size: 11px;
+      color: var(--gray-400);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    @media print {
+      #barcode-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+      .barcode-card { border: 1px solid #ccc !important; break-inside: avoid; }
+    }
+
     /* ─── TOAST ─── */
     .toast {
       position: fixed;
@@ -1117,14 +1152,31 @@
           </div>
         </div>
 
+        <!-- Toggle between QR and Barcode -->
+        <div style="display:flex; gap:0; margin-bottom:20px; border:1.5px solid var(--gray-200); width:fit-content;">
+          <button id="btn-show-qr" onclick="showCodeType('qr')"
+            style="padding:10px 24px; font-family:var(--font-display); font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border:none; cursor:pointer; background:var(--black); color:var(--white); transition:all 0.15s;">
+            QR Codes
+          </button>
+          <button id="btn-show-bc" onclick="showCodeType('barcode')"
+            style="padding:10px 24px; font-family:var(--font-display); font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border:none; cursor:pointer; background:var(--white); color:var(--gray-500); transition:all 0.15s;">
+            Barcodes
+          </button>
+        </div>
+
         <!-- QR grid -->
         <div id="qr-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:16px;">
           <div class="loading-spinner">Loading team members…</div>
         </div>
+
+        <!-- Barcode grid -->
+        <div id="barcode-grid" style="display:none; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">
+          <div class="loading-spinner">Loading barcodes…</div>
+        </div>
       </div>
 
       <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
-        ℹ️ QR codes use the URL above — make sure it points to your live adiclub.html file. Adding or removing members here also updates the Team Members list.
+        ℹ️ QR codes link to the adiClub page. Barcodes encode each person's name — scan them with any barcode scanner. Adding or removing members here also updates the Team Members list.
       </p>
     </div>
 
@@ -2091,6 +2143,149 @@
       window.print();
     }
 
+    // ─── BARCODE FUNCTIONS ───
+    // Draws a Code128 barcode using pure canvas — no library needed
+    function code128Encode(str) {
+      // Code128B character set (space=0x20 to DEL=0x7E)
+      const CODE_B_START = 104, CODE_STOP = 106, FNC3 = 96;
+      const chars = str.split('').map(c => c.charCodeAt(0) - 32);
+      let checksum = CODE_B_START;
+      chars.forEach((v, i) => { checksum += v * (i + 1); });
+      checksum = checksum % 103;
+
+      // Code128 bar patterns (11 bits each)
+      const PATTERNS = [
+        '11011001100','11001101100','11001100110','10010011000','10010001100',
+        '10001001100','10011001000','10011000100','10001100100','11001001000',
+        '11001000100','11000100100','10110011100','10011011100','10011001110',
+        '10111001100','10011101100','10011100110','11001110010','11001011100',
+        '11001001110','11011100100','11001110100','11101101110','11101001100',
+        '11100101100','11100100110','11101100100','11100110100','11100110010',
+        '11011011000','11011000110','11000110110','10100011000','10001011000',
+        '10001000110','10110001000','10001101000','10001100010','11010001000',
+        '11000101000','11000100010','10110111000','10110001110','10001101110',
+        '10111011000','10111000110','10001110110','11101110110','11010001110',
+        '11000101110','11011101000','11011100010','11011101110','11101011000',
+        '11101000110','11100010110','11101101000','11101100010','11100011010',
+        '11101111010','11001000010','11110001010','10100110000','10100001100',
+        '10010110000','10010000110','10000101100','10000100110','10110010000',
+        '10110000100','10011010000','10011000010','10000110100','10000110010',
+        '11000010010','11001010000','11110111010','11000010100','10001111010',
+        '10100111100','10010111100','10010011110','10111100100','10011110100',
+        '10011110010','11110100100','11110010100','11110010010','11011011110',
+        '11011110110','11110110110','10101111000','10100011110','10001011110',
+        '10111101000','10111100010','11110101000','11110100010','10111011110',
+        '10111101110','11101011110','11110101110','11010000100','11010010000',
+        '11010011100','1100011101011'
+      ];
+
+      const codes = [CODE_B_START, ...chars, checksum, CODE_STOP];
+      return codes.map(c => PATTERNS[c] || '').join('') + '11';
+    }
+
+    function drawBarcode(canvas, text, label) {
+      const bars    = code128Encode(text);
+      const barW    = 2;
+      const height  = 60;
+      const padX    = 10;
+      const padY    = 8;
+      const fontSize = 13;
+      canvas.width  = bars.length * barW + padX * 2;
+      canvas.height = height + padY * 2 + fontSize + 4;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#000000';
+      bars.split('').forEach((bit, i) => {
+        if (bit === '1') ctx.fillRect(padX + i * barW, padY, barW, height);
+      });
+      // Label below
+      ctx.font = `bold ${fontSize}px 'Barlow Condensed', sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(label || text, canvas.width / 2, padY + height + fontSize + 2);
+    }
+
+    function renderBarcodeGrid() {
+      const grid = document.getElementById('barcode-grid');
+      grid.innerHTML = '';
+
+      if (teamMembers.length === 0) {
+        grid.innerHTML = '<p style="color:var(--gray-500); font-size:13px; grid-column:1/-1;">No team members yet.</p>';
+        return;
+      }
+
+      teamMembers.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'barcode-card';
+
+        const canvas = document.createElement('canvas');
+        drawBarcode(canvas, name.toUpperCase(), name);
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'barcode-name';
+        nameEl.textContent = name;
+
+        const valEl = document.createElement('div');
+        valEl.className = 'barcode-val';
+        valEl.textContent = 'Code 128 · ' + name.toUpperCase();
+
+        const actions = document.createElement('div');
+        actions.className = 'qr-actions';
+        actions.innerHTML = `
+          <button class="btn-qr-dl" onclick="downloadBarcode('${escHtml(name)}')">⬇ Download</button>
+          <button class="btn-qr-del" onclick="qrDeleteMember('${escHtml(name)}')">✕</button>
+        `;
+
+        card.appendChild(canvas);
+        card.appendChild(nameEl);
+        card.appendChild(valEl);
+        card.appendChild(actions);
+        grid.appendChild(card);
+      });
+    }
+
+    function downloadBarcode(name) {
+      const grid   = document.getElementById('barcode-grid');
+      const cards  = grid.querySelectorAll('.barcode-card');
+      let canvas   = null;
+      cards.forEach(card => {
+        const n = card.querySelector('.barcode-name');
+        if (n && n.textContent === name) canvas = card.querySelector('canvas');
+      });
+      if (!canvas) { showToast('Barcode not found', 'error'); return; }
+      const link    = document.createElement('a');
+      link.download = 'barcode-' + name.toLowerCase().replace(/\s+/g, '-') + '.png';
+      link.href     = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    let currentCodeType = 'qr';
+
+    function showCodeType(type) {
+      currentCodeType = type;
+      const qrGrid  = document.getElementById('qr-grid');
+      const bcGrid  = document.getElementById('barcode-grid');
+      const btnQR   = document.getElementById('btn-show-qr');
+      const btnBC   = document.getElementById('btn-show-bc');
+
+      if (type === 'qr') {
+        qrGrid.style.display  = 'grid';
+        bcGrid.style.display  = 'none';
+        btnQR.style.background = 'var(--black)';
+        btnQR.style.color      = 'var(--white)';
+        btnBC.style.background = 'var(--white)';
+        btnBC.style.color      = 'var(--gray-500)';
+      } else {
+        qrGrid.style.display  = 'none';
+        bcGrid.style.display  = 'grid';
+        btnQR.style.background = 'var(--white)';
+        btnQR.style.color      = 'var(--gray-500)';
+        btnBC.style.background = 'var(--black)';
+        btnBC.style.color      = 'var(--white)';
+        renderBarcodeGrid();
+      }
+    }
+
     // Add member from QR tab — syncs to teamMembers + Firebase
     async function qrAddMember() {
       const input = document.getElementById('qr-new-member');
@@ -2103,7 +2298,6 @@
       teamMembers.push(formatted);
       input.value = '';
 
-      // Save to Firebase immediately
       if (window._firebaseReady) {
         try {
           await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
@@ -2113,6 +2307,7 @@
         }
       }
       renderQRGrid();
+      if (currentCodeType === 'barcode') renderBarcodeGrid();
     }
 
     // Delete member from QR tab — syncs to teamMembers + Firebase
@@ -2129,6 +2324,7 @@
         }
       }
       renderQRGrid();
+      if (currentCodeType === 'barcode') renderBarcodeGrid();
     }
 
     // ─── ADICLUB DATA ───
