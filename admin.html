@@ -1170,13 +1170,13 @@
         </div>
 
         <!-- Barcode grid -->
-        <div id="barcode-grid" style="display:none; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">
+        <div id="barcode-grid" style="display:none; flex-direction:column; gap:16px;">
           <div class="loading-spinner">Loading barcodes…</div>
         </div>
       </div>
 
       <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
-        ℹ️ QR codes link to the adiClub page. Barcodes encode each person's name — scan them with any barcode scanner. Adding or removing members here also updates the Team Members list.
+        ℹ️ QR codes link to the adiClub page. Barcodes use your custom codes per member — type each code in, hit Save, then download. Adding or removing members here also updates the Team Members list.
       </p>
     </div>
 
@@ -1408,6 +1408,9 @@
 
     // ─── Current team members list (in-memory, edited before saving) ───
     let teamMembers = [...DEFAULT_NAMES];
+
+    // ─── Barcode values per member (loaded from Firebase) ───
+    let barcodeValues = {};
 
     // ─── Module definitions ───
     const MODULE_DEFS = [
@@ -2044,6 +2047,13 @@
       // Pre-fill base URL from localStorage if saved
       const saved = localStorage.getItem('adidas_qr_base_url');
       if (saved) document.getElementById('qr-base-url').value = saved;
+      // Load barcode values from Firebase
+      if (window._firebaseReady) {
+        try {
+          const snap = await window._fbGet(window._fbRef(window._db, 'config/barcode_values'));
+          if (snap.exists()) barcodeValues = snap.val() || {};
+        } catch(e) {}
+      }
       renderQRGrid();
     }
 
@@ -2210,49 +2220,115 @@
       grid.innerHTML = '';
 
       if (teamMembers.length === 0) {
-        grid.innerHTML = '<p style="color:var(--gray-500); font-size:13px; grid-column:1/-1;">No team members yet.</p>';
+        grid.innerHTML = '<p style="color:var(--gray-500); font-size:13px;">No team members yet.</p>';
         return;
       }
 
+      // Save button row at top
+      const saveRow = document.createElement('div');
+      saveRow.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid var(--gray-200); margin-bottom:4px;';
+      saveRow.innerHTML = `
+        <p style="font-size:13px; color:var(--gray-700); line-height:1.6;">Enter each member's unique barcode value. Click <strong>Generate</strong> to preview and download.</p>
+        <button class="btn-save" style="flex-shrink:0; margin-left:16px;" onclick="saveBarcodeValues()">Save Codes →</button>
+      `;
+      grid.appendChild(saveRow);
+
       teamMembers.forEach(name => {
-        const card = document.createElement('div');
-        card.className = 'barcode-card';
-
-        const canvas = document.createElement('canvas');
-        drawBarcode(canvas, name.toUpperCase(), name);
-
-        const nameEl = document.createElement('div');
-        nameEl.className = 'barcode-name';
-        nameEl.textContent = name;
-
-        const valEl = document.createElement('div');
-        valEl.className = 'barcode-val';
-        valEl.textContent = 'Code 128 · ' + name.toUpperCase();
-
-        const actions = document.createElement('div');
-        actions.className = 'qr-actions';
-        actions.innerHTML = `
-          <button class="btn-qr-dl" onclick="downloadBarcode('${escHtml(name)}')">⬇ Download</button>
-          <button class="btn-qr-del" onclick="qrDeleteMember('${escHtml(name)}')">✕</button>
+        const savedVal = (barcodeValues[name] || '');
+        const row = document.createElement('div');
+        row.className = 'barcode-row';
+        row.id = 'bc-row-' + name.replace(/\s+/g, '_');
+        row.style.cssText = 'display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid var(--gray-100); flex-wrap:wrap;';
+        row.innerHTML = `
+          <div style="font-family:var(--font-display); font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:0.04em; min-width:90px;">${escHtml(name)}</div>
+          <input type="text" id="bc-input-${name.replace(/\s+/g,'_')}"
+            placeholder="Enter barcode value e.g. 9400123456"
+            value="${escHtml(savedVal)}"
+            style="flex:1; min-width:180px; font-size:14px; padding:10px 12px; font-family:monospace; letter-spacing:0.05em;"
+            onkeydown="if(event.key==='Enter') generateOneBarcode('${escHtml(name)}')"/>
+          <button class="btn-qr-dl" style="flex-shrink:0; padding:10px 16px;" onclick="generateOneBarcode('${escHtml(name)}')">Generate</button>
+          <button class="btn-qr-del" style="flex-shrink:0;" onclick="qrDeleteMember('${escHtml(name)}')">✕</button>
         `;
+        grid.appendChild(row);
 
-        card.appendChild(canvas);
-        card.appendChild(nameEl);
-        card.appendChild(valEl);
-        card.appendChild(actions);
-        grid.appendChild(card);
+        // If a value is already saved, auto-render the barcode preview below
+        if (savedVal) {
+          appendBarcodePreview(grid, name, savedVal);
+        }
       });
     }
 
-    function downloadBarcode(name) {
-      const grid   = document.getElementById('barcode-grid');
-      const cards  = grid.querySelectorAll('.barcode-card');
-      let canvas   = null;
-      cards.forEach(card => {
-        const n = card.querySelector('.barcode-name');
-        if (n && n.textContent === name) canvas = card.querySelector('canvas');
+    function appendBarcodePreview(container, name, value) {
+      // Remove existing preview for this name if any
+      const existing = document.getElementById('bc-preview-' + name.replace(/\s+/g, '_'));
+      if (existing) existing.remove();
+
+      const preview = document.createElement('div');
+      preview.id = 'bc-preview-' + name.replace(/\s+/g, '_');
+      preview.style.cssText = 'background:var(--white); border:1.5px solid var(--gray-200); padding:20px 16px; text-align:center; margin-bottom:4px;';
+
+      const canvas = document.createElement('canvas');
+      try {
+        drawBarcode(canvas, value, name + ' · ' + value);
+      } catch(e) {
+        preview.innerHTML = '<p style="color:var(--red); font-size:12px;">Invalid barcode value — use alphanumeric characters only.</p>';
+        container.appendChild(preview);
+        return;
+      }
+
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'btn-qr-dl';
+      dlBtn.style.cssText = 'margin-top:12px; padding:10px 20px;';
+      dlBtn.textContent = '⬇ Download PNG';
+      dlBtn.onclick = () => {
+        const link    = document.createElement('a');
+        link.download = 'barcode-' + name.toLowerCase().replace(/\s+/g,'-') + '.png';
+        link.href     = canvas.toDataURL('image/png');
+        link.click();
+      };
+
+      preview.appendChild(canvas);
+      preview.appendChild(dlBtn);
+
+      // Insert preview right after the row for this member
+      const row = document.getElementById('bc-row-' + name.replace(/\s+/g, '_'));
+      if (row && row.nextSibling) {
+        container.insertBefore(preview, row.nextSibling);
+      } else {
+        container.appendChild(preview);
+      }
+    }
+
+    function generateOneBarcode(name) {
+      const input = document.getElementById('bc-input-' + name.replace(/\s+/g, '_'));
+      const value = input ? input.value.trim() : '';
+      if (!value) { showToast('Enter a barcode value for ' + name + ' first', 'error'); return; }
+      barcodeValues[name] = value;
+      const grid = document.getElementById('barcode-grid');
+      appendBarcodePreview(grid, name, value);
+    }
+
+    async function saveBarcodeValues() {
+      // Read all current input values into barcodeValues
+      teamMembers.forEach(name => {
+        const input = document.getElementById('bc-input-' + name.replace(/\s+/g, '_'));
+        if (input && input.value.trim()) barcodeValues[name] = input.value.trim();
       });
-      if (!canvas) { showToast('Barcode not found', 'error'); return; }
+
+      if (!window._firebaseReady) { showToast('Firebase not connected', 'error'); return; }
+      try {
+        await window._fbSet(window._fbRef(window._db, 'config/barcode_values'), barcodeValues);
+        showToast('✓ Barcode values saved', 'success');
+      } catch(e) {
+        showToast('Save failed — ' + e.message, 'error');
+      }
+    }
+
+    function downloadBarcode(name) {
+      const preview = document.getElementById('bc-preview-' + name.replace(/\s+/g, '_'));
+      if (!preview) { showToast('Generate the barcode first', 'error'); return; }
+      const canvas = preview.querySelector('canvas');
+      if (!canvas) return;
       const link    = document.createElement('a');
       link.download = 'barcode-' + name.toLowerCase().replace(/\s+/g, '-') + '.png';
       link.href     = canvas.toDataURL('image/png');
@@ -2277,7 +2353,7 @@
         btnBC.style.color      = 'var(--gray-500)';
       } else {
         qrGrid.style.display  = 'none';
-        bcGrid.style.display  = 'grid';
+        bcGrid.style.display  = 'flex';
         btnQR.style.background = 'var(--white)';
         btnQR.style.color      = 'var(--gray-500)';
         btnBC.style.background = 'var(--black)';
