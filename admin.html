@@ -23,702 +23,149 @@
       --font-body: 'Barlow', sans-serif;
     }
 
-    body {
-      background: var(--gray-100);
-      font-family: var(--font-body);
-      min-height: 100vh;
-      color: var(--black);
-    }
+    body { background: var(--gray-100); font-family: var(--font-body); min-height: 100vh; color: var(--black); }
 
     /* ─── HEADER ─── */
     header {
-      background: var(--black);
-      padding: 16px 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      flex-wrap: wrap;
+      background: var(--black); padding: 16px 28px; display: flex;
+      align-items: center; gap: 16px; position: sticky; top: 0; z-index: 200; flex-wrap: wrap;
     }
-
-    .adidas-logo {
-      font-family: var(--font-display);
-      font-size: 26px;
-      font-weight: 900;
-      color: var(--white);
-      letter-spacing: -0.02em;
-      text-transform: lowercase;
-      line-height: 1;
-      user-select: none;
-    }
-
-    .header-text {
-      border-left: 2px solid #333;
-      padding-left: 16px;
-    }
-
-    .header-text h1 {
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-
-    .header-text p {
-      font-size: 10px;
-      color: var(--gray-500);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
-
-    .header-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    #admin-badge {
-      display: none;
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--green);
-      background: rgba(46,204,113,0.12);
-      padding: 5px 12px;
-      border: 1px solid rgba(46,204,113,0.3);
-    }
-
-    #btn-logout {
-      display: none;
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-      background: none;
-      border: 1px solid #333;
-      padding: 6px 14px;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
+    .header-logo-area { display: flex; align-items: center; gap: 12px; }
+    .adidas-logo { font-family: var(--font-display); font-size: 26px; font-weight: 900; color: var(--white); letter-spacing: -0.02em; text-transform: lowercase; line-height: 1; user-select: none; }
+    .adidas-logo img { height: 32px; width: auto; object-fit: contain; filter: brightness(0) invert(1); }
+    .header-text { border-left: 2px solid #333; padding-left: 16px; }
+    .header-text h1 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--white); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; }
+    .header-text p { font-size: 10px; color: var(--gray-500); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+    #admin-badge { display: none; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); background: rgba(46,204,113,0.12); padding: 5px 12px; border: 1px solid rgba(46,204,113,0.3); }
+    #btn-logout { display: none; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); background: none; border: 1px solid #333; padding: 6px 14px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
     #btn-logout:hover { color: var(--white); border-color: var(--white); }
 
     /* ─── LAYOUT ─── */
     .page { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
 
     /* ─── LOGIN ─── */
-    #screen-login {
-      display: flex;
-      justify-content: center;
-      padding-top: 60px;
-    }
-
-    .login-box {
-      background: var(--white);
-      border: 1.5px solid var(--gray-200);
-      padding: 40px 36px;
-      width: 100%;
-      max-width: 420px;
-      animation: fadeUp 0.4s ease both;
-    }
-
-    .login-box .step-label {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-      margin-bottom: 6px;
-    }
-
-    .login-box h2 {
-      font-family: var(--font-display);
-      font-size: 38px;
-      font-weight: 900;
-      text-transform: uppercase;
-      line-height: 1;
-      margin-bottom: 32px;
-      letter-spacing: -0.01em;
-    }
-
+    #screen-login { display: flex; justify-content: center; padding-top: 60px; }
+    .login-box { background: var(--white); border: 1.5px solid var(--gray-200); padding: 40px 36px; width: 100%; max-width: 420px; animation: fadeUp 0.4s ease both; }
+    .login-box .step-label { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 6px; }
+    .login-box h2 { font-family: var(--font-display); font-size: 38px; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 32px; letter-spacing: -0.01em; }
     .form-group { margin-bottom: 18px; }
-
-    label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray-700);
-      margin-bottom: 7px;
-    }
-
-    input[type="text"], input[type="password"], input[type="url"], select {
-      width: 100%;
-      padding: 13px 15px;
-      border: 1.5px solid var(--gray-200);
-      background: var(--gray-100);
-      font-family: var(--font-body);
-      font-size: 15px;
-      color: var(--black);
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      border-radius: 0;
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--black);
-      background: var(--white);
-    }
-
+    label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-700); margin-bottom: 7px; }
+    input[type="text"], input[type="password"], input[type="url"], select { width: 100%; padding: 13px 15px; border: 1.5px solid var(--gray-200); background: var(--gray-100); font-family: var(--font-body); font-size: 15px; color: var(--black); outline: none; transition: border-color 0.2s, background 0.2s; border-radius: 0; appearance: none; -webkit-appearance: none; }
+    input:focus, select:focus { border-color: var(--black); background: var(--white); }
     input::placeholder { color: var(--gray-400); }
-
-    .btn-primary {
-      width: 100%;
-      padding: 16px;
-      background: var(--black);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      margin-top: 6px;
-      transition: background 0.2s;
-    }
-
+    .btn-primary { width: 100%; padding: 16px; background: var(--black); color: var(--white); border: none; font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; margin-top: 6px; transition: background 0.2s; }
     .btn-primary:hover { background: #222; }
     .btn-primary:disabled { background: #888; cursor: not-allowed; }
-
-    .error-msg {
-      color: var(--red);
-      font-size: 12px;
-      margin-top: 8px;
-      display: none;
-      letter-spacing: 0.04em;
-    }
+    .error-msg { color: var(--red); font-size: 12px; margin-top: 8px; display: none; letter-spacing: 0.04em; }
 
     /* ─── ADMIN PANEL ─── */
     #screen-admin { display: none; }
 
     /* ─── TABS ─── */
-    .tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 28px;
-      border-bottom: 2px solid var(--gray-200);
-    }
-
-    .tab-btn {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 14px 22px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--gray-500);
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      transition: color 0.2s;
-    }
-
+    .tabs { display: flex; gap: 0; margin-bottom: 28px; border-bottom: 2px solid var(--gray-200); }
+    .tab-btn { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 22px; background: none; border: none; cursor: pointer; color: var(--gray-500); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s; }
     .tab-btn.active { color: var(--black); border-bottom-color: var(--black); }
     .tab-btn:hover:not(.active) { color: var(--gray-700); }
-
     .tab-panel { display: none; animation: fadeUp 0.3s ease both; }
     .tab-panel.active { display: block; }
 
     /* ─── SECTION CARD ─── */
-    .card {
-      background: var(--white);
-      border: 1.5px solid var(--gray-200);
-      padding: 28px 28px;
-      margin-bottom: 20px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .card-tag {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .card-tag.outline {
-      background: transparent;
-      color: var(--black);
-      border: 1.5px solid var(--black);
-    }
+    .card { background: var(--white); border: 1.5px solid var(--gray-200); padding: 28px 28px; margin-bottom: 20px; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-200); }
+    .card-title { font-family: var(--font-display); font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+    .card-tag { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; background: var(--black); color: var(--white); }
+    .card-tag.outline { background: transparent; color: var(--black); border: 1.5px solid var(--black); }
 
     /* ─── MODULE EDITOR ─── */
-    .module-row {
-      display: grid;
-      grid-template-columns: 42px 1fr 1fr 1.4fr;
-      gap: 10px;
-      align-items: start;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--gray-100);
-    }
-
+    .module-row { display: grid; grid-template-columns: 42px 1fr 1fr 1.4fr; gap: 10px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
     .module-row:last-child { border-bottom: none; }
-
-    .module-num-label {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 900;
-      color: var(--gray-200);
-      line-height: 1;
-      padding-top: 14px;
-    }
-
+    .module-num-label { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--gray-200); line-height: 1; padding-top: 14px; }
     .module-row .form-group { margin-bottom: 0; }
     .module-row input { font-size: 13px; padding: 10px 12px; }
-
-    .save-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .save-status {
-      font-size: 13px;
-      letter-spacing: 0.04em;
-      color: var(--gray-500);
-      transition: opacity 0.5s;
-    }
-
-    .btn-save {
-      padding: 13px 28px;
-      background: var(--black);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-display);
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
+    .save-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--gray-200); }
+    .save-status { font-size: 13px; letter-spacing: 0.04em; color: var(--gray-500); transition: opacity 0.5s; }
+    .btn-save { padding: 13px 28px; background: var(--black); color: var(--white); border: none; font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
     .btn-save:hover { background: #222; }
     .btn-save:disabled { background: #999; cursor: not-allowed; }
 
     /* ─── STATS ROW ─── */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .stat-box {
-      background: var(--white);
-      border: 1.5px solid var(--gray-200);
-      padding: 18px 16px;
-      text-align: center;
-    }
-
-    .stat-num {
-      font-family: var(--font-display);
-      font-size: 36px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-      margin-top: 4px;
-    }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-box { background: var(--white); border: 1.5px solid var(--gray-200); padding: 18px 16px; text-align: center; }
+    .stat-num { font-family: var(--font-display); font-size: 36px; font-weight: 900; line-height: 1; }
+    .stat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-500); margin-top: 4px; }
 
     /* ─── FILTERS ─── */
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 18px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .filter-bar select,
-    .filter-bar input[type="text"] {
-      width: auto;
-      flex: 1;
-      min-width: 140px;
-      font-size: 13px;
-      padding: 10px 14px;
-    }
-
-    .select-wrap {
-      position: relative;
-      flex: 1;
-      min-width: 140px;
-    }
-
-    .select-wrap::after {
-      content: '▾';
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: var(--gray-500);
-      font-size: 13px;
-    }
-
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 18px; align-items: center; flex-wrap: wrap; }
+    .filter-bar select, .filter-bar input[type="text"] { width: auto; flex: 1; min-width: 140px; font-size: 13px; padding: 10px 14px; }
+    .select-wrap { position: relative; flex: 1; min-width: 140px; }
+    .select-wrap::after { content: '▾'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--gray-500); font-size: 13px; }
     .select-wrap select { width: 100%; }
-
-    .btn-refresh {
-      padding: 10px 18px;
-      background: var(--black);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-
+    .btn-refresh { padding: 10px 18px; background: var(--black); color: var(--white); border: none; font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
     .btn-refresh:hover { background: #222; }
 
     /* ─── PROGRESS TABLE ─── */
     .table-wrap { overflow-x: auto; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    thead th {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-      padding: 10px 12px;
-      text-align: left;
-      background: var(--gray-100);
-      border-bottom: 2px solid var(--gray-200);
-      white-space: nowrap;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--gray-100);
-      transition: background 0.15s;
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-500); padding: 10px 12px; text-align: left; background: var(--gray-100); border-bottom: 2px solid var(--gray-200); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
     tbody tr:hover { background: #fafafa; }
-
-    tbody td {
-      padding: 12px 12px;
-      vertical-align: middle;
-    }
-
+    tbody td { padding: 12px 12px; vertical-align: middle; }
     .td-name { font-weight: 600; }
     .td-store { color: var(--gray-500); font-size: 12px; }
-
-    .check-dot {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--gray-200);
-      text-align: center;
-      line-height: 20px;
-      font-size: 10px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
+    .check-dot { display: inline-block; width: 20px; height: 20px; border-radius: 50%; background: var(--gray-200); text-align: center; line-height: 20px; font-size: 10px; cursor: pointer; transition: background 0.15s; }
     .check-dot:hover { background: #b0b0b0; }
-
-    .check-dot.done {
-      background: var(--green);
-      color: var(--white);
-    }
-
+    .check-dot.done { background: var(--green); color: var(--white); }
     .check-dot.done:hover { background: #27ae60; }
-
-    .progress-bar-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .progress-bar {
-      height: 6px;
-      background: var(--gray-200);
-      flex: 1;
-      min-width: 50px;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--black);
-      transition: width 0.3s;
-    }
-
+    .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .progress-bar { height: 6px; background: var(--gray-200); flex: 1; min-width: 50px; }
+    .progress-bar-fill { height: 100%; background: var(--black); transition: width 0.3s; }
     .progress-bar-fill.full { background: var(--green); }
-
-    .pct-label {
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 700;
-      min-width: 36px;
-      text-align: right;
-    }
-
+    .pct-label { font-family: var(--font-display); font-size: 13px; font-weight: 700; min-width: 36px; text-align: right; }
     .td-date { color: var(--gray-500); font-size: 11px; white-space: nowrap; }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--gray-500);
-    }
-
-    .empty-state p {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
+    .empty-state p { font-family: var(--font-display); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .empty-state span { font-size: 13px; display: block; margin-top: 6px; }
 
     /* ─── MONTH SELECTOR ─── */
-    .month-chips {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      scrollbar-width: none;
-    }
-
+    .month-chips { display: flex; gap: 8px; flex-wrap: wrap; scrollbar-width: none; }
     .month-chips::-webkit-scrollbar { display: none; }
-
-    .month-chip {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      border: 1.5px solid var(--gray-200);
-      background: var(--white);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .month-chip.active {
-      background: var(--black);
-      color: var(--white);
-      border-color: var(--black);
-    }
-
+    .month-chip { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; border: 1.5px solid var(--gray-200); background: var(--white); cursor: pointer; transition: all 0.15s; }
+    .month-chip.active { background: var(--black); color: var(--white); border-color: var(--black); }
     .month-chip:hover:not(.active) { border-color: var(--black); }
 
     /* ─── LOADING SPINNER ─── */
-    .loading-spinner {
-      text-align: center;
-      padding: 30px;
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-    }
+    .loading-spinner { text-align: center; padding: 30px; font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); }
 
     /* ─── TEAM MEMBERS ─── */
-    .team-member-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .team-member-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      background: var(--gray-100);
-      border: 1.5px solid var(--gray-200);
-      transition: border-color 0.2s;
-    }
-
+    .team-member-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .team-member-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--gray-100); border: 1.5px solid var(--gray-200); transition: border-color 0.2s; }
     .team-member-item:hover { border-color: #bbb; }
-
-    .team-member-drag {
-      color: var(--gray-400);
-      font-size: 16px;
-      cursor: grab;
-      user-select: none;
-      flex-shrink: 0;
-    }
-
-    .team-member-name {
-      flex: 1;
-      font-family: var(--font-display);
-      font-size: 18px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .btn-remove-member {
-      width: 30px;
-      height: 30px;
-      background: none;
-      border: 1.5px solid var(--gray-200);
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--red);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: all 0.15s;
-    }
-
-    .btn-remove-member:hover {
-      background: var(--red);
-      color: var(--white);
-      border-color: var(--red);
-    }
-
-    .add-member-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-    }
-
-    .add-member-row .form-group {
-      flex: 1;
-      margin: 0;
-    }
-
-    .add-member-row input {
-      padding: 12px 14px;
-      font-size: 15px;
-    }
-
-    .btn-add-member {
-      padding: 12px 22px;
-      background: var(--black);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
+    .team-member-drag { color: var(--gray-400); font-size: 16px; cursor: grab; user-select: none; flex-shrink: 0; }
+    .team-member-name { flex: 1; font-family: var(--font-display); font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+    .btn-remove-member { width: 30px; height: 30px; background: none; border: 1.5px solid var(--gray-200); cursor: pointer; font-size: 14px; color: var(--red); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+    .btn-remove-member:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+    .add-member-row { display: flex; gap: 10px; align-items: flex-end; }
+    .add-member-row .form-group { flex: 1; margin: 0; }
+    .add-member-row input { padding: 12px 14px; font-size: 15px; }
+    .btn-add-member { padding: 12px 22px; background: var(--black); color: var(--white); border: none; font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; white-space: nowrap; transition: background 0.2s; flex-shrink: 0; }
     .btn-add-member:hover { background: #222; }
 
     /* ─── ADMIN USERS ─── */
     .user-list { display: flex; flex-direction: column; gap: 10px; }
+    .user-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: var(--gray-100); border: 1px solid var(--gray-200); }
+    .user-item .u-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+    .user-item .u-role { font-size: 11px; color: var(--gray-500); letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge-active { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); padding: 4px 10px; }
 
-    .user-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      background: var(--gray-100);
-      border: 1px solid var(--gray-200);
-    }
+    /* ═══════════════════════════════════════════
+       ID CARD SYSTEM — PORTRAIT
+    ═══════════════════════════════════════════ */
 
-    .user-item .u-name {
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .user-item .u-role {
-      font-size: 11px;
-      color: var(--gray-500);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .badge-active {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--green);
-      background: rgba(46,204,113,0.1);
-      border: 1px solid rgba(46,204,113,0.3);
-      padding: 4px 10px;
-    }
-
-    /* ─── ID CARD SYSTEM ─── */
-    /* Card dimensions: CR80 standard ratio ~3.375" × 2.125" → 320×202px */
+    /* Grid — portrait cards are narrower */
     .id-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 240px));
       gap: 28px;
     }
 
@@ -740,12 +187,13 @@
       justify-content: space-between;
     }
 
-    /* Flip container */
+    /* Flip scene — PORTRAIT aspect ratio (CR80: 54×86mm ≈ 0.628) */
     .id-card-scene {
       width: 100%;
-      aspect-ratio: 320 / 202;
+      aspect-ratio: 54 / 86;
       perspective: 900px;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .id-card-inner {
@@ -753,7 +201,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
     }
 
     .id-card-scene.flipped .id-card-inner {
@@ -765,127 +213,135 @@
       inset: 0;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.1);
     }
 
-    /* ── FRONT FACE ── */
+    /* ── FRONT FACE (portrait) ── */
     .id-card-front {
-      background: #000;
+      background: #fff;
       display: flex;
       flex-direction: column;
-      align-items: center;
     }
 
-    .id-card-front .card-stripe {
-      width: 100%;
+    /* Black header bar */
+    .card-stripe-front {
       background: #000;
-      padding: 10px 0 8px;
+      padding: 10px 12px 9px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      min-height: 40px;
     }
 
-    .id-card-front .card-logo {
+    .card-logo-img {
+      max-height: 22px;
+      max-width: 90px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+
+    .card-logo-text {
       font-family: var(--font-display);
       font-size: 22px;
       font-weight: 900;
       color: #fff;
       letter-spacing: -0.02em;
       text-transform: lowercase;
+      line-height: 1;
     }
 
+    /* White body — portrait */
     .id-card-front .card-body {
       flex: 1;
-      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px 12px;
+      padding: 14px 12px 12px;
       background: #fff;
+      gap: 0;
     }
 
-    /* Photo area */
-    .id-card-photo {
-      width: 68px;
-      height: 68px;
+    /* Photo */
+    .id-card-photo-circle {
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
-      object-fit: cover;
       border: 3px solid #000;
-      background: var(--gray-200);
+      background: var(--gray-100);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       flex-shrink: 0;
+      cursor: pointer;
     }
 
-    .id-card-photo img {
+    .id-card-photo-circle img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .id-card-photo-placeholder {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      border: 3px solid #ddd;
-      background: var(--gray-100);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      color: var(--gray-400);
-      font-size: 26px;
-    }
-
     .id-card-name {
       font-family: var(--font-display);
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 900;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #000;
-      margin-top: 4px;
+      margin-top: 8px;
       text-align: center;
       line-height: 1;
     }
 
     .id-card-role {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--gray-500);
-      margin-top: 2px;
+      margin-top: 3px;
       text-align: center;
     }
 
-    /* Barcode on front */
-    .id-card-barcode-wrap {
+    /* Black accent bar */
+    .id-card-accent-bar {
+      width: 32px;
+      height: 3px;
+      background: #000;
+      margin: 10px auto 0;
+      flex-shrink: 0;
+    }
+
+    /* Spacer */
+    .id-card-spacer { flex: 1; }
+
+    /* Barcode */
+    .id-card-barcode-section {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #fff;
       padding-top: 4px;
+      padding-bottom: 4px;
     }
 
-    .id-card-barcode-wrap canvas {
+    .id-card-barcode-section canvas {
       max-width: 100%;
       height: auto;
+      display: block;
     }
 
     .id-card-barcode-num {
       font-family: 'Courier New', monospace;
-      font-size: 9px;
-      letter-spacing: 0.15em;
+      font-size: 8px;
+      letter-spacing: 0.12em;
       color: #666;
       margin-top: 2px;
       text-align: center;
@@ -893,43 +349,31 @@
 
     /* ── BACK FACE ── */
     .id-card-back {
-      background: #000;
+      background: #fff;
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
-      align-items: center;
     }
 
-    .id-card-back .card-stripe {
-      width: 100%;
+    .card-stripe-back {
       background: #000;
-      padding: 10px 0 8px;
+      padding: 10px 12px 9px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .id-card-back .card-logo {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -0.02em;
-      text-transform: lowercase;
+      min-height: 40px;
     }
 
     .id-card-back .card-body {
       flex: 1;
-      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px 16px 12px;
+      padding: 12px;
       background: #fff;
-      gap: 6px;
+      gap: 8px;
     }
 
     .id-card-back .qr-container {
@@ -940,7 +384,7 @@
 
     .id-card-back .back-name {
       font-family: var(--font-display);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -948,33 +392,32 @@
       text-align: center;
     }
 
-    /* Flip hint */
-    .flip-hint {
-      font-size: 10px;
-      color: var(--gray-400);
+    .id-card-back .back-note {
+      font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: var(--gray-400);
       text-align: center;
-      margin-top: 2px;
     }
 
-    /* Card actions row */
+    /* Card action buttons */
     .id-card-actions {
       display: flex;
-      gap: 6px;
+      gap: 4px;
     }
 
     .btn-card-action {
       flex: 1;
-      padding: 8px 10px;
+      padding: 7px 8px;
       font-family: var(--font-display);
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       cursor: pointer;
       border: none;
       transition: background 0.15s;
+      white-space: nowrap;
     }
 
     .btn-card-dl { background: var(--black); color: var(--white); }
@@ -982,7 +425,7 @@
     .btn-card-del { background: none; color: var(--red); border: 1.5px solid var(--gray-200) !important; }
     .btn-card-del:hover { background: var(--red); color: var(--white); border-color: var(--red) !important; }
 
-    /* Barcode suffix input - with SCN000 prefix display */
+    /* Barcode input */
     .barcode-input-wrap {
       display: flex;
       align-items: stretch;
@@ -991,78 +434,55 @@
       transition: border-color 0.2s, background 0.2s;
       overflow: hidden;
     }
+    .barcode-input-wrap:focus-within { border-color: var(--black); background: var(--white); }
+    .barcode-prefix { padding: 9px 8px 9px 10px; font-family: 'Courier New', monospace; font-size: 12px; font-weight: 700; color: var(--gray-500); background: transparent; white-space: nowrap; user-select: none; line-height: 1.4; display: flex; align-items: center; }
+    .barcode-suffix-input { flex: 1; padding: 9px 10px 9px 2px; font-family: 'Courier New', monospace; font-size: 12px; font-weight: 700; color: var(--black); background: transparent; border: none !important; outline: none; letter-spacing: 0.08em; width: 50px; }
 
-    .barcode-input-wrap:focus-within {
-      border-color: var(--black);
-      background: var(--white);
-    }
-
-    .barcode-prefix {
-      padding: 10px 10px 10px 12px;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--gray-500);
-      background: transparent;
-      white-space: nowrap;
-      user-select: none;
-      line-height: 1.5;
+    /* Logo upload section */
+    .logo-upload-section {
       display: flex;
       align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 14px 16px;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
     }
+    .logo-preview-area {
+      width: 80px;
+      height: 40px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .logo-preview-area img { max-width: 100%; max-height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
+    .logo-preview-area .logo-text-preview { font-family: var(--font-display); font-size: 16px; font-weight: 900; color: #fff; letter-spacing: -0.02em; text-transform: lowercase; }
+    .btn-logo-upload { padding: 8px 16px; background: var(--black); color: var(--white); border: none; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+    .btn-logo-remove { padding: 8px 12px; background: none; color: var(--red); border: 1.5px solid var(--gray-200); font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; display: none; }
 
-    .barcode-suffix-input {
-      flex: 1;
-      padding: 10px 12px 10px 2px;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--black);
-      background: transparent;
-      border: none !important;
-      outline: none;
-      letter-spacing: 0.08em;
-      width: 60px;
-    }
+    /* Flip hint */
+    .flip-hint { font-size: 10px; color: var(--gray-400); letter-spacing: 0.08em; text-transform: uppercase; text-align: center; margin-top: 2px; pointer-events: none; }
 
     /* ─── TOAST ─── */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      background: var(--black);
-      color: var(--white);
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 14px 22px;
-      z-index: 999;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.25s, transform 0.25s;
-      pointer-events: none;
-    }
-
+    .toast { position: fixed; bottom: 28px; right: 28px; background: var(--black); color: var(--white); font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 22px; z-index: 999; opacity: 0; transform: translateY(10px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.success { background: #1a5c38; }
     .toast.error { background: #8b1a1a; }
 
     /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Print styles for ID cards */
+    /* Print styles */
     @media print {
-      header, .tabs, .card > p, #qr-base-url, .btn-refresh,
-      .btn-card-dl, .btn-card-del, .id-card-actions, .flip-hint,
-      .id-card-label span:last-child,
-      div[style*="border:1.5px solid var(--gray-200)"] { display: none !important; }
+      header, .tabs, .btn-refresh, .btn-card-dl, .btn-card-del,
+      .id-card-actions, .flip-hint, .id-card-label span:last-child,
+      .logo-upload-section, .barcode-input-wrap, .id-card-label { display: none !important; }
       .card { border: none !important; padding: 0 !important; }
-      .id-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+      .id-cards-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 16px !important; }
       .id-card-scene { page-break-inside: avoid; }
     }
 
@@ -1074,75 +494,47 @@
       .header-text p { display: none; }
       #admin-badge { display: none !important; }
       #btn-logout { font-size: 11px; padding: 5px 10px; }
-
       .page { padding: 20px 12px 40px; }
-
       #screen-login { padding-top: 32px; }
       .login-box { padding: 28px 20px; }
       .login-box h2 { font-size: 30px; }
-
-      .tabs {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        flex-wrap: nowrap;
-        gap: 0;
-        scrollbar-width: none;
-      }
+      .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; gap: 0; scrollbar-width: none; }
       .tabs::-webkit-scrollbar { display: none; }
       .tab-btn { padding: 12px 14px; font-size: 12px; white-space: nowrap; }
-
       .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
       .stat-num { font-size: 28px; }
-
       .card { padding: 18px 14px; }
       .card-title { font-size: 16px; }
-
-      .module-row {
-        grid-template-columns: 32px 1fr;
-        gap: 6px;
-      }
+      .module-row { grid-template-columns: 32px 1fr; gap: 6px; }
       .module-row > .form-group:nth-child(3) { grid-column: 2; }
       .module-row > .form-group:nth-child(4) { grid-column: 2; }
       .module-num-label { font-size: 22px; padding-top: 10px; }
       .module-row input { font-size: 12px; padding: 9px 10px; }
-
       .save-bar { flex-direction: column; gap: 10px; align-items: stretch; }
       .btn-save { text-align: center; }
-
-      .month-chips {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 4px;
-        max-width: 100%;
-      }
+      .month-chips { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; max-width: 100%; }
       .month-chip { white-space: nowrap; font-size: 11px; padding: 5px 10px; flex-shrink: 0; }
-
       .filter-bar { flex-direction: column; gap: 8px; }
       .filter-bar input, .filter-bar .select-wrap, .select-wrap { min-width: unset; width: 100%; }
       .btn-refresh { width: 100%; text-align: center; }
-
       .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       table { min-width: 480px; }
       thead th { padding: 8px 8px; font-size: 10px; }
       tbody td { padding: 10px 8px; }
       .pct-label { min-width: 28px; font-size: 12px; }
       .progress-bar { min-width: 36px; }
-
       .add-member-row { flex-direction: column; }
       .btn-add-member { width: 100%; text-align: center; }
-
       .toast { bottom: 14px; right: 14px; left: 14px; font-size: 12px; padding: 12px 16px; }
-
       .user-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-
-      .id-cards-grid { grid-template-columns: 1fr !important; gap: 20px; }
+      .id-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px; }
     }
 
     @media (max-width: 400px) {
       .stats-row { grid-template-columns: repeat(2, 1fr); }
       .stat-num { font-size: 24px; }
       .tab-btn { padding: 10px 11px; font-size: 11px; }
+      .id-cards-grid { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
@@ -1150,7 +542,9 @@
 
   <!-- HEADER -->
   <header>
-    <div class="adidas-logo">adidas</div>
+    <div class="header-logo-area">
+      <div class="adidas-logo" id="header-logo-area">adidas</div>
+    </div>
     <div class="header-text">
       <h1>Training Hub</h1>
       <p>Admin Panel</p>
@@ -1166,7 +560,6 @@
     <div class="login-box">
       <p class="step-label">Restricted Access</p>
       <h2>Admin<br>Login</h2>
-
       <div class="form-group">
         <label for="login-user">Username</label>
         <input type="text" id="login-user" placeholder="Enter username" autocomplete="username"
@@ -1177,16 +570,12 @@
         <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password"
                onkeydown="if(event.key==='Enter') doLogin()"/>
       </div>
-
       <p class="error-msg" id="login-error"></p>
-
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; margin-top:4px;">
         <input type="checkbox" id="keep-logged-in" style="width:16px; height:16px; cursor:pointer; accent-color:var(--black);"/>
         <label for="keep-logged-in" style="font-size:12px; font-weight:500; letter-spacing:0.05em; text-transform:none; color:var(--gray-700); cursor:pointer; margin:0;">Keep me logged in</label>
       </div>
-
       <button class="btn-primary" id="login-btn" onclick="doLogin()">Access Dashboard →</button>
-
       <p style="font-size:11px; color:var(--gray-400); margin-top:20px; letter-spacing:0.04em; line-height:1.6;">
         Access is restricted to authorised admin users only.
       </p>
@@ -1199,9 +588,8 @@
       <p class="step-label">First Login Detected</p>
       <h2>Set Up Your<br>Account</h2>
       <p style="font-size:13px; color:var(--gray-700); margin-bottom:24px; line-height:1.6;">
-        You logged in with the default password. Choose a username and new password — these will be saved to Firebase so you can log in from anywhere.
+        You logged in with the default password. Choose a username and new password.
       </p>
-
       <div class="form-group">
         <label for="setup-user">Choose Username</label>
         <input type="text" id="setup-user" placeholder="e.g. sarah" autocomplete="off"/>
@@ -1215,7 +603,6 @@
         <input type="password" id="setup-confirm" placeholder="Repeat your password" autocomplete="new-password"
                onkeydown="if(event.key==='Enter') saveNewCredentials()"/>
       </div>
-
       <p class="error-msg" id="setup-error"></p>
       <button class="btn-primary" onclick="saveNewCredentials()">Save & Continue →</button>
     </div>
@@ -1236,8 +623,6 @@
 
     <!-- ─── TAB: MODULE EDITOR ─── -->
     <div class="tab-panel active" id="tab-modules">
-
-      <!-- MONTH SELECTOR -->
       <div class="card" style="padding:20px 24px; margin-bottom:20px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div>
@@ -1249,8 +634,6 @@
           </div>
         </div>
       </div>
-
-      <!-- AREA MODULES -->
       <div class="card">
         <div class="card-header">
           <span class="card-title">AREA Modules</span>
@@ -1262,8 +645,6 @@
           <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
         </div>
       </div>
-
-      <!-- ATTICUS MODULES -->
       <div class="card">
         <div class="card-header">
           <span class="card-title">Atticus Modules</span>
@@ -1275,7 +656,6 @@
           <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
         </div>
       </div>
-
       <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding: 0 4px;">
         ℹ️ Changes are saved to Firebase instantly and reflected in the worker app within seconds — no GitHub push required.
       </p>
@@ -1288,17 +668,12 @@
           <span class="card-title">Team Members</span>
           <span class="card-tag">Worker Names</span>
         </div>
-
         <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
-          These names appear in the dropdown on the worker page. Changes save to Firebase instantly and are reflected immediately.
+          These names appear in the dropdown on the worker page. Changes save to Firebase instantly.
         </p>
-
-        <!-- Name list -->
         <div class="team-member-list" id="team-member-list">
           <div class="loading-spinner">Loading team members…</div>
         </div>
-
-        <!-- Add new member -->
         <div style="border-top:1px solid var(--gray-200); padding-top:20px; margin-top:4px;">
           <label style="margin-bottom:10px; display:block;">Add New Member</label>
           <div class="add-member-row">
@@ -1309,21 +684,15 @@
             <button class="btn-add-member" onclick="addTeamMember()">+ Add</button>
           </div>
         </div>
-
         <div class="save-bar" style="margin-top:24px;">
           <span class="save-status" id="save-status-team"></span>
           <button class="btn-save" onclick="saveTeamMembers()">Save Team →</button>
         </div>
       </div>
-
-      <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
-        ℹ️ The worker page dropdown refreshes on every page load — workers will see the updated list immediately after saving.
-      </p>
     </div>
 
-    <!-- ─── TAB: ID CARDS (was QR CODES) ─── -->
+    <!-- ─── TAB: ID CARDS ─── -->
     <div class="tab-panel" id="tab-qrcodes">
-
       <div class="card">
         <div class="card-header">
           <span class="card-title">Staff ID Cards</span>
@@ -1331,8 +700,27 @@
         </div>
 
         <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
-          Each card has a <strong>front</strong> (photo + barcode) and a <strong>back</strong> (QR code). Click any card to flip it. Download front or back individually.
+          Each card has a <strong>front</strong> (photo + barcode) and a <strong>back</strong> (QR code). <strong>Tap any card to flip it.</strong> Download front or back individually.
         </p>
+
+        <!-- ── LOGO UPLOAD ── -->
+        <div style="margin-bottom:20px;">
+          <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:10px;">Card Logo</p>
+          <div class="logo-upload-section">
+            <div class="logo-preview-area" id="logo-preview-area">
+              <span class="logo-text-preview" id="logo-text-preview">adidas</span>
+            </div>
+            <div style="flex:1;">
+              <p style="font-size:12px; color:var(--gray-700); line-height:1.6; margin-bottom:8px;">
+                Upload your own logo (PNG/JPG) to appear on both sides of every card. A white version is used on the black header.
+              </p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn-logo-upload" onclick="triggerLogoUpload()">📁 Upload Logo</button>
+                <button class="btn-logo-remove" id="btn-logo-remove" onclick="removeLogo()">✕ Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- adiClub Base URL -->
         <div style="display:flex; gap:10px; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap;">
@@ -1362,34 +750,18 @@
       </div>
 
       <p style="font-size:12px; color:var(--gray-500); letter-spacing:0.04em; line-height:1.7; padding:0 4px;">
-        ℹ️ Front shows photo + barcode (SCN000 + 3-digit suffix). Back shows QR code linking to adiClub. Click a card to flip it. Upload photos by clicking the photo area.
+        ℹ️ Tap any card to flip between front and back. Enter barcode suffix digits (e.g. 458 → SCN000458). Upload photos by tapping the photo circle.
       </p>
     </div>
 
     <!-- ─── TAB: WORKER PROGRESS ─── -->
     <div class="tab-panel" id="tab-progress">
-
-      <!-- STATS -->
       <div class="stats-row" id="stats-row">
-        <div class="stat-box">
-          <div class="stat-num" id="stat-total">–</div>
-          <div class="stat-label">Workers</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-complete">–</div>
-          <div class="stat-label">100% Done</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-partial">–</div>
-          <div class="stat-label">In Progress</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-rate">–</div>
-          <div class="stat-label">Avg Progress</div>
-        </div>
+        <div class="stat-box"><div class="stat-num" id="stat-total">–</div><div class="stat-label">Workers</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-complete">–</div><div class="stat-label">100% Done</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-partial">–</div><div class="stat-label">In Progress</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-rate">–</div><div class="stat-label">Avg Progress</div></div>
       </div>
-
-      <!-- MONTH SELECTOR -->
       <div class="card" style="padding: 20px 24px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div>
@@ -1399,8 +771,6 @@
           <button class="btn-refresh" onclick="refreshProgressTab()">↻ Refresh</button>
         </div>
       </div>
-
-      <!-- FILTERS -->
       <div class="filter-bar">
         <div class="select-wrap">
           <select id="filter-store" onchange="renderTable()">
@@ -1409,30 +779,17 @@
         </div>
         <input type="text" id="filter-search" placeholder="Search by name…" oninput="renderTable()" style="flex:1; min-width:150px;"/>
       </div>
-
-      <!-- TABLE -->
       <div class="card" style="padding: 0;">
         <div class="table-wrap">
           <table>
             <thead id="progress-thead">
               <tr>
-                <th>Name</th>
-                <th>Store</th>
-                <th title="AREA Module 1">A1</th>
-                <th title="AREA Module 2">A2</th>
-                <th title="AREA Module 3">A3</th>
-                <th title="Atticus Module 1">T1</th>
-                <th title="Atticus Module 2">T2</th>
-                <th title="Atticus Module 3">T3</th>
-                <th>Progress</th>
-                <th>Last Seen</th>
-                <th>Actions</th>
+                <th>Name</th><th>Store</th><th>A1</th><th>A2</th><th>A3</th>
+                <th>T1</th><th>T2</th><th>T3</th><th>Progress</th><th>Last Seen</th><th>Actions</th>
               </tr>
             </thead>
             <tbody id="progress-tbody">
-              <tr><td colspan="11">
-                <div class="loading-spinner">Loading progress data…</div>
-              </td></tr>
+              <tr><td colspan="11"><div class="loading-spinner">Loading progress data…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -1442,24 +799,11 @@
     <!-- ─── TAB: ADICLUB SIGNUPS ─── -->
     <div class="tab-panel" id="tab-adiclub">
       <div class="stats-row">
-        <div class="stat-box">
-          <div class="stat-num" id="ac-stat-total">–</div>
-          <div class="stat-label">Total Signups</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="ac-stat-today">–</div>
-          <div class="stat-label">Today</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="ac-stat-month">–</div>
-          <div class="stat-label">This Month</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="ac-stat-unique">–</div>
-          <div class="stat-label">Unique Members</div>
-        </div>
+        <div class="stat-box"><div class="stat-num" id="ac-stat-total">–</div><div class="stat-label">Total Signups</div></div>
+        <div class="stat-box"><div class="stat-num" id="ac-stat-today">–</div><div class="stat-label">Today</div></div>
+        <div class="stat-box"><div class="stat-num" id="ac-stat-month">–</div><div class="stat-label">This Month</div></div>
+        <div class="stat-box"><div class="stat-num" id="ac-stat-unique">–</div><div class="stat-label">Unique Members</div></div>
       </div>
-
       <div class="card" style="padding:18px 24px; margin-bottom:16px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div class="filter-bar" style="margin:0; flex:1;">
@@ -1478,24 +822,12 @@
           <button class="btn-refresh" onclick="loadAdiClub()">↻ Refresh</button>
         </div>
       </div>
-
       <div class="card" style="padding:0;">
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>#</th><th>Name</th><th>ID</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>
             <tbody id="adiclub-tbody">
-              <tr><td colspan="6">
-                <div class="loading-spinner">Loading adiClub data…</div>
-              </td></tr>
+              <tr><td colspan="6"><div class="loading-spinner">Loading adiClub data…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -1504,8 +836,6 @@
 
     <!-- ─── TAB: SETTINGS ─── -->
     <div class="tab-panel" id="tab-settings">
-
-      <!-- ADMIN USERS -->
       <div class="card">
         <div class="card-header"><span class="card-title">Admin Users</span></div>
         <div class="user-list" id="admin-user-list"></div>
@@ -1513,16 +843,9 @@
           To add or change admin credentials, log in with the default and set your own username and password on first login.
         </p>
       </div>
-
-      <!-- ADICLUB EXPORT -->
       <div class="card">
-        <div class="card-header">
-          <span class="card-title">Export adiClub Data</span>
-        </div>
-        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">
-          Export signup data to a spreadsheet. Choose your date range and format below.
-        </p>
-
+        <div class="card-header"><span class="card-title">Export adiClub Data</span></div>
+        <p style="font-size:13px; color:var(--gray-700); margin-bottom:20px; line-height:1.6;">Export signup data to a spreadsheet. Choose your date range and format below.</p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
           <div class="form-group" style="margin:0;">
             <label>Date Range</label>
@@ -1547,14 +870,9 @@
             </div>
           </div>
         </div>
-
-        <div id="export-preview" style="background:var(--gray-100); border:1px solid var(--gray-200); padding:12px 16px; margin-bottom:16px; font-size:12px; color:var(--gray-700); letter-spacing:0.04em;">
-          Select a range and click Export.
-        </div>
-
+        <div id="export-preview" style="background:var(--gray-100); border:1px solid var(--gray-200); padding:12px 16px; margin-bottom:16px; font-size:12px; color:var(--gray-700); letter-spacing:0.04em;">Select a range and click Export.</div>
         <button class="btn-save" onclick="exportAdiClub()">Export Data →</button>
       </div>
-
     </div>
 
   </div>
@@ -1566,7 +884,6 @@
   <script type="module">
     import { initializeApp }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
     const firebaseConfig = {
       apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
       authDomain:        "adidas-training-mtd.firebaseapp.com",
@@ -1576,10 +893,8 @@
       messagingSenderId: "208658627122",
       appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
     };
-
     const app = initializeApp(firebaseConfig);
     const db  = getDatabase(app);
-
     window._db            = db;
     window._fbRef         = ref;
     window._fbSet         = set;
@@ -1589,13 +904,13 @@
   </script>
 
   <script>
-    // ─── DEFAULT NAMES ───
-    const DEFAULT_NAMES = ['David','Cheyne','Alex','Charli','Robin','Bailey'];
+    const DEFAULT_NAMES  = ['David','Cheyne','Alex','Charli','Robin','Bailey'];
     const BARCODE_PREFIX = 'SCN000';
 
     let teamMembers   = [...DEFAULT_NAMES];
-    let barcodeValues = {};   // { "Name": "458" } — suffix only
-    let memberPhotos  = {};   // { "Name": dataURL } — stored in localStorage
+    let barcodeValues = {};
+    let memberPhotos  = {};
+    let cardLogoData  = null;   // base64 dataURL of uploaded logo, or null
     let currentUser   = null;
     let allProgress   = [];
     let selectedMonth = getCurrentMonthKey();
@@ -1603,7 +918,6 @@
     let adminActiveModules = [];
     let selectedModuleMonth = getCurrentMonthKey();
 
-    // ─── MODULE DEFINITIONS ───
     const MODULE_DEFS = [
       { id: 'mod-a1', num: '01', group: 'area',    defaultName: 'AREA Module 1',    defaultSub: 'AREA · Training' },
       { id: 'mod-a2', num: '02', group: 'area',    defaultName: 'AREA Module 2',    defaultSub: 'AREA · Training' },
@@ -1613,801 +927,78 @@
       { id: 'mod-t3', num: '06', group: 'atticus', defaultName: 'Atticus Module 3', defaultSub: 'Atticus · Training' },
     ];
 
-    // ─── MONTH HELPERS ───
-    function getCurrentMonthKey() {
-      return new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
-    }
-
-    function getRecentMonths(n = 6) {
-      const months = [];
-      const d = new Date();
-      for (let i = 0; i < n; i++) {
-        months.unshift(d.toLocaleString('default', { month: 'long', year: 'numeric' }));
-        d.setMonth(d.getMonth() - 1);
-      }
+    function getCurrentMonthKey() { return new Date().toLocaleString('default', { month: 'long', year: 'numeric' }); }
+    function getRecentMonths(n=6) {
+      const months=[]; const d=new Date();
+      for(let i=0;i<n;i++){ months.unshift(d.toLocaleString('default',{month:'long',year:'numeric'})); d.setMonth(d.getMonth()-1); }
       return months;
     }
-
-    function safeKey(str)   { return str.replace(/\./g, ','); }
-    function unsafeKey(str) { return str.replace(/,/g, '.'); }
-
+    function safeKey(str)   { return str.replace(/\./g,','); }
+    function unsafeKey(str) { return str.replace(/,/g,'.'); }
     async function sha256(str) {
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
     }
-
     const DEFAULT_USER = 'admin';
     const DEFAULT_PASS = 'adidas123';
 
-    // ─── PHOTO STORAGE (localStorage) ───
+    /* ─── PHOTO / LOGO STORAGE ─── */
     function loadPhotos() {
-      try {
-        const saved = localStorage.getItem('adidas_member_photos');
-        memberPhotos = saved ? JSON.parse(saved) : {};
-      } catch(e) { memberPhotos = {}; }
+      try { const s=localStorage.getItem('adidas_member_photos'); memberPhotos=s?JSON.parse(s):{}; } catch(e){ memberPhotos={}; }
     }
-
     function savePhotos() {
-      try {
-        localStorage.setItem('adidas_member_photos', JSON.stringify(memberPhotos));
-      } catch(e) { showToast('Photo storage full — photos not saved', 'error'); }
+      try { localStorage.setItem('adidas_member_photos',JSON.stringify(memberPhotos)); } catch(e){ showToast('Photo storage full','error'); }
     }
-
-    // ─── LOGIN ───
-    async function doLogin() {
-      const user = document.getElementById('login-user').value.trim();
-      const pass = document.getElementById('login-pass').value;
-      const err  = document.getElementById('login-error');
-      const btn  = document.getElementById('login-btn');
-      err.style.display = 'none';
-
-      if (!user || !pass) {
-        err.textContent = 'Please enter your username and password.';
-        err.style.display = 'block'; return;
-      }
-
-      btn.textContent = 'Checking…'; btn.disabled = true;
-
-      try {
-        if (user === DEFAULT_USER && pass === DEFAULT_PASS) {
-          currentUser = user;
-          sessionStorage.setItem('adidas_admin_session', user);
-          sessionStorage.setItem('adidas_used_default', '1');
-          showSetup(); return;
-        }
-
-        if (!window._firebaseReady) {
-          err.textContent = 'Incorrect username or password.';
-          err.style.display = 'block'; return;
-        }
-
-        const hash = await sha256(pass);
-        const snap = await window._fbGet(window._fbRef(window._db, 'config/admins/' + safeKey(user)));
-
-        if (snap.exists() && snap.val() === hash) {
-          currentUser = user;
-          sessionStorage.setItem('adidas_admin_session', user);
-          if (document.getElementById('keep-logged-in').checked) {
-            localStorage.setItem('adidas_admin_persistent', user);
-          }
-          showAdmin();
-        } else {
-          err.textContent = 'Incorrect username or password.';
-          err.style.display = 'block';
-          document.getElementById('login-pass').value = '';
-          document.getElementById('login-pass').focus();
-        }
-      } catch(e) {
-        err.textContent = 'Incorrect username or password.';
-        err.style.display = 'block';
-      } finally {
-        btn.textContent = 'Access Dashboard →'; btn.disabled = false;
-      }
+    function loadLogoFromStorage() {
+      try { cardLogoData=localStorage.getItem('adidas_card_logo')||null; } catch(e){ cardLogoData=null; }
+      updateLogoPreview();
     }
-
-    function showSetup() {
-      document.getElementById('screen-login').style.display = 'none';
-      document.getElementById('screen-setup').style.display = 'flex';
+    function saveLogoToStorage(data) {
+      try { if(data) localStorage.setItem('adidas_card_logo',data); else localStorage.removeItem('adidas_card_logo'); } catch(e){ showToast('Logo storage failed','error'); }
     }
-
-    async function saveNewCredentials() {
-      const user    = document.getElementById('setup-user').value.trim();
-      const pass    = document.getElementById('setup-pass').value;
-      const confirm = document.getElementById('setup-confirm').value;
-      const err     = document.getElementById('setup-error');
-      err.style.display = 'none';
-
-      if (!user) { err.textContent = 'Please choose a username.'; err.style.display = 'block'; return; }
-      if (pass.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display = 'block'; return; }
-      if (pass !== confirm) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
-      if (user === DEFAULT_USER && pass === DEFAULT_PASS) { err.textContent = 'Please choose different credentials from the default.'; err.style.display = 'block'; return; }
-
-      if (!window._firebaseReady) {
-        err.textContent = 'Firebase not connected — try again in a moment.';
-        err.style.display = 'block'; return;
-      }
-
-      try {
-        const hash = await sha256(pass);
-        await window._fbSet(window._fbRef(window._db, 'config/admins/' + safeKey(user)), hash);
-        currentUser = user;
-        sessionStorage.setItem('adidas_admin_session', user);
-        sessionStorage.removeItem('adidas_used_default');
-        document.getElementById('screen-setup').style.display = 'none';
-        showAdmin();
-        showToast('✓ Account saved — use these credentials next time', 'success');
-      } catch(e) {
-        err.textContent = 'Could not save to Firebase. Check your connection.';
-        err.style.display = 'block';
-      }
-    }
-
-    function logout() {
-      currentUser = null;
-      sessionStorage.removeItem('adidas_admin_session');
-      sessionStorage.removeItem('adidas_used_default');
-      localStorage.removeItem('adidas_admin_persistent');
-      document.getElementById('screen-admin').style.display = 'none';
-      document.getElementById('screen-setup').style.display = 'none';
-      document.getElementById('screen-login').style.display = 'flex';
-      document.getElementById('admin-badge').style.display = 'none';
-      document.getElementById('btn-logout').style.display = 'none';
-      document.getElementById('login-user').value = '';
-      document.getElementById('login-pass').value = '';
-      document.getElementById('keep-logged-in').checked = false;
-    }
-
-    // ─── SHOW ADMIN ───
-    function showAdmin() {
-      document.getElementById('screen-login').style.display = 'none';
-      document.getElementById('screen-setup').style.display = 'none';
-      document.getElementById('screen-admin').style.display = 'block';
-      document.getElementById('admin-badge').style.display = 'inline-block';
-      document.getElementById('btn-logout').style.display = 'inline-block';
-      document.getElementById('admin-badge').textContent = '● ' + currentUser;
-
-      loadPhotos();
-      buildModuleRows();
-      renderAdminUsers();
-      loadFbConfigToForm();
-      buildMonthChips();
-      buildModuleMonthChips();
-
-      waitForFirebase(async () => {
-        await loadModuleConfig();
-        await loadProgress();
-        await loadTeamMembersAdmin();
-      });
-    }
-
-    function waitForFirebase(cb) {
-      if (window._firebaseReady) return cb();
-      document.addEventListener('firebase-ready', cb, { once: true });
-    }
-
-    // ─── BUILD MODULE ROWS ───
-    function buildModuleRows() {
-      const areaEl    = document.getElementById('area-module-rows');
-      const atticusEl = document.getElementById('atticus-module-rows');
-      areaEl.innerHTML = ''; atticusEl.innerHTML = '';
-
-      MODULE_DEFS.forEach(m => {
-        const row = document.createElement('div');
-        row.className = 'module-row';
-        row.innerHTML = `
-          <span class="module-num-label">${m.num}</span>
-          <div class="form-group">
-            <label>Module Name</label>
-            <input type="text" id="inp-name-${m.id}" placeholder="${m.defaultName}"/>
-          </div>
-          <div class="form-group">
-            <label>Subtitle</label>
-            <input type="text" id="inp-sub-${m.id}" placeholder="${m.defaultSub}"/>
-          </div>
-          <div class="form-group">
-            <label>Training URL</label>
-            <input type="text" id="inp-url-${m.id}" placeholder="https://…"/>
-          </div>
-        `;
-        (m.group === 'area' ? areaEl : atticusEl).appendChild(row);
-      });
-    }
-
-    // ─── TEAM MEMBERS ───
-    async function loadTeamMembersAdmin() {
-      if (!window._firebaseReady) return;
-      try {
-        const snap = await window._fbGet(window._fbRef(window._db, 'config/team_members'));
-        if (snap.exists()) {
-          const data = snap.val();
-          teamMembers = Array.isArray(data) ? [...data] : [...Object.values(data)];
-          teamMembers = teamMembers.filter(Boolean);
-        } else {
-          teamMembers = [...DEFAULT_NAMES];
-        }
-      } catch(e) { teamMembers = [...DEFAULT_NAMES]; }
-      renderTeamMemberList();
-    }
-
-    function renderTeamMemberList() {
-      const list = document.getElementById('team-member-list');
-      if (teamMembers.length === 0) {
-        list.innerHTML = '<p style="font-size:13px; color:var(--gray-500); padding:8px 0;">No team members yet. Add some below.</p>';
-        return;
-      }
-      list.innerHTML = '';
-      teamMembers.forEach((name, idx) => {
-        const item = document.createElement('div');
-        item.className = 'team-member-item';
-        item.innerHTML = `
-          <span class="team-member-drag" title="Drag to reorder">⠿</span>
-          <span class="team-member-name">${escHtml(name)}</span>
-          <button class="btn-remove-member" onclick="removeMember(${idx})" title="Remove ${escHtml(name)}">✕</button>
-        `;
-        list.appendChild(item);
-      });
-    }
-
-    function addTeamMember() {
-      const input = document.getElementById('new-member-input');
-      const name  = input.value.trim();
-      if (!name) { showToast('Enter a name first', 'error'); return; }
-      if (teamMembers.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
-        showToast('That name already exists', 'error'); return;
-      }
-      const formatted = name.charAt(0).toUpperCase() + name.slice(1);
-      teamMembers.push(formatted);
-      input.value = '';
-      renderTeamMemberList();
-      showToast('Added ' + formatted + ' — click Save Team to apply', '');
-    }
-
-    function removeMember(idx) {
-      const name = teamMembers[idx];
-      if (!confirm(`Remove "${name}" from the team list?`)) return;
-      teamMembers.splice(idx, 1);
-      renderTeamMemberList();
-      showToast('Removed ' + name + ' — click Save Team to apply', '');
-    }
-
-    async function saveTeamMembers() {
-      if (!window._firebaseReady) { showToast('Firebase not connected', 'error'); return; }
-      try {
-        await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
-        const el = document.getElementById('save-status-team');
-        if (el) { el.textContent = '✓ Saved — worker page updated'; el.style.color = 'var(--green)'; setTimeout(() => { el.textContent = ''; }, 4000); }
-        showToast('✓ Team members saved', 'success');
-      } catch(e) { showToast('Save failed — ' + e.message, 'error'); }
-    }
-
-    // ─── MODULE CONFIG ───
-    function monthToKey(m) { return m.replace(/\s+/g, '_'); }
-    function moduleConfigPath(m) { return 'config/modules/' + monthToKey(m || selectedModuleMonth); }
-
-    function buildModuleMonthChips() {
-      const chips = [];
-      const d = new Date();
-      for (let i = 3; i >= 1; i--) { const dd = new Date(d); dd.setMonth(d.getMonth() - i); chips.push(dd.toLocaleString('default', { month: 'long', year: 'numeric' })); }
-      chips.push(getCurrentMonthKey());
-      for (let i = 1; i <= 3; i++) { const dd = new Date(d); dd.setMonth(d.getMonth() + i); chips.push(dd.toLocaleString('default', { month: 'long', year: 'numeric' })); }
-
-      const wrap = document.getElementById('module-month-chips');
-      wrap.innerHTML = '';
-      chips.forEach(m => {
-        const chip = document.createElement('button');
-        chip.className = 'month-chip' + (m === selectedModuleMonth ? ' active' : '');
-        chip.textContent = m;
-        chip.onclick = () => { selectedModuleMonth = m; wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); loadModuleConfig(m); };
-        wrap.appendChild(chip);
-      });
-    }
-
-    async function loadModuleConfig(month) {
-      month = month || selectedModuleMonth;
-      if (!window._firebaseReady) return;
-      try {
-        const snap = await window._fbGet(window._fbRef(window._db, moduleConfigPath(month)));
-        if (snap.exists()) {
-          const cfg = snap.val();
-          applyModuleConfig(cfg);
-          adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id => cfg[id] && cfg[id].url && cfg[id].url !== '#' && cfg[id].url.trim() !== '');
-        } else {
-          MODULE_DEFS.forEach(m => {
-            const nameEl = document.getElementById('inp-name-' + m.id);
-            const subEl  = document.getElementById('inp-sub-'  + m.id);
-            const urlEl  = document.getElementById('inp-url-'  + m.id);
-            if (nameEl) nameEl.value = '';
-            if (subEl)  subEl.value  = '';
-            if (urlEl)  urlEl.value  = '';
-          });
-          adminActiveModules = ['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'];
-        }
-      } catch(e) { console.warn('Could not load module config', e); }
-    }
-
-    function applyModuleConfig(cfg) {
-      MODULE_DEFS.forEach(m => {
-        const data   = cfg[m.id];
-        const nameEl = document.getElementById('inp-name-' + m.id);
-        const subEl  = document.getElementById('inp-sub-'  + m.id);
-        const urlEl  = document.getElementById('inp-url-'  + m.id);
-        if (!data) return;
-        if (nameEl) nameEl.value = data.name || '';
-        if (subEl)  subEl.value  = data.sub  || '';
-        if (urlEl)  urlEl.value  = (data.url && data.url !== '#') ? data.url : '';
-      });
-    }
-
-    async function saveModuleConfig() {
-      if (!window._firebaseReady) { showToast('Firebase not connected', 'error'); return; }
-      const cfg = {};
-      MODULE_DEFS.forEach(m => {
-        cfg[m.id] = {
-          name: document.getElementById('inp-name-' + m.id).value.trim() || m.defaultName,
-          sub:  document.getElementById('inp-sub-'  + m.id).value.trim() || m.defaultSub,
-          url:  document.getElementById('inp-url-'  + m.id).value.trim() || '#',
-        };
-      });
-      try {
-        await window._fbSet(window._fbRef(window._db, moduleConfigPath(selectedModuleMonth)), cfg);
-        adminActiveModules = MODULE_DEFS.filter(m => cfg[m.id] && cfg[m.id].url && cfg[m.id].url !== '#' && cfg[m.id].url.trim() !== '').map(m => m.id);
-        if (allProgress.length) { renderTable(); updateStats(); }
-        showToast('✓ Modules saved for ' + selectedModuleMonth, 'success');
-        ['area', 'atticus'].forEach(g => {
-          const el = document.getElementById('save-status-' + g);
-          if (el) { el.textContent = '✓ Saved ' + new Date().toLocaleTimeString(); el.style.color = 'var(--green)'; setTimeout(() => { el.textContent = ''; }, 4000); }
-        });
-      } catch(e) { showToast('Save failed — check Firebase connection', 'error'); }
-    }
-
-    // ─── MONTH CHIPS (progress) ───
-    function buildMonthChips() {
-      allMonths = getRecentMonths(6);
-      selectedMonth = getCurrentMonthKey();
-      const wrap = document.getElementById('month-chips');
-      wrap.innerHTML = '';
-      allMonths.forEach(m => {
-        const chip = document.createElement('button');
-        chip.className = 'month-chip' + (m === selectedMonth ? ' active' : '');
-        chip.textContent = m;
-        chip.onclick = async () => {
-          selectedMonth = m;
-          wrap.querySelectorAll('.month-chip').forEach(c => c.classList.remove('active'));
-          chip.classList.add('active');
-          await loadModuleConfig(m);
-          renderTable(); updateStats();
-        };
-        wrap.appendChild(chip);
-      });
-    }
-
-    async function refreshProgressTab() { await loadModuleConfig(selectedMonth); await loadProgress(); }
-
-    async function loadProgress() {
-      if (!window._firebaseReady) {
-        document.getElementById('progress-tbody').innerHTML = `<tr><td colspan="10"><div class="empty-state"><p>Firebase Not Connected</p><span>Configure Firebase in the Settings tab.</span></div></td></tr>`;
-        return;
-      }
-      document.getElementById('progress-tbody').innerHTML = `<tr><td colspan="10"><div class="loading-spinner">Loading progress data…</div></td></tr>`;
-      try {
-        const snap = await window._fbGet(window._fbRef(window._db, 'progress'));
-        allProgress = [];
-        if (snap.exists()) { snap.forEach(child => { allProgress.push({ key: child.key, ...child.val() }); }); }
-        populateStoreFilter(); renderTable(); updateStats();
-      } catch(e) {
-        document.getElementById('progress-tbody').innerHTML = `<tr><td colspan="10"><div class="empty-state"><p>Could not load data</p><span>Check Firebase connection and database rules.</span></div></td></tr>`;
-      }
-    }
-
-    function getFilteredRows() {
-      const store  = document.getElementById('filter-store').value;
-      const search = document.getElementById('filter-search').value.toLowerCase();
-      const monthSuffix = selectedMonth.replace(/[^a-zA-Z0-9_\-]/g, '_');
-      return allProgress.filter(r => {
-        if (!r.key.includes(monthSuffix)) return false;
-        if (store  && r.store !== store)   return false;
-        if (search && !r.name.toLowerCase().includes(search)) return false;
-        return true;
-      });
-    }
-
-    function populateStoreFilter() {
-      const stores = [...new Set(allProgress.map(r => r.store).filter(Boolean))].sort();
-      const sel = document.getElementById('filter-store');
-      const current = sel.value;
-      sel.innerHTML = '<option value="">All Stores</option>' + stores.map(s => `<option value="${s}"${s===current?' selected':''}>${s}</option>`).join('');
-    }
-
-    function renderTable() {
-      const rows  = getFilteredRows();
-      const tbody = document.getElementById('progress-tbody');
-      const mods  = adminActiveModules;
-      const modLabels = { 'mod-a1':'A1','mod-a2':'A2','mod-a3':'A3','mod-t1':'T1','mod-t2':'T2','mod-t3':'T3' };
-      const modTitles = { 'mod-a1':'AREA Module 1','mod-a2':'AREA Module 2','mod-a3':'AREA Module 3','mod-t1':'Atticus Module 1','mod-t2':'Atticus Module 2','mod-t3':'Atticus Module 3' };
-
-      const thead = document.getElementById('progress-thead');
-      if (thead) {
-        thead.innerHTML = `<tr>
-          <th>Name</th><th>Store</th>
-          ${mods.map(m => `<th title="${modTitles[m]}">${modLabels[m]}</th>`).join('')}
-          <th>Progress</th><th>Last Seen</th><th>Actions</th>
-        </tr>`;
-      }
-
-      const colCount = 3 + mods.length + 3;
-      if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${colCount}"><div class="empty-state"><p>No Data Found</p><span>No workers have logged progress for ${selectedMonth} yet.</span></div></td></tr>`;
-        return;
-      }
-
-      rows.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      tbody.innerHTML = rows.map(r => {
-        const completed  = r.completed || [];
-        const activeDone = completed.filter(m => mods.includes(m)).length;
-        const pct  = mods.length ? Math.round((activeDone / mods.length) * 100) : 0;
-        const date = r.savedAt ? new Date(r.savedAt).toLocaleDateString('en-NZ', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '–';
-        const dots = mods.map(m => {
-          const done = completed.includes(m);
-          return `<td><span class="check-dot${done ? ' done' : ''}" onclick="${done ? `uncompleteModule('${r.key}', '${m}')` : `completeModule('${r.key}', '${m}')`}" title="${done ? 'Click to uncomplete' : 'Click to complete'}">✓</span></td>`;
-        }).join('');
-        return `<tr>
-          <td class="td-name">${escHtml(r.name || '–')}</td>
-          <td class="td-store">${escHtml(r.store || '–')}</td>
-          ${dots}
-          <td><div class="progress-bar-wrap"><div class="progress-bar"><div class="progress-bar-fill${pct===100?' full':''}" style="width:${pct}%"></div></div><span class="pct-label">${pct}%</span></div></td>
-          <td class="td-date">${date}</td>
-          <td><button onclick="deleteWorker('${r.key}', '${escHtml(r.name||'')}')" style="padding:5px 10px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:var(--red); transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button></td>
-        </tr>`;
-      }).join('');
-    }
-
-    function updateStats() {
-      const rows   = getFilteredRows();
-      const mods   = adminActiveModules;
-      const total    = rows.length;
-      const complete = rows.filter(r => { const d = (r.completed||[]).filter(m => mods.includes(m)).length; return mods.length > 0 && d === mods.length; }).length;
-      const partial  = rows.filter(r => { const d = (r.completed||[]).filter(m => mods.includes(m)).length; return d > 0 && d < mods.length; }).length;
-      const avgPct   = total && mods.length ? Math.round(rows.reduce((s, r) => s + ((r.completed||[]).filter(m => mods.includes(m)).length / mods.length) * 100, 0) / total) : 0;
-      document.getElementById('stat-total').textContent    = total;
-      document.getElementById('stat-complete').textContent = complete;
-      document.getElementById('stat-partial').textContent  = partial;
-      document.getElementById('stat-rate').textContent     = total ? avgPct + '%' : '–';
-    }
-
-    // ─── ADMIN USERS ───
-    async function renderAdminUsers() {
-      const list = document.getElementById('admin-user-list');
-      list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Loading…</div>';
-      try {
-        if (!window._firebaseReady) throw new Error('no firebase');
-        const snap = await window._fbGet(window._fbRef(window._db, 'config/admins'));
-        if (!snap.exists()) { list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">No admin users found.</div>'; return; }
-        const users = Object.keys(snap.val());
-        list.innerHTML = users.map(u => `
-          <div class="user-item">
-            <div><div class="u-name">${escHtml(unsafeKey(u))}</div><div class="u-role">Admin</div></div>
-            <span class="badge-active">${unsafeKey(u) === currentUser ? '● Active' : 'Enabled'}</span>
-          </div>
-        `).join('');
-      } catch(e) { list.innerHTML = '<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Could not load user list.</div>'; }
-    }
-
-    // ─── TABS ───
-    function switchTab(name) {
-      const names  = ['modules','team','qrcodes','progress','adiclub','settings'];
-      const panels = ['tab-modules','tab-team','tab-qrcodes','tab-progress','tab-adiclub','tab-settings'];
-      document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', names[i] === name));
-      document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', panels[i] === 'tab-' + name));
-
-      if (name === 'progress') { waitForFirebase(async () => { await loadModuleConfig(selectedMonth); await loadProgress(); }); }
-      if (name === 'team')     { waitForFirebase(() => loadTeamMembersAdmin()); }
-      if (name === 'qrcodes')  { waitForFirebase(() => loadIDCardsTab()); }
-      if (name === 'settings') { renderAdminUsers(); updateExportPreview(); }
-      if (name === 'adiclub')  { loadAdiClub(); }
-    }
-
-    // ─────────────────────────────────────────────────
-    // ─── ID CARDS TAB ───
-    // ─────────────────────────────────────────────────
-    let qrLibLoaded = false;
-
-    function loadQRLib() {
-      return new Promise((resolve) => {
-        if (qrLibLoaded) { resolve(); return; }
-        const s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-        s.onload = () => { qrLibLoaded = true; resolve(); };
-        s.onerror = () => resolve();
-        document.head.appendChild(s);
-      });
-    }
-
-    async function loadIDCardsTab() {
-      await loadQRLib();
-      // Load saved QR base URL
-      const savedUrl = localStorage.getItem('adidas_qr_base_url');
-      if (savedUrl) document.getElementById('qr-base-url').value = savedUrl;
-      // Load barcode suffix values from Firebase
-      if (window._firebaseReady) {
-        try {
-          const snap = await window._fbGet(window._fbRef(window._db, 'config/barcode_values'));
-          if (snap.exists()) barcodeValues = snap.val() || {};
-        } catch(e) {}
-      }
-      // Load team members if not already loaded
-      if (teamMembers.length === 0 || (teamMembers.length === DEFAULT_NAMES.length && JSON.stringify(teamMembers) === JSON.stringify(DEFAULT_NAMES))) {
-        await loadTeamMembersAdmin();
-      }
-      renderIDCards();
-    }
-
-    function getQRBaseUrl() {
-      const val = (document.getElementById('qr-base-url').value || '').trim();
-      localStorage.setItem('adidas_qr_base_url', val);
-      return val;
-    }
-
-    function buildQRUrl(name) {
-      const base = getQRBaseUrl();
-      if (!base) return '';
-      const sep = base.includes('?') ? '&' : '?';
-      return base + sep + 'name=' + encodeURIComponent(name);
-    }
-
-    function getFullBarcode(name) {
-      const suffix = (barcodeValues[name] || '').toString().trim();
-      if (!suffix) return '';
-      return BARCODE_PREFIX + suffix;
-    }
-
-    // ─── RENDER ALL ID CARDS ───
-    function renderIDCards() {
-      const grid = document.getElementById('id-cards-grid');
-      grid.innerHTML = '';
-
-      if (teamMembers.length === 0) {
-        grid.innerHTML = '<p style="color:var(--gray-500); font-size:13px; grid-column:1/-1;">No team members yet — add some in the Team Members tab.</p>';
-        return;
-      }
-
-      teamMembers.forEach(name => {
-        const wrapper = buildIDCardWrapper(name);
-        grid.appendChild(wrapper);
-      });
-    }
-
-    function buildIDCardWrapper(name) {
-      const safeName  = name.replace(/\s+/g, '_');
-      const fullCode  = getFullBarcode(name);
-      const qrUrl     = buildQRUrl(name);
-      const photoData = memberPhotos[name] || null;
-      const savedSuffix = (barcodeValues[name] || '').toString();
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'id-card-wrapper';
-      wrapper.id = 'card-wrapper-' + safeName;
-
-      // Label row
-      const labelRow = document.createElement('div');
-      labelRow.className = 'id-card-label';
-      labelRow.innerHTML = `<span>${escHtml(name)}</span><span style="font-size:10px; color:var(--gray-400); font-weight:600;">Click card to flip</span>`;
-
-      // Scene (flip container)
-      const scene = document.createElement('div');
-      scene.className = 'id-card-scene';
-      scene.id = 'card-scene-' + safeName;
-      scene.onclick = () => scene.classList.toggle('flipped');
-
-      const inner = document.createElement('div');
-      inner.className = 'id-card-inner';
-
-      // ── FRONT FACE ──
-      const front = document.createElement('div');
-      front.className = 'id-card-face id-card-front';
-      front.id = 'card-front-' + safeName;
-
-      // Stop click propagation for interactive elements on front
-      front.onclick = e => e.stopPropagation();
-
-      front.innerHTML = `
-        <!-- Black header with adidas logo -->
-        <div class="card-stripe">
-          <span class="card-logo">adidas</span>
-        </div>
-        <!-- White body -->
-        <div class="card-body">
-          <!-- Photo -->
-          <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
-            <div class="id-card-photo" id="photo-circle-${safeName}" title="Click to upload photo" onclick="triggerPhotoUpload('${escHtml(name)}')">
-              ${photoData
-                ? `<img src="${photoData}" alt="${escHtml(name)}"/>`
-                : `<span style="font-size:28px; color:var(--gray-400); user-select:none;">👤</span>`
-              }
-            </div>
-            <div class="id-card-name">${escHtml(name)}</div>
-            <div class="id-card-role">Team Member · adidas</div>
-          </div>
-          <!-- Barcode -->
-          <div class="id-card-barcode-wrap">
-            <canvas id="bc-canvas-${safeName}" style="height:44px;"></canvas>
-            <div class="id-card-barcode-num" id="bc-num-${safeName}">${fullCode || '–'}</div>
-          </div>
-        </div>
-      `;
-
-      // ── BACK FACE ──
-      const back = document.createElement('div');
-      back.className = 'id-card-face id-card-back';
-      back.id = 'card-back-' + safeName;
-      back.onclick = e => e.stopPropagation();
-
-      back.innerHTML = `
-        <div class="card-stripe">
-          <span class="card-logo">adidas</span>
-        </div>
-        <div class="card-body">
-          <div class="qr-container" id="qr-div-${safeName}" style="width:130px; height:130px;"></div>
-          <div class="back-name">${escHtml(name)}</div>
-          ${!qrUrl ? '<div style="font-size:10px; color:var(--gray-400); letter-spacing:0.06em; text-align:center;">Enter URL above to generate QR</div>' : ''}
-        </div>
-      `;
-
-      inner.appendChild(front);
-      inner.appendChild(back);
-      scene.appendChild(inner);
-
-      // ── BARCODE INPUT ROW ──
-      const inputRow = document.createElement('div');
-      inputRow.style.cssText = 'display:flex; gap:8px; align-items:center;';
-      inputRow.innerHTML = `
-        <div class="barcode-input-wrap" style="flex:1;">
-          <span class="barcode-prefix">${BARCODE_PREFIX}</span>
-          <input class="barcode-suffix-input" type="text"
-            id="bc-suffix-${safeName}"
-            value="${escHtml(savedSuffix)}"
-            maxlength="6"
-            placeholder="458"
-            title="Enter last 3–6 digits (e.g. 458 → SCN000458)"
-            oninput="onSuffixInput('${escHtml(name)}')"
-            onkeydown="if(event.key==='Enter') saveBarcodeValues()"
-            onclick="event.stopPropagation()"/>
-        </div>
-        <button class="btn-card-dl btn-card-action" style="flex:0 0 auto; padding:9px 14px;" onclick="downloadCardFace('${escHtml(name)}', 'front')">↓ Front</button>
-        <button class="btn-card-dl btn-card-action" style="flex:0 0 auto; padding:9px 14px; background:#444;" onclick="downloadCardFace('${escHtml(name)}', 'back')">↓ Back</button>
-        <button class="btn-card-del btn-card-action" style="flex:0 0 auto; padding:9px 10px; border:1.5px solid var(--gray-200);" onclick="qrDeleteMember('${escHtml(name)}')">✕</button>
-      `;
-
-      // Photo upload hint
-      const photoHint = document.createElement('div');
-      photoHint.style.cssText = 'font-size:10px; color:var(--gray-400); letter-spacing:0.06em; text-transform:uppercase; cursor:pointer;';
-      photoHint.textContent = '📷 Click the photo circle to upload';
-      photoHint.onclick = () => triggerPhotoUpload(name);
-
-      wrapper.appendChild(labelRow);
-      wrapper.appendChild(scene);
-      wrapper.appendChild(inputRow);
-      wrapper.appendChild(photoHint);
-
-      // Generate barcode and QR after appending to DOM (next tick)
-      setTimeout(() => {
-        if (fullCode) drawIDBarcode(safeName, fullCode);
-        if (qrUrl)    drawIDQR(safeName, qrUrl);
-      }, 50);
-
-      return wrapper;
-    }
-
-    // ─── BARCODE INPUT HANDLER ───
-    function onSuffixInput(name) {
-      const safeName = name.replace(/\s+/g, '_');
-      const input    = document.getElementById('bc-suffix-' + safeName);
-      if (!input) return;
-      // Strip non-alphanumeric
-      input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
-      const suffix   = input.value.trim();
-      const fullCode = suffix ? BARCODE_PREFIX + suffix : '';
-
-      barcodeValues[name] = suffix;
-
-      // Update barcode canvas + number
-      const numEl = document.getElementById('bc-num-' + safeName);
-      if (numEl) numEl.textContent = fullCode || '–';
-
-      if (fullCode) {
-        drawIDBarcode(safeName, fullCode);
+    function updateLogoPreview() {
+      const area     = document.getElementById('logo-preview-area');
+      const textEl   = document.getElementById('logo-text-preview');
+      const removBtn = document.getElementById('btn-logo-remove');
+      if (!area) return;
+      if (cardLogoData) {
+        area.innerHTML = `<img src="${cardLogoData}" alt="Logo"/>`;
+        if (removBtn) removBtn.style.display = 'inline-block';
       } else {
-        const canvas = document.getElementById('bc-canvas-' + safeName);
-        if (canvas) { const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        area.innerHTML = `<span class="logo-text-preview" id="logo-text-preview">adidas</span>`;
+        if (removBtn) removBtn.style.display = 'none';
+      }
+      // Update header logo
+      const headerArea = document.getElementById('header-logo-area');
+      if (headerArea) {
+        if (cardLogoData) headerArea.innerHTML = `<img src="${cardLogoData}" alt="Logo" class="adidas-logo" style="height:30px; width:auto; object-fit:contain; filter:brightness(0) invert(1);"/>`;
+        else headerArea.innerHTML = 'adidas';
       }
     }
 
-    // ─── DRAW BARCODE ON ID CARD ───
-    function drawIDBarcode(safeName, text) {
-      const canvas = document.getElementById('bc-canvas-' + safeName);
-      if (!canvas) return;
-
-      try {
-        const bars   = code128Encode(text);
-        const barW   = 1.6;
-        const height = 36;
-        const padX   = 6;
-        canvas.width  = Math.floor(bars.length * barW + padX * 2);
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#000000';
-        bars.split('').forEach((bit, i) => {
-          if (bit === '1') ctx.fillRect(padX + i * barW, 0, barW, height);
-        });
-      } catch(e) {
-        console.warn('Barcode draw error', e);
-      }
-    }
-
-    // ─── DRAW QR ON ID CARD BACK ───
-    function drawIDQR(safeName, url) {
-      const div = document.getElementById('qr-div-' + safeName);
-      if (!div) return;
-      div.innerHTML = '';
-      if (!url || !window.QRCode) return;
-      try {
-        new QRCode(div, {
-          text: url,
-          width: 130,
-          height: 130,
-          colorDark: '#000000',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } catch(e) {}
-    }
-
-    function regenerateAllQR() {
-      clearTimeout(window._qrRegen);
-      window._qrRegen = setTimeout(() => {
-        getQRBaseUrl(); // save to localStorage
-        teamMembers.forEach(name => {
-          const safeName = name.replace(/\s+/g, '_');
-          const qrUrl = buildQRUrl(name);
-          drawIDQR(safeName, qrUrl);
-        });
-      }, 400);
-    }
-
-    // ─── PHOTO UPLOAD ───
-    function triggerPhotoUpload(name) {
+    /* ─── LOGO UPLOAD ─── */
+    function triggerLogoUpload() {
       const input = document.createElement('input');
-      input.type   = 'file';
-      input.accept = 'image/*';
+      input.type = 'file'; input.accept = 'image/*';
       input.onchange = e => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const file = e.target.files[0]; if (!file) return;
         const reader = new FileReader();
         reader.onload = ev => {
-          // Compress image to max 200×200 before storing
           const img = new Image();
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const size = 200;
-            canvas.width = size; canvas.height = size;
-            const ctx = canvas.getContext('2d');
-            // Centre-crop
-            const min  = Math.min(img.width, img.height);
-            const sx   = (img.width - min) / 2;
-            const sy   = (img.height - min) / 2;
-            ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
-            const dataURL = canvas.toDataURL('image/jpeg', 0.8);
-            memberPhotos[name] = dataURL;
-            savePhotos();
-            // Update the photo circle without full re-render
-            const safeName    = name.replace(/\s+/g, '_');
-            const photoCircle = document.getElementById('photo-circle-' + safeName);
-            if (photoCircle) {
-              photoCircle.innerHTML = `<img src="${dataURL}" alt="${escHtml(name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>`;
-            }
-            showToast('✓ Photo saved for ' + name, 'success');
+            // Scale to max 300px wide, keep aspect ratio
+            const maxW = 300;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width  = Math.round(img.width  * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            cardLogoData = canvas.toDataURL('image/png');
+            saveLogoToStorage(cardLogoData);
+            updateLogoPreview();
+            // Re-render cards with new logo
+            renderIDCards();
+            showToast('✓ Logo uploaded', 'success');
           };
           img.src = ev.target.result;
         };
@@ -2416,403 +1007,833 @@
       input.click();
     }
 
-    // ─── SAVE BARCODE VALUES ───
-    async function saveBarcodeValues() {
-      // Read all suffix inputs into barcodeValues
-      teamMembers.forEach(name => {
-        const safeName = name.replace(/\s+/g, '_');
-        const input = document.getElementById('bc-suffix-' + safeName);
-        if (input) {
-          const val = input.value.trim();
-          if (val) barcodeValues[name] = val;
-          else delete barcodeValues[name];
-        }
-      });
-      if (!window._firebaseReady) { showToast('Firebase not connected', 'error'); return; }
+    function removeLogo() {
+      cardLogoData = null;
+      saveLogoToStorage(null);
+      updateLogoPreview();
+      renderIDCards();
+      showToast('Logo removed', '');
+    }
+
+    /* ─── LOGIN ─── */
+    async function doLogin() {
+      const user=document.getElementById('login-user').value.trim();
+      const pass=document.getElementById('login-pass').value;
+      const err=document.getElementById('login-error');
+      const btn=document.getElementById('login-btn');
+      err.style.display='none';
+      if(!user||!pass){ err.textContent='Please enter your username and password.'; err.style.display='block'; return; }
+      btn.textContent='Checking…'; btn.disabled=true;
       try {
-        await window._fbSet(window._fbRef(window._db, 'config/barcode_values'), barcodeValues);
-        showToast('✓ Barcode codes saved', 'success');
-      } catch(e) { showToast('Save failed — ' + e.message, 'error'); }
+        if(user===DEFAULT_USER&&pass===DEFAULT_PASS){ currentUser=user; sessionStorage.setItem('adidas_admin_session',user); sessionStorage.setItem('adidas_used_default','1'); showSetup(); return; }
+        if(!window._firebaseReady){ err.textContent='Incorrect username or password.'; err.style.display='block'; return; }
+        const hash=await sha256(pass);
+        const snap=await window._fbGet(window._fbRef(window._db,'config/admins/'+safeKey(user)));
+        if(snap.exists()&&snap.val()===hash){
+          currentUser=user; sessionStorage.setItem('adidas_admin_session',user);
+          if(document.getElementById('keep-logged-in').checked) localStorage.setItem('adidas_admin_persistent',user);
+          showAdmin();
+        } else { err.textContent='Incorrect username or password.'; err.style.display='block'; document.getElementById('login-pass').value=''; document.getElementById('login-pass').focus(); }
+      } catch(e){ err.textContent='Incorrect username or password.'; err.style.display='block'; }
+      finally { btn.textContent='Access Dashboard →'; btn.disabled=false; }
     }
 
-    // ─── DOWNLOAD CARD FACE ───
-    async function downloadCardFace(name, face) {
-      const safeName = name.replace(/\s+/g, '_');
-      const faceEl   = document.getElementById('card-' + face + '-' + safeName);
-      if (!faceEl) { showToast('Card not found', 'error'); return; }
+    function showSetup() { document.getElementById('screen-login').style.display='none'; document.getElementById('screen-setup').style.display='flex'; }
 
-      // Use html2canvas if available, else fall back to canvas reconstruction
-      if (!window.html2canvas) {
-        await loadHtml2Canvas();
-      }
-
-      if (window.html2canvas) {
-        try {
-          const canvas = await html2canvas(faceEl, {
-            scale: 3,
-            backgroundColor: face === 'front' ? '#ffffff' : '#ffffff',
-            useCORS: true,
-            allowTaint: true,
-            logging: false
-          });
-          const link = document.createElement('a');
-          link.download = `adidas-id-${face}-${name.toLowerCase().replace(/\s+/g,'-')}.png`;
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-          showToast('✓ Downloaded ' + face + ' card for ' + name, 'success');
-        } catch(e) {
-          showToast('Download failed — try again', 'error');
-        }
-      } else {
-        showToast('Renderer not available — try print instead', 'error');
-      }
+    async function saveNewCredentials() {
+      const user=document.getElementById('setup-user').value.trim();
+      const pass=document.getElementById('setup-pass').value;
+      const confirm=document.getElementById('setup-confirm').value;
+      const err=document.getElementById('setup-error');
+      err.style.display='none';
+      if(!user){ err.textContent='Please choose a username.'; err.style.display='block'; return; }
+      if(pass.length<8){ err.textContent='Password must be at least 8 characters.'; err.style.display='block'; return; }
+      if(pass!==confirm){ err.textContent='Passwords do not match.'; err.style.display='block'; return; }
+      if(user===DEFAULT_USER&&pass===DEFAULT_PASS){ err.textContent='Please choose different credentials from the default.'; err.style.display='block'; return; }
+      if(!window._firebaseReady){ err.textContent='Firebase not connected.'; err.style.display='block'; return; }
+      try {
+        const hash=await sha256(pass);
+        await window._fbSet(window._fbRef(window._db,'config/admins/'+safeKey(user)),hash);
+        currentUser=user; sessionStorage.setItem('adidas_admin_session',user); sessionStorage.removeItem('adidas_used_default');
+        document.getElementById('screen-setup').style.display='none'; showAdmin();
+        showToast('✓ Account saved','success');
+      } catch(e){ err.textContent='Could not save to Firebase.'; err.style.display='block'; }
     }
 
-    function loadHtml2Canvas() {
-      return new Promise(resolve => {
-        if (window.html2canvas) { resolve(); return; }
-        const s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-        s.onload  = resolve;
-        s.onerror = resolve;
+    function logout() {
+      currentUser=null;
+      sessionStorage.removeItem('adidas_admin_session'); sessionStorage.removeItem('adidas_used_default'); localStorage.removeItem('adidas_admin_persistent');
+      document.getElementById('screen-admin').style.display='none';
+      document.getElementById('screen-setup').style.display='none';
+      document.getElementById('screen-login').style.display='flex';
+      document.getElementById('admin-badge').style.display='none';
+      document.getElementById('btn-logout').style.display='none';
+      document.getElementById('login-user').value=''; document.getElementById('login-pass').value='';
+      document.getElementById('keep-logged-in').checked=false;
+    }
+
+    function showAdmin() {
+      document.getElementById('screen-login').style.display='none';
+      document.getElementById('screen-setup').style.display='none';
+      document.getElementById('screen-admin').style.display='block';
+      document.getElementById('admin-badge').style.display='inline-block';
+      document.getElementById('btn-logout').style.display='inline-block';
+      document.getElementById('admin-badge').textContent='● '+currentUser;
+      loadPhotos(); loadLogoFromStorage();
+      buildModuleRows(); renderAdminUsers(); loadFbConfigToForm(); buildMonthChips(); buildModuleMonthChips();
+      waitForFirebase(async()=>{ await loadModuleConfig(); await loadProgress(); await loadTeamMembersAdmin(); });
+    }
+
+    function waitForFirebase(cb) { if(window._firebaseReady) return cb(); document.addEventListener('firebase-ready',cb,{once:true}); }
+
+    /* ─── MODULE ROWS ─── */
+    function buildModuleRows() {
+      const areaEl=document.getElementById('area-module-rows');
+      const atticusEl=document.getElementById('atticus-module-rows');
+      areaEl.innerHTML=''; atticusEl.innerHTML='';
+      MODULE_DEFS.forEach(m=>{
+        const row=document.createElement('div'); row.className='module-row';
+        row.innerHTML=`
+          <span class="module-num-label">${m.num}</span>
+          <div class="form-group"><label>Module Name</label><input type="text" id="inp-name-${m.id}" placeholder="${m.defaultName}"/></div>
+          <div class="form-group"><label>Subtitle</label><input type="text" id="inp-sub-${m.id}" placeholder="${m.defaultSub}"/></div>
+          <div class="form-group"><label>Training URL</label><input type="text" id="inp-url-${m.id}" placeholder="https://…"/></div>`;
+        (m.group==='area'?areaEl:atticusEl).appendChild(row);
+      });
+    }
+
+    /* ─── TEAM MEMBERS ─── */
+    async function loadTeamMembersAdmin() {
+      if(!window._firebaseReady) return;
+      try {
+        const snap=await window._fbGet(window._fbRef(window._db,'config/team_members'));
+        if(snap.exists()){ const data=snap.val(); teamMembers=Array.isArray(data)?[...data]:[...Object.values(data)]; teamMembers=teamMembers.filter(Boolean); }
+        else teamMembers=[...DEFAULT_NAMES];
+      } catch(e){ teamMembers=[...DEFAULT_NAMES]; }
+      renderTeamMemberList();
+    }
+
+    function renderTeamMemberList() {
+      const list=document.getElementById('team-member-list');
+      if(teamMembers.length===0){ list.innerHTML='<p style="font-size:13px; color:var(--gray-500); padding:8px 0;">No team members yet.</p>'; return; }
+      list.innerHTML='';
+      teamMembers.forEach((name,idx)=>{
+        const item=document.createElement('div'); item.className='team-member-item';
+        item.innerHTML=`<span class="team-member-drag">⠿</span><span class="team-member-name">${escHtml(name)}</span><button class="btn-remove-member" onclick="removeMember(${idx})">✕</button>`;
+        list.appendChild(item);
+      });
+    }
+
+    function addTeamMember() {
+      const input=document.getElementById('new-member-input'); const name=input.value.trim();
+      if(!name){ showToast('Enter a name first','error'); return; }
+      if(teamMembers.map(n=>n.toLowerCase()).includes(name.toLowerCase())){ showToast('That name already exists','error'); return; }
+      const formatted=name.charAt(0).toUpperCase()+name.slice(1);
+      teamMembers.push(formatted); input.value=''; renderTeamMemberList();
+      showToast('Added '+formatted+' — click Save Team to apply','');
+    }
+
+    function removeMember(idx) {
+      const name=teamMembers[idx];
+      if(!confirm(`Remove "${name}" from the team list?`)) return;
+      teamMembers.splice(idx,1); renderTeamMemberList(); showToast('Removed '+name,'');
+    }
+
+    async function saveTeamMembers() {
+      if(!window._firebaseReady){ showToast('Firebase not connected','error'); return; }
+      try {
+        await window._fbSet(window._fbRef(window._db,'config/team_members'),teamMembers);
+        const el=document.getElementById('save-status-team');
+        if(el){ el.textContent='✓ Saved'; el.style.color='var(--green)'; setTimeout(()=>{el.textContent='';},4000); }
+        showToast('✓ Team members saved','success');
+      } catch(e){ showToast('Save failed — '+e.message,'error'); }
+    }
+
+    /* ─── MODULE CONFIG ─── */
+    function monthToKey(m){ return m.replace(/\s+/g,'_'); }
+    function moduleConfigPath(m){ return 'config/modules/'+monthToKey(m||selectedModuleMonth); }
+
+    function buildModuleMonthChips() {
+      const chips=[]; const d=new Date();
+      for(let i=3;i>=1;i--){ const dd=new Date(d); dd.setMonth(d.getMonth()-i); chips.push(dd.toLocaleString('default',{month:'long',year:'numeric'})); }
+      chips.push(getCurrentMonthKey());
+      for(let i=1;i<=3;i++){ const dd=new Date(d); dd.setMonth(d.getMonth()+i); chips.push(dd.toLocaleString('default',{month:'long',year:'numeric'})); }
+      const wrap=document.getElementById('module-month-chips'); wrap.innerHTML='';
+      chips.forEach(m=>{
+        const chip=document.createElement('button'); chip.className='month-chip'+(m===selectedModuleMonth?' active':'');
+        chip.textContent=m;
+        chip.onclick=()=>{ selectedModuleMonth=m; wrap.querySelectorAll('.month-chip').forEach(c=>c.classList.remove('active')); chip.classList.add('active'); loadModuleConfig(m); };
+        wrap.appendChild(chip);
+      });
+    }
+
+    async function loadModuleConfig(month) {
+      month=month||selectedModuleMonth;
+      if(!window._firebaseReady) return;
+      try {
+        const snap=await window._fbGet(window._fbRef(window._db,moduleConfigPath(month)));
+        if(snap.exists()){ const cfg=snap.val(); applyModuleConfig(cfg); adminActiveModules=['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id=>cfg[id]&&cfg[id].url&&cfg[id].url!=='#'&&cfg[id].url.trim()!==''); }
+        else { MODULE_DEFS.forEach(m=>{ const n=document.getElementById('inp-name-'+m.id); const s=document.getElementById('inp-sub-'+m.id); const u=document.getElementById('inp-url-'+m.id); if(n)n.value=''; if(s)s.value=''; if(u)u.value=''; }); adminActiveModules=['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']; }
+      } catch(e){ console.warn('Could not load module config',e); }
+    }
+
+    function applyModuleConfig(cfg) {
+      MODULE_DEFS.forEach(m=>{
+        const data=cfg[m.id];
+        const n=document.getElementById('inp-name-'+m.id); const s=document.getElementById('inp-sub-'+m.id); const u=document.getElementById('inp-url-'+m.id);
+        if(!data) return;
+        if(n) n.value=data.name||''; if(s) s.value=data.sub||''; if(u) u.value=(data.url&&data.url!=='#')?data.url:'';
+      });
+    }
+
+    async function saveModuleConfig() {
+      if(!window._firebaseReady){ showToast('Firebase not connected','error'); return; }
+      const cfg={};
+      MODULE_DEFS.forEach(m=>{ cfg[m.id]={ name:document.getElementById('inp-name-'+m.id).value.trim()||m.defaultName, sub:document.getElementById('inp-sub-'+m.id).value.trim()||m.defaultSub, url:document.getElementById('inp-url-'+m.id).value.trim()||'#' }; });
+      try {
+        await window._fbSet(window._fbRef(window._db,moduleConfigPath(selectedModuleMonth)),cfg);
+        adminActiveModules=MODULE_DEFS.filter(m=>cfg[m.id]&&cfg[m.id].url&&cfg[m.id].url!=='#'&&cfg[m.id].url.trim()!=='').map(m=>m.id);
+        if(allProgress.length){ renderTable(); updateStats(); }
+        showToast('✓ Modules saved for '+selectedModuleMonth,'success');
+        ['area','atticus'].forEach(g=>{ const el=document.getElementById('save-status-'+g); if(el){ el.textContent='✓ Saved '+new Date().toLocaleTimeString(); el.style.color='var(--green)'; setTimeout(()=>{el.textContent='';},4000); } });
+      } catch(e){ showToast('Save failed — check Firebase connection','error'); }
+    }
+
+    /* ─── MONTH CHIPS (progress) ─── */
+    function buildMonthChips() {
+      allMonths=getRecentMonths(6); selectedMonth=getCurrentMonthKey();
+      const wrap=document.getElementById('month-chips'); wrap.innerHTML='';
+      allMonths.forEach(m=>{
+        const chip=document.createElement('button'); chip.className='month-chip'+(m===selectedMonth?' active':'');
+        chip.textContent=m;
+        chip.onclick=async()=>{ selectedMonth=m; wrap.querySelectorAll('.month-chip').forEach(c=>c.classList.remove('active')); chip.classList.add('active'); await loadModuleConfig(m); renderTable(); updateStats(); };
+        wrap.appendChild(chip);
+      });
+    }
+
+    async function refreshProgressTab(){ await loadModuleConfig(selectedMonth); await loadProgress(); }
+
+    async function loadProgress() {
+      if(!window._firebaseReady){ document.getElementById('progress-tbody').innerHTML=`<tr><td colspan="10"><div class="empty-state"><p>Firebase Not Connected</p></div></td></tr>`; return; }
+      document.getElementById('progress-tbody').innerHTML=`<tr><td colspan="10"><div class="loading-spinner">Loading…</div></td></tr>`;
+      try {
+        const snap=await window._fbGet(window._fbRef(window._db,'progress'));
+        allProgress=[];
+        if(snap.exists()) snap.forEach(child=>{ allProgress.push({key:child.key,...child.val()}); });
+        populateStoreFilter(); renderTable(); updateStats();
+      } catch(e){ document.getElementById('progress-tbody').innerHTML=`<tr><td colspan="10"><div class="empty-state"><p>Could not load data</p></div></td></tr>`; }
+    }
+
+    function getFilteredRows() {
+      const store=document.getElementById('filter-store').value;
+      const search=document.getElementById('filter-search').value.toLowerCase();
+      const monthSuffix=selectedMonth.replace(/[^a-zA-Z0-9_\-]/g,'_');
+      return allProgress.filter(r=>{ if(!r.key.includes(monthSuffix)) return false; if(store&&r.store!==store) return false; if(search&&!r.name.toLowerCase().includes(search)) return false; return true; });
+    }
+
+    function populateStoreFilter() {
+      const stores=[...new Set(allProgress.map(r=>r.store).filter(Boolean))].sort();
+      const sel=document.getElementById('filter-store'); const current=sel.value;
+      sel.innerHTML='<option value="">All Stores</option>'+stores.map(s=>`<option value="${s}"${s===current?' selected':''}>${s}</option>`).join('');
+    }
+
+    function renderTable() {
+      const rows=getFilteredRows(); const tbody=document.getElementById('progress-tbody');
+      const mods=adminActiveModules;
+      const modLabels={'mod-a1':'A1','mod-a2':'A2','mod-a3':'A3','mod-t1':'T1','mod-t2':'T2','mod-t3':'T3'};
+      const modTitles={'mod-a1':'AREA Module 1','mod-a2':'AREA Module 2','mod-a3':'AREA Module 3','mod-t1':'Atticus Module 1','mod-t2':'Atticus Module 2','mod-t3':'Atticus Module 3'};
+      const thead=document.getElementById('progress-thead');
+      if(thead) thead.innerHTML=`<tr><th>Name</th><th>Store</th>${mods.map(m=>`<th title="${modTitles[m]}">${modLabels[m]}</th>`).join('')}<th>Progress</th><th>Last Seen</th><th>Actions</th></tr>`;
+      const colCount=3+mods.length+3;
+      if(rows.length===0){ tbody.innerHTML=`<tr><td colspan="${colCount}"><div class="empty-state"><p>No Data Found</p><span>No workers have logged progress for ${selectedMonth} yet.</span></div></td></tr>`; return; }
+      rows.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+      tbody.innerHTML=rows.map(r=>{
+        const completed=r.completed||[];
+        const activeDone=completed.filter(m=>mods.includes(m)).length;
+        const pct=mods.length?Math.round((activeDone/mods.length)*100):0;
+        const date=r.savedAt?new Date(r.savedAt).toLocaleDateString('en-NZ',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'–';
+        const dots=mods.map(m=>{ const done=completed.includes(m); return `<td><span class="check-dot${done?' done':''}" onclick="${done?`uncompleteModule('${r.key}','${m}')`:`completeModule('${r.key}','${m}')`}">✓</span></td>`; }).join('');
+        return `<tr><td class="td-name">${escHtml(r.name||'–')}</td><td class="td-store">${escHtml(r.store||'–')}</td>${dots}<td><div class="progress-bar-wrap"><div class="progress-bar"><div class="progress-bar-fill${pct===100?' full':''}" style="width:${pct}%"></div></div><span class="pct-label">${pct}%</span></div></td><td class="td-date">${date}</td><td><button onclick="deleteWorker('${r.key}','${escHtml(r.name||'')}')" style="padding:5px 10px;background:none;border:1.5px solid var(--gray-200);font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;color:var(--red);" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button></td></tr>`;
+      }).join('');
+    }
+
+    function updateStats() {
+      const rows=getFilteredRows(); const mods=adminActiveModules;
+      const total=rows.length;
+      const complete=rows.filter(r=>{ const d=(r.completed||[]).filter(m=>mods.includes(m)).length; return mods.length>0&&d===mods.length; }).length;
+      const partial=rows.filter(r=>{ const d=(r.completed||[]).filter(m=>mods.includes(m)).length; return d>0&&d<mods.length; }).length;
+      const avgPct=total&&mods.length?Math.round(rows.reduce((s,r)=>s+((r.completed||[]).filter(m=>mods.includes(m)).length/mods.length)*100,0)/total):0;
+      document.getElementById('stat-total').textContent=total;
+      document.getElementById('stat-complete').textContent=complete;
+      document.getElementById('stat-partial').textContent=partial;
+      document.getElementById('stat-rate').textContent=total?avgPct+'%':'–';
+    }
+
+    /* ─── ADMIN USERS ─── */
+    async function renderAdminUsers() {
+      const list=document.getElementById('admin-user-list');
+      list.innerHTML='<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Loading…</div>';
+      try {
+        if(!window._firebaseReady) throw new Error('no firebase');
+        const snap=await window._fbGet(window._fbRef(window._db,'config/admins'));
+        if(!snap.exists()){ list.innerHTML='<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">No admin users found.</div>'; return; }
+        const users=Object.keys(snap.val());
+        list.innerHTML=users.map(u=>`<div class="user-item"><div><div class="u-name">${escHtml(unsafeKey(u))}</div><div class="u-role">Admin</div></div><span class="badge-active">${unsafeKey(u)===currentUser?'● Active':'Enabled'}</span></div>`).join('');
+      } catch(e){ list.innerHTML='<div style="color:var(--gray-500);font-size:13px;padding:8px 0;">Could not load user list.</div>'; }
+    }
+
+    /* ─── TABS ─── */
+    function switchTab(name) {
+      const names=['modules','team','qrcodes','progress','adiclub','settings'];
+      const panels=['tab-modules','tab-team','tab-qrcodes','tab-progress','tab-adiclub','tab-settings'];
+      document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',names[i]===name));
+      document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',panels[i]==='tab-'+name));
+      if(name==='progress') waitForFirebase(async()=>{ await loadModuleConfig(selectedMonth); await loadProgress(); });
+      if(name==='team')     waitForFirebase(()=>loadTeamMembersAdmin());
+      if(name==='qrcodes')  waitForFirebase(()=>loadIDCardsTab());
+      if(name==='settings') { renderAdminUsers(); updateExportPreview(); }
+      if(name==='adiclub')  loadAdiClub();
+    }
+
+    /* ═══════════════════════════════════
+       ID CARDS TAB
+    ═══════════════════════════════════ */
+    let qrLibLoaded = false;
+
+    function loadQRLib() {
+      return new Promise(resolve=>{
+        if(qrLibLoaded){ resolve(); return; }
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+        s.onload=()=>{ qrLibLoaded=true; resolve(); }; s.onerror=()=>resolve();
         document.head.appendChild(s);
       });
     }
 
-    function printAllQR() { window.print(); }
-
-    // ─── ADD / DELETE MEMBER (QR tab) ───
-    async function qrAddMember() {
-      const input = document.getElementById('qr-new-member');
-      const name  = input.value.trim();
-      if (!name) { showToast('Enter a name first', 'error'); return; }
-      if (teamMembers.map(n => n.toLowerCase()).includes(name.toLowerCase())) { showToast('That name already exists', 'error'); return; }
-      const formatted = name.charAt(0).toUpperCase() + name.slice(1);
-      teamMembers.push(formatted);
-      input.value = '';
-
-      if (window._firebaseReady) {
-        try {
-          await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
-          showToast('✓ ' + formatted + ' added and saved', 'success');
-        } catch(e) { showToast('Added locally — Firebase save failed', 'error'); }
+    async function loadIDCardsTab() {
+      await loadQRLib();
+      const savedUrl=localStorage.getItem('adidas_qr_base_url');
+      if(savedUrl) document.getElementById('qr-base-url').value=savedUrl;
+      loadLogoFromStorage();
+      if(window._firebaseReady){
+        try { const snap=await window._fbGet(window._fbRef(window._db,'config/barcode_values')); if(snap.exists()) barcodeValues=snap.val()||{}; } catch(e){}
       }
+      if(teamMembers.length===0||(teamMembers.length===DEFAULT_NAMES.length&&JSON.stringify(teamMembers)===JSON.stringify(DEFAULT_NAMES))){ await loadTeamMembersAdmin(); }
+      renderIDCards();
+    }
+
+    function getQRBaseUrl() {
+      const val=(document.getElementById('qr-base-url').value||'').trim();
+      localStorage.setItem('adidas_qr_base_url',val);
+      return val;
+    }
+
+    function buildQRUrl(name) {
+      const base=getQRBaseUrl(); if(!base) return '';
+      const sep=base.includes('?')?'&':'?';
+      return base+sep+'name='+encodeURIComponent(name);
+    }
+
+    function getFullBarcode(name) {
+      const suffix=(barcodeValues[name]||'').toString().trim();
+      return suffix ? BARCODE_PREFIX+suffix : '';
+    }
+
+    /* ── Build the logo HTML for inside a card stripe ── */
+    function buildLogoHTML() {
+      if(cardLogoData) {
+        return `<img src="${cardLogoData}" alt="Logo" class="card-logo-img"/>`;
+      }
+      return `<span class="card-logo-text">adidas</span>`;
+    }
+
+    /* ── RENDER ALL CARDS ── */
+    function renderIDCards() {
+      const grid=document.getElementById('id-cards-grid');
+      if(!grid) return;
+      grid.innerHTML='';
+      if(teamMembers.length===0){ grid.innerHTML='<p style="color:var(--gray-500);font-size:13px;grid-column:1/-1;">No team members yet.</p>'; return; }
+      teamMembers.forEach(name=>{ grid.appendChild(buildIDCardWrapper(name)); });
+    }
+
+    /* ── BUILD ONE PORTRAIT CARD ── */
+    function buildIDCardWrapper(name) {
+      const safeName    = name.replace(/\s+/g,'_');
+      const fullCode    = getFullBarcode(name);
+      const qrUrl       = buildQRUrl(name);
+      const photoData   = memberPhotos[name]||null;
+      const savedSuffix = (barcodeValues[name]||'').toString();
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'id-card-wrapper';
+      wrapper.id = 'card-wrapper-'+safeName;
+
+      /* Label row */
+      const labelRow = document.createElement('div');
+      labelRow.className = 'id-card-label';
+      labelRow.innerHTML = `<span>${escHtml(name)}</span><span style="font-size:10px;color:var(--gray-400);font-weight:600;">Tap to flip</span>`;
+
+      /* Scene — the flip container */
+      const scene = document.createElement('div');
+      scene.className = 'id-card-scene';
+      scene.id = 'card-scene-'+safeName;
+
+      /* ── FIX: Toggle flip only when clicking the scene directly (not children that stopPropagation) ── */
+      scene.addEventListener('click', function() {
+        this.classList.toggle('flipped');
+      });
+
+      const inner = document.createElement('div');
+      inner.className = 'id-card-inner';
+      inner.id = 'card-inner-'+safeName;
+
+      /* ──────────────────────────────
+         FRONT FACE (portrait)
+      ────────────────────────────── */
+      const front = document.createElement('div');
+      front.className = 'id-card-face id-card-front';
+      front.id = 'card-front-'+safeName;
+
+      front.innerHTML = `
+        <!-- Black header -->
+        <div class="card-stripe-front">${buildLogoHTML()}</div>
+        <!-- White body -->
+        <div class="card-body">
+          <!-- Photo -->
+          <div class="id-card-photo-circle" id="photo-circle-${safeName}" title="Tap to upload photo">
+            ${photoData
+              ? `<img src="${photoData}" alt="${escHtml(name)}"/>`
+              : `<span style="font-size:30px;user-select:none;">👤</span>`}
+          </div>
+          <div class="id-card-name">${escHtml(name)}</div>
+          <div class="id-card-role">Team Member · adidas</div>
+          <div class="id-card-accent-bar"></div>
+          <div class="id-card-spacer"></div>
+          <!-- Barcode -->
+          <div class="id-card-barcode-section">
+            <canvas id="bc-canvas-${safeName}"></canvas>
+            <div class="id-card-barcode-num" id="bc-num-${safeName}">${fullCode||'–'}</div>
+          </div>
+        </div>`;
+
+      /* Photo click — stop propagation so it doesn't flip card */
+      const photoCircle = front.querySelector('#photo-circle-'+safeName);
+      photoCircle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        triggerPhotoUpload(name);
+      });
+
+      /* ──────────────────────────────
+         BACK FACE (portrait)
+      ────────────────────────────── */
+      const back = document.createElement('div');
+      back.className = 'id-card-face id-card-back';
+      back.id = 'card-back-'+safeName;
+
+      back.innerHTML = `
+        <div class="card-stripe-back">${buildLogoHTML()}</div>
+        <div class="card-body">
+          <div class="qr-container" id="qr-div-${safeName}" style="width:140px;height:140px;"></div>
+          <div class="back-name">${escHtml(name)}</div>
+          ${!qrUrl?'<div class="back-note">Enter URL above to<br>generate QR code</div>':''}
+        </div>`;
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      scene.appendChild(inner);
+
+      /* ── Barcode input + action buttons ── */
+      const inputRow = document.createElement('div');
+      inputRow.style.cssText = 'display:flex; gap:6px; align-items:center;';
+      inputRow.innerHTML = `
+        <div class="barcode-input-wrap" style="flex:1;" onclick="event.stopPropagation()">
+          <span class="barcode-prefix">${BARCODE_PREFIX}</span>
+          <input class="barcode-suffix-input" type="text"
+            id="bc-suffix-${safeName}"
+            value="${escHtml(savedSuffix)}"
+            maxlength="6"
+            placeholder="458"
+            title="Enter digits (e.g. 458 → SCN000458)"
+            oninput="onSuffixInput('${escHtml(name)}')"
+            onkeydown="if(event.key==='Enter') saveBarcodeValues()"/>
+        </div>`;
+
+      /* Action buttons row */
+      const actionsRow = document.createElement('div');
+      actionsRow.className = 'id-card-actions';
+      actionsRow.innerHTML = `
+        <button class="btn-card-dl btn-card-action" onclick="event.stopPropagation(); downloadCardFace('${escHtml(name)}','front')">↓ Front</button>
+        <button class="btn-card-dl btn-card-action" style="background:#444;" onclick="event.stopPropagation(); downloadCardFace('${escHtml(name)}','back')">↓ Back</button>
+        <button class="btn-card-del btn-card-action" style="flex:0 0 auto; padding:7px 10px;" onclick="event.stopPropagation(); qrDeleteMember('${escHtml(name)}')">✕</button>`;
+
+      const photoHint = document.createElement('div');
+      photoHint.style.cssText = 'font-size:10px;color:var(--gray-400);letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;text-align:center;';
+      photoHint.textContent = '📷 Tap photo circle to upload';
+      photoHint.onclick = e => { e.stopPropagation(); triggerPhotoUpload(name); };
+
+      wrapper.appendChild(labelRow);
+      wrapper.appendChild(scene);
+      wrapper.appendChild(inputRow);
+      wrapper.appendChild(actionsRow);
+      wrapper.appendChild(photoHint);
+
+      /* Generate barcode + QR after DOM append */
+      setTimeout(()=>{
+        if(fullCode) drawIDBarcode(safeName, fullCode);
+        if(qrUrl)    drawIDQR(safeName, qrUrl);
+      }, 60);
+
+      return wrapper;
+    }
+
+    /* ── BARCODE INPUT ── */
+    function onSuffixInput(name) {
+      const safeName=name.replace(/\s+/g,'_');
+      const input=document.getElementById('bc-suffix-'+safeName); if(!input) return;
+      input.value=input.value.replace(/[^a-zA-Z0-9]/g,'');
+      const suffix=input.value.trim();
+      const fullCode=suffix?BARCODE_PREFIX+suffix:'';
+      barcodeValues[name]=suffix;
+      const numEl=document.getElementById('bc-num-'+safeName); if(numEl) numEl.textContent=fullCode||'–';
+      if(fullCode) drawIDBarcode(safeName,fullCode);
+      else { const c=document.getElementById('bc-canvas-'+safeName); if(c){ const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); } }
+    }
+
+    /* ── DRAW BARCODE ── */
+    function drawIDBarcode(safeName, text) {
+      const canvas=document.getElementById('bc-canvas-'+safeName); if(!canvas) return;
+      try {
+        const bars=code128Encode(text);
+        const barW=1.5; const height=32; const padX=4;
+        canvas.width=Math.floor(bars.length*barW+padX*2); canvas.height=height;
+        const ctx=canvas.getContext('2d');
+        ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle='#000000';
+        bars.split('').forEach((bit,i)=>{ if(bit==='1') ctx.fillRect(padX+i*barW,0,barW,height); });
+      } catch(e){ console.warn('Barcode error',e); }
+    }
+
+    /* ── DRAW QR ── */
+    function drawIDQR(safeName, url) {
+      const div=document.getElementById('qr-div-'+safeName); if(!div) return;
+      div.innerHTML=''; if(!url||!window.QRCode) return;
+      try { new QRCode(div,{text:url,width:140,height:140,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); } catch(e){}
+    }
+
+    function regenerateAllQR() {
+      clearTimeout(window._qrRegen);
+      window._qrRegen=setTimeout(()=>{
+        getQRBaseUrl();
+        teamMembers.forEach(name=>{ const safeName=name.replace(/\s+/g,'_'); const qrUrl=buildQRUrl(name); drawIDQR(safeName,qrUrl); });
+      },400);
+    }
+
+    /* ── PHOTO UPLOAD ── */
+    function triggerPhotoUpload(name) {
+      const input=document.createElement('input'); input.type='file'; input.accept='image/*';
+      input.onchange=e=>{
+        const file=e.target.files[0]; if(!file) return;
+        const reader=new FileReader();
+        reader.onload=ev=>{
+          const img=new Image();
+          img.onload=()=>{
+            const canvas=document.createElement('canvas');
+            const size=200; canvas.width=size; canvas.height=size;
+            const ctx=canvas.getContext('2d');
+            const min=Math.min(img.width,img.height); const sx=(img.width-min)/2; const sy=(img.height-min)/2;
+            ctx.drawImage(img,sx,sy,min,min,0,0,size,size);
+            const dataURL=canvas.toDataURL('image/jpeg',0.8);
+            memberPhotos[name]=dataURL; savePhotos();
+            const safeName=name.replace(/\s+/g,'_');
+            const photoCircle=document.getElementById('photo-circle-'+safeName);
+            if(photoCircle) photoCircle.innerHTML=`<img src="${dataURL}" alt="${escHtml(name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>`;
+            showToast('✓ Photo saved for '+name,'success');
+          };
+          img.src=ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      };
+      input.click();
+    }
+
+    /* ── SAVE BARCODE VALUES ── */
+    async function saveBarcodeValues() {
+      teamMembers.forEach(name=>{ const safeName=name.replace(/\s+/g,'_'); const input=document.getElementById('bc-suffix-'+safeName); if(input){ const val=input.value.trim(); if(val) barcodeValues[name]=val; else delete barcodeValues[name]; } });
+      if(!window._firebaseReady){ showToast('Firebase not connected','error'); return; }
+      try { await window._fbSet(window._fbRef(window._db,'config/barcode_values'),barcodeValues); showToast('✓ Barcode codes saved','success'); }
+      catch(e){ showToast('Save failed — '+e.message,'error'); }
+    }
+
+    /* ── DOWNLOAD CARD FACE (FIXED) ──
+       For the back face we clone the element, strip the 3D transform,
+       regenerate the QR code in the clone, capture it, then discard.
+    ── */
+    async function downloadCardFace(name, face) {
+      const safeName = name.replace(/\s+/g,'_');
+      if(!window.html2canvas) await loadHtml2Canvas();
+      if(!window.html2canvas){ showToast('Renderer not available','error'); return; }
+
+      let captureEl;
+      let tempContainer = null;
+
+      try {
+        if(face === 'back') {
+          /* ── Clone the back face and remove the rotateY so it renders normally ── */
+          const backEl = document.getElementById('card-back-'+safeName);
+          if(!backEl){ showToast('Card not found','error'); return; }
+
+          // Use the scene dimensions for correct sizing
+          const sceneEl = document.getElementById('card-scene-'+safeName);
+          const W = sceneEl ? sceneEl.offsetWidth  : 220;
+          const H = sceneEl ? sceneEl.offsetHeight : 350;
+
+          tempContainer = document.createElement('div');
+          tempContainer.style.cssText = `position:fixed;left:-9999px;top:0;width:${W}px;height:${H}px;z-index:-999;overflow:hidden;border-radius:12px;`;
+
+          const clone = backEl.cloneNode(true);
+          clone.style.cssText = `
+            position:relative;width:100%;height:100%;
+            transform:none;
+            backface-visibility:visible;
+            -webkit-backface-visibility:visible;
+            border-radius:12px;
+            overflow:hidden;
+          `;
+
+          // Regenerate QR inside clone (cloneNode doesn't copy canvas content)
+          const qrDiv = clone.querySelector('[id^="qr-div-"]');
+          if(qrDiv){ qrDiv.innerHTML=''; const qrUrl=buildQRUrl(name); if(qrUrl&&window.QRCode){ try{ new QRCode(qrDiv,{text:qrUrl,width:140,height:140,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){} } }
+
+          tempContainer.appendChild(clone);
+          document.body.appendChild(tempContainer);
+          captureEl = clone;
+
+          // Give QR a moment to render
+          await new Promise(r=>setTimeout(r,200));
+
+        } else {
+          captureEl = document.getElementById('card-front-'+safeName);
+          if(!captureEl){ showToast('Card not found','error'); return; }
+        }
+
+        const canvas = await html2canvas(captureEl, {
+          scale: 3,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: '#ffffff'
+        });
+
+        const link = document.createElement('a');
+        link.download = `adidas-id-${face}-${name.toLowerCase().replace(/\s+/g,'-')}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('✓ Downloaded '+face+' card for '+name,'success');
+
+      } catch(e) {
+        showToast('Download failed — try again','error');
+        console.error(e);
+      } finally {
+        if(tempContainer && tempContainer.parentNode) document.body.removeChild(tempContainer);
+      }
+    }
+
+    function loadHtml2Canvas() {
+      return new Promise(resolve=>{
+        if(window.html2canvas){ resolve(); return; }
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload=resolve; s.onerror=resolve;
+        document.head.appendChild(s);
+      });
+    }
+
+    function printAllQR(){ window.print(); }
+
+    /* ── ADD / DELETE MEMBER (QR tab) ── */
+    async function qrAddMember() {
+      const input=document.getElementById('qr-new-member'); const name=input.value.trim();
+      if(!name){ showToast('Enter a name first','error'); return; }
+      if(teamMembers.map(n=>n.toLowerCase()).includes(name.toLowerCase())){ showToast('That name already exists','error'); return; }
+      const formatted=name.charAt(0).toUpperCase()+name.slice(1);
+      teamMembers.push(formatted); input.value='';
+      if(window._firebaseReady){ try{ await window._fbSet(window._fbRef(window._db,'config/team_members'),teamMembers); showToast('✓ '+formatted+' added','success'); }catch(e){ showToast('Added locally — Firebase save failed','error'); } }
       renderIDCards();
     }
 
     async function qrDeleteMember(name) {
-      if (!confirm(`Remove "${name}" from the team list?`)) return;
-      teamMembers = teamMembers.filter(n => n !== name);
-      if (window._firebaseReady) {
-        try {
-          await window._fbSet(window._fbRef(window._db, 'config/team_members'), teamMembers);
-          showToast('✓ ' + name + ' removed', 'success');
-        } catch(e) { showToast('Removed locally — Firebase save failed', 'error'); }
-      }
+      if(!confirm(`Remove "${name}" from the team list?`)) return;
+      teamMembers=teamMembers.filter(n=>n!==name);
+      if(window._firebaseReady){ try{ await window._fbSet(window._fbRef(window._db,'config/team_members'),teamMembers); showToast('✓ '+name+' removed','success'); }catch(e){ showToast('Removed locally — Firebase save failed','error'); } }
       renderIDCards();
     }
 
-    // ─────────────────────────────────────────────────
-    // ─── CODE128 BARCODE ENCODER ───
-    // ─────────────────────────────────────────────────
+    /* ─── CODE128 ENCODER ─── */
     function code128Encode(str) {
-      const CODE_B_START = 104, CODE_STOP = 106;
-      const PATTERNS = [
-        '11011001100','11001101100','11001100110','10010011000','10010001100',
-        '10001001100','10011001000','10011000100','10001100100','11001001000',
-        '11001000100','11000100100','10110011100','10011011100','10011001110',
-        '10111001100','10011101100','10011100110','11001110010','11001011100',
-        '11001001110','11011100100','11001110100','11101101110','11101001100',
-        '11100101100','11100100110','11101100100','11100110100','11100110010',
-        '11011011000','11011000110','11000110110','10100011000','10001011000',
-        '10001000110','10110001000','10001101000','10001100010','11010001000',
-        '11000101000','11000100010','10110111000','10110001110','10001101110',
-        '10111011000','10111000110','10001110110','11101110110','11010001110',
-        '11000101110','11011101000','11011100010','11011101110','11101011000',
-        '11101000110','11100010110','11101101000','11101100010','11100011010',
-        '11101111010','11001000010','11110001010','10100110000','10100001100',
-        '10010110000','10010000110','10000101100','10000100110','10110010000',
-        '10110000100','10011010000','10011000010','10000110100','10000110010',
-        '11000010010','11001010000','11110111010','11000010100','10001111010',
-        '10100111100','10010111100','10010011110','10111100100','10011110100',
-        '10011110010','11110100100','11110010100','11110010010','11011011110',
-        '11011110110','11110110110','10101111000','10100011110','10001011110',
-        '10111101000','10111100010','11110101000','11110100010','10111011110',
-        '10111101110','11101011110','11110101110','11010000100','11010010000',
-        '11010011100','1100011101011'
-      ];
-      const chars = str.split('').map(c => c.charCodeAt(0) - 32);
-      let checksum = CODE_B_START;
-      chars.forEach((v, i) => { checksum += v * (i + 1); });
-      checksum = checksum % 103;
-      const codes = [CODE_B_START, ...chars, checksum, CODE_STOP];
-      return codes.map(c => PATTERNS[c] || '').join('') + '11';
+      const CODE_B_START=104, CODE_STOP=106;
+      const PATTERNS=['11011001100','11001101100','11001100110','10010011000','10010001100','10001001100','10011001000','10011000100','10001100100','11001001000','11001000100','11000100100','10110011100','10011011100','10011001110','10111001100','10011101100','10011100110','11001110010','11001011100','11001001110','11011100100','11001110100','11101101110','11101001100','11100101100','11100100110','11101100100','11100110100','11100110010','11011011000','11011000110','11000110110','10100011000','10001011000','10001000110','10110001000','10001101000','10001100010','11010001000','11000101000','11000100010','10110111000','10110001110','10001101110','10111011000','10111000110','10001110110','11101110110','11010001110','11000101110','11011101000','11011100010','11011101110','11101011000','11101000110','11100010110','11101101000','11101100010','11100011010','11101111010','11001000010','11110001010','10100110000','10100001100','10010110000','10010000110','10000101100','10000100110','10110010000','10110000100','10011010000','10011000010','10000110100','10000110010','11000010010','11001010000','11110111010','11000010100','10001111010','10100111100','10010111100','10010011110','10111100100','10011110100','10011110010','11110100100','11110010100','11110010010','11011011110','11011110110','11110110110','10101111000','10100011110','10001011110','10111101000','10111100010','11110101000','11110100010','10111011110','10111101110','11101011110','11110101110','11010000100','11010010000','11010011100','1100011101011'];
+      const chars=str.split('').map(c=>c.charCodeAt(0)-32);
+      let checksum=CODE_B_START; chars.forEach((v,i)=>{ checksum+=v*(i+1); }); checksum=checksum%103;
+      const codes=[CODE_B_START,...chars,checksum,CODE_STOP];
+      return codes.map(c=>PATTERNS[c]||'').join('')+'11';
     }
 
-    // ─── ADICLUB DATA ───
-    let allAdiClub = [];
+    /* ─── ADICLUB DATA ─── */
+    let allAdiClub=[];
 
     async function loadAdiClub() {
-      allAdiClub = [];
-      document.getElementById('adiclub-tbody').innerHTML = '<tr><td colspan="6"><div class="loading-spinner">Loading adiClub data…</div></td></tr>';
-      if (!window._firebaseReady) {
-        document.getElementById('adiclub-tbody').innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>Firebase Not Connected</p></div></td></tr>';
-        return;
-      }
+      allAdiClub=[];
+      document.getElementById('adiclub-tbody').innerHTML='<tr><td colspan="6"><div class="loading-spinner">Loading…</div></td></tr>';
+      if(!window._firebaseReady){ document.getElementById('adiclub-tbody').innerHTML='<tr><td colspan="6"><div class="empty-state"><p>Firebase Not Connected</p></div></td></tr>'; return; }
       try {
-        const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
-        if (snap.exists()) { snap.forEach(child => { const val = child.val(); if (val && val.timestamp) allAdiClub.push({ key: child.key, ...val }); }); }
-        allAdiClub.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        renderAdiClubTable(); updateAdiClubStats();
-        showToast('✓ Loaded ' + allAdiClub.length + ' entries', 'success');
-      } catch(e) {
-        document.getElementById('adiclub-tbody').innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>Could Not Load</p><span>' + e.message + '</span></div></td></tr>';
-      }
+        const snap=await window._fbGet(window._fbRef(window._db,'adiclub'));
+        if(snap.exists()) snap.forEach(child=>{ const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); });
+        allAdiClub.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+        renderAdiClubTable(); updateAdiClubStats(); showToast('✓ Loaded '+allAdiClub.length+' entries','success');
+      } catch(e){ document.getElementById('adiclub-tbody').innerHTML='<tr><td colspan="6"><div class="empty-state"><p>Could Not Load</p></div></td></tr>'; }
     }
 
-    function parseAdiTimestamp(ts) {
-      if (!ts) return null;
-      const local = ts.replace('Z', '').replace('T', ' ');
-      const d = new Date(local);
-      return isNaN(d) ? new Date(ts) : d;
-    }
+    function parseAdiTimestamp(ts) { if(!ts) return null; const local=ts.replace('Z','').replace('T',' '); const d=new Date(local); return isNaN(d)?new Date(ts):d; }
 
     function getAdiClubFiltered() {
-      const search = document.getElementById('ac-search').value.toLowerCase();
-      const period = document.getElementById('ac-filter-period').value;
-      const now    = new Date();
-      return allAdiClub.filter(r => {
-        if (search && !((r.name||'').toLowerCase().includes(search) || (r.id||'').toLowerCase().includes(search))) return false;
-        if (period !== 'all') {
-          const d = parseAdiTimestamp(r.timestamp);
-          if (!d) return false;
-          if (period === 'today') { if (d.toDateString() !== now.toDateString()) return false; }
-          else if (period === 'week') { const mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()+6)%7)); mon.setHours(0,0,0,0); if (d < mon) return false; }
-          else if (period === 'last_week') { const tm=new Date(now); tm.setDate(now.getDate()-((now.getDay()+6)%7)); tm.setHours(0,0,0,0); const lm=new Date(tm); lm.setDate(tm.getDate()-7); const ls=new Date(tm); ls.setSeconds(ls.getSeconds()-1); if (d < lm || d > ls) return false; }
-          else if (period === 'month') { if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false; }
-          else if (period === 'last_month') { const lm=new Date(now.getFullYear(), now.getMonth()-1, 1); if (d.getMonth()!==lm.getMonth()||d.getFullYear()!==lm.getFullYear()) return false; }
+      const search=document.getElementById('ac-search').value.toLowerCase();
+      const period=document.getElementById('ac-filter-period').value;
+      const now=new Date();
+      return allAdiClub.filter(r=>{
+        if(search&&!((r.name||'').toLowerCase().includes(search)||(r.id||'').toLowerCase().includes(search))) return false;
+        if(period!=='all'){ const d=parseAdiTimestamp(r.timestamp); if(!d) return false;
+          if(period==='today'){ if(d.toDateString()!==now.toDateString()) return false; }
+          else if(period==='week'){ const mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()+6)%7)); mon.setHours(0,0,0,0); if(d<mon) return false; }
+          else if(period==='last_week'){ const tm=new Date(now); tm.setDate(now.getDate()-((now.getDay()+6)%7)); tm.setHours(0,0,0,0); const lm=new Date(tm); lm.setDate(tm.getDate()-7); const ls=new Date(tm); ls.setSeconds(ls.getSeconds()-1); if(d<lm||d>ls) return false; }
+          else if(period==='month'){ if(d.getMonth()!==now.getMonth()||d.getFullYear()!==now.getFullYear()) return false; }
+          else if(period==='last_month'){ const lm=new Date(now.getFullYear(),now.getMonth()-1,1); if(d.getMonth()!==lm.getMonth()||d.getFullYear()!==lm.getFullYear()) return false; }
         }
         return true;
       });
     }
 
     function renderAdiClubTable() {
-      const rows  = getAdiClubFiltered();
-      const tbody = document.getElementById('adiclub-tbody');
-      if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>No Signups Found</p><span>No adiClub signups match your filter.</span></div></td></tr>';
-        return;
-      }
-      tbody.innerHTML = rows.map((r, i) => {
-        const d    = parseAdiTimestamp(r.timestamp);
-        const date = d ? d.toLocaleDateString('en-NZ', {day:'2-digit',month:'short',year:'numeric'}) : '–';
-        const time = d ? d.toLocaleTimeString('en-NZ', {hour:'2-digit',minute:'2-digit'}) : '–';
-        return `<tr>
-          <td style="color:var(--gray-400); font-size:12px;">${rows.length - i}</td>
-          <td class="td-name">${escHtml(r.name || '–')}</td>
-          <td style="font-family:var(--font-display); font-size:15px; font-weight:700; letter-spacing:0.05em;">${escHtml(r.id || '–')}</td>
-          <td class="td-date">${date}</td>
-          <td class="td-date">${time}</td>
-          <td><button onclick="deleteAdiClub('${r.key}', '${escHtml(r.name||'')}')" style="padding:5px 10px; background:none; border:1.5px solid var(--gray-200); font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; color:var(--red); transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕ Delete</button></td>
-        </tr>`;
-      }).join('');
+      const rows=getAdiClubFiltered(); const tbody=document.getElementById('adiclub-tbody');
+      if(rows.length===0){ tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><p>No Signups Found</p></div></td></tr>'; return; }
+      tbody.innerHTML=rows.map((r,i)=>{ const d=parseAdiTimestamp(r.timestamp); const date=d?d.toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'}):'–'; const time=d?d.toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'}):'–'; return `<tr><td style="color:var(--gray-400);font-size:12px;">${rows.length-i}</td><td class="td-name">${escHtml(r.name||'–')}</td><td style="font-family:var(--font-display);font-size:15px;font-weight:700;">${escHtml(r.id||'–')}</td><td class="td-date">${date}</td><td class="td-date">${time}</td><td><button onclick="deleteAdiClub('${r.key}','${escHtml(r.name||'')}')" style="padding:5px 10px;background:none;border:1.5px solid var(--gray-200);font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;color:var(--red);" onmouseover="this.style.background='var(--red)';this.style.color='#fff';this.style.borderColor='var(--red)'" onmouseout="this.style.background='none';this.style.color='var(--red)';this.style.borderColor='var(--gray-200)'">✕</button></td></tr>`; }).join('');
     }
 
     function updateAdiClubStats() {
-      const now   = new Date();
-      const total  = allAdiClub.length;
-      const today  = allAdiClub.filter(r => { const d=parseAdiTimestamp(r.timestamp); return d && d.toDateString()===now.toDateString(); }).length;
-      const month  = allAdiClub.filter(r => { const d=parseAdiTimestamp(r.timestamp); return d && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); }).length;
-      const unique = new Set(allAdiClub.map(r => (r.id||r.name||'').toLowerCase()).filter(Boolean)).size;
-      document.getElementById('ac-stat-total').textContent  = total;
-      document.getElementById('ac-stat-today').textContent  = today;
-      document.getElementById('ac-stat-month').textContent  = month;
-      document.getElementById('ac-stat-unique').textContent = unique;
+      const now=new Date(); const total=allAdiClub.length;
+      const today=allAdiClub.filter(r=>{ const d=parseAdiTimestamp(r.timestamp); return d&&d.toDateString()===now.toDateString(); }).length;
+      const month=allAdiClub.filter(r=>{ const d=parseAdiTimestamp(r.timestamp); return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); }).length;
+      const unique=new Set(allAdiClub.map(r=>(r.id||r.name||'').toLowerCase()).filter(Boolean)).size;
+      document.getElementById('ac-stat-total').textContent=total; document.getElementById('ac-stat-today').textContent=today;
+      document.getElementById('ac-stat-month').textContent=month; document.getElementById('ac-stat-unique').textContent=unique;
     }
 
-    // ─── EXPORT ───
+    /* ─── EXPORT ─── */
     function getExportRows(period) {
-      const now = new Date();
-      return allAdiClub.filter(r => {
-        const d = parseAdiTimestamp(r.timestamp);
-        if (!d) return false;
-        if (period === 'mtd')        return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
-        if (period === 'last_month') { const lm=new Date(now.getFullYear(),now.getMonth()-1,1); return d.getMonth()===lm.getMonth()&&d.getFullYear()===lm.getFullYear(); }
-        if (period === 'wtd')        { const mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()+6)%7)); mon.setHours(0,0,0,0); return d>=mon; }
-        if (period === 'last_week')  {
-          const tm=new Date(now); tm.setDate(now.getDate()-((now.getDay()+6)%7)); tm.setHours(0,0,0,0);
-          const lm=new Date(tm); lm.setDate(tm.getDate()-7);
-          const ls=new Date(tm); ls.setSeconds(ls.getSeconds()-1);
-          return d>=lm&&d<=ls;
-        }
-        if (period === 'ytd')        return d.getFullYear()===now.getFullYear();
+      const now=new Date();
+      return allAdiClub.filter(r=>{ const d=parseAdiTimestamp(r.timestamp); if(!d) return false;
+        if(period==='mtd') return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+        if(period==='last_month'){ const lm=new Date(now.getFullYear(),now.getMonth()-1,1); return d.getMonth()===lm.getMonth()&&d.getFullYear()===lm.getFullYear(); }
+        if(period==='wtd'){ const mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()+6)%7)); mon.setHours(0,0,0,0); return d>=mon; }
+        if(period==='last_week'){ const tm=new Date(now); tm.setDate(now.getDate()-((now.getDay()+6)%7)); tm.setHours(0,0,0,0); const lm=new Date(tm); lm.setDate(tm.getDate()-7); const ls=new Date(tm); ls.setSeconds(ls.getSeconds()-1); return d>=lm&&d<=ls; }
+        if(period==='ytd') return d.getFullYear()===now.getFullYear();
         return true;
       }).sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
     }
 
     function periodLabel(period) {
-      const now = new Date();
-      if (period==='mtd')        return now.toLocaleString('default',{month:'long',year:'numeric'})+' (MTD)';
-      if (period==='last_month') { const lm=new Date(now.getFullYear(),now.getMonth()-1,1); return lm.toLocaleString('default',{month:'long',year:'numeric'})+' (PM)'; }
-      if (period==='wtd')        return 'Week to Date (WTD)';
-      if (period==='last_week')  {
-        const tm=new Date(now); tm.setDate(now.getDate()-((now.getDay()+6)%7)); tm.setHours(0,0,0,0);
-        const lm=new Date(tm); lm.setDate(tm.getDate()-7);
-        const ls=new Date(tm); ls.setSeconds(ls.getSeconds()-1);
-        return lm.toLocaleDateString('en-NZ',{day:'2-digit',month:'short'})+' – '+ls.toLocaleDateString('en-NZ',{day:'2-digit',month:'short'})+' (PW)';
-      }
-      if (period==='ytd')        return now.getFullYear()+' (YTD)';
+      const now=new Date();
+      if(period==='mtd') return now.toLocaleString('default',{month:'long',year:'numeric'})+' (MTD)';
+      if(period==='last_month'){ const lm=new Date(now.getFullYear(),now.getMonth()-1,1); return lm.toLocaleString('default',{month:'long',year:'numeric'})+' (PM)'; }
+      if(period==='wtd') return 'Week to Date (WTD)';
+      if(period==='last_week'){ const tm=new Date(now); tm.setDate(now.getDate()-((now.getDay()+6)%7)); tm.setHours(0,0,0,0); const lm=new Date(tm); lm.setDate(tm.getDate()-7); const ls=new Date(tm); ls.setSeconds(ls.getSeconds()-1); return lm.toLocaleDateString('en-NZ',{day:'2-digit',month:'short'})+' – '+ls.toLocaleDateString('en-NZ',{day:'2-digit',month:'short'})+' (PW)'; }
+      if(period==='ytd') return now.getFullYear()+' (YTD)';
       return 'All Time';
     }
 
     async function exportAdiClub() {
-      const period = document.getElementById('export-period').value;
-      const format = document.getElementById('export-format').value;
-      const label  = periodLabel(period);
-      const btn    = document.querySelector('#tab-settings .btn-save');
-      btn.textContent = 'Loading data…'; btn.disabled = true;
+      const period=document.getElementById('export-period').value; const format=document.getElementById('export-format').value;
+      const label=periodLabel(period); const btn=document.querySelector('#tab-settings .btn-save');
+      btn.textContent='Loading…'; btn.disabled=true;
       try {
-        if (!allAdiClub.length) {
-          const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
-          allAdiClub = [];
-          if (snap.exists()) { snap.forEach(child => { const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); }); }
-          allAdiClub.sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
-        }
-        const rows = getExportRows(period);
-        document.getElementById('export-preview').textContent = rows.length + ' entries · ' + label;
-        if (rows.length === 0) { showToast('No data for selected period', 'error'); return; }
-        if (format === 'csv') exportCSV(rows, label);
-        else exportPDF(rows, label);
-      } catch(e) { showToast('Export failed — ' + e.message, 'error'); }
-      finally { btn.textContent = 'Export Data →'; btn.disabled = false; }
+        if(!allAdiClub.length){ const snap=await window._fbGet(window._fbRef(window._db,'adiclub')); allAdiClub=[]; if(snap.exists()) snap.forEach(child=>{ const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); }); allAdiClub.sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp)); }
+        const rows=getExportRows(period);
+        document.getElementById('export-preview').textContent=rows.length+' entries · '+label;
+        if(rows.length===0){ showToast('No data for selected period','error'); return; }
+        if(format==='csv') exportCSV(rows,label); else exportPDF(rows,label);
+      } catch(e){ showToast('Export failed — '+e.message,'error'); }
+      finally { btn.textContent='Export Data →'; btn.disabled=false; }
     }
 
-    function exportCSV(rows, label) {
-      const headers = ['#','Name','ID','Date','Time'];
-      const lines   = [headers.join(',')];
-      rows.forEach((r, i) => {
-        const d    = parseAdiTimestamp(r.timestamp);
-        const date = d ? d.toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'}) : '';
-        const time = d ? d.toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'}) : '';
-        lines.push([i+1, `"${(r.name||'').replace(/"/g,'""')}"`, `"${(r.id||'').replace(/"/g,'""')}"`, date, time].join(','));
-      });
-      const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-      a.download = 'adiclub-' + label.replace(/[^a-zA-Z0-9]/g,'-').toLowerCase() + '.csv'; a.click();
-      showToast('✓ CSV downloaded', 'success');
+    function exportCSV(rows,label) {
+      const headers=['#','Name','ID','Date','Time'];
+      const lines=[headers.join(',')];
+      rows.forEach((r,i)=>{ const d=parseAdiTimestamp(r.timestamp); const date=d?d.toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'}):''; const time=d?d.toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'}):''; lines.push([i+1,`"${(r.name||'').replace(/"/g,'""')}"`,`"${(r.id||'').replace(/"/g,'""')}"`,date,time].join(',')); });
+      const blob=new Blob([lines.join('\n')],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='adiclub-'+label.replace(/[^a-zA-Z0-9]/g,'-').toLowerCase()+'.csv'; a.click(); showToast('✓ CSV downloaded','success');
     }
 
-    function exportPDF(rows, label) {
-      const now = new Date().toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'});
-      const tableRows = rows.map((r,i) => {
-        const d    = parseAdiTimestamp(r.timestamp);
-        const date = d ? d.toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'}) : '';
-        const time = d ? d.toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'}) : '';
-        return `<tr style="background:${i%2===0?'#fff':'#f5f5f5'}"><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;color:#888;">${i+1}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;font-weight:600;">${escHtml(r.name||'–')}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;">${escHtml(r.id||'–')}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;">${date}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;">${time}</td></tr>`;
-      }).join('');
-      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>adiClub Signups – ${label}</title><style>body{font-family:'Helvetica Neue',Arial,sans-serif;margin:0;padding:32px;color:#000;}.header{background:#000;color:#fff;padding:24px 28px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;}.header h1{font-size:22px;font-weight:900;letter-spacing:0.05em;text-transform:uppercase;margin:0;}.meta{display:flex;gap:24px;margin-bottom:20px;}.meta-box{background:#f5f5f5;padding:14px 18px;flex:1;text-align:center;}.meta-box .num{font-size:28px;font-weight:900;}.meta-box .lbl{font-size:10px;color:#888;letter-spacing:0.1em;text-transform:uppercase;}table{width:100%;border-collapse:collapse;}thead th{background:#000;color:#fff;padding:10px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;}.footer{margin-top:24px;font-size:10px;color:#aaa;text-align:center;}</style></head><body><div class="header"><div><h1>adidas · adiClub Signups</h1><p>${label}</p></div><div style="font-size:11px;color:#888;">Exported ${now}</div></div><div class="meta"><div class="meta-box"><div class="num">${rows.length}</div><div class="lbl">Total Signups</div></div><div class="meta-box"><div class="num">${new Set(rows.map(r=>(r.id||r.name||'').toLowerCase()).filter(Boolean)).size}</div><div class="lbl">Unique Members</div></div></div><table><thead><tr><th>#</th><th>Name</th><th>ID</th><th>Date</th><th>Time</th></tr></thead><tbody>${tableRows}</tbody></table><div class="footer">adidas Training Hub · adiClub Data Export · ${now}</div></body></html>`;
-      const win = window.open('','_blank'); win.document.write(html); win.document.close();
-      setTimeout(() => { win.print(); }, 400);
-      showToast('✓ PDF ready — use Print → Save as PDF', 'success');
+    function exportPDF(rows,label) {
+      const now=new Date().toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'});
+      const tableRows=rows.map((r,i)=>{ const d=parseAdiTimestamp(r.timestamp); const date=d?d.toLocaleDateString('en-NZ',{day:'2-digit',month:'short',year:'numeric'}):''; const time=d?d.toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'}):''; return `<tr style="background:${i%2===0?'#fff':'#f5f5f5'}"><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;color:#888;">${i+1}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;font-weight:600;">${escHtml(r.name||'–')}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;">${escHtml(r.id||'–')}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;">${date}</td><td style="padding:7px 10px;border-bottom:1px solid #e8e8e8;font-size:12px;">${time}</td></tr>`; }).join('');
+      const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>adiClub – ${label}</title></head><body style="font-family:Helvetica,Arial,sans-serif;margin:0;padding:32px;"><div style="background:#000;color:#fff;padding:24px 28px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;"><div><h1 style="font-size:22px;font-weight:900;margin:0;">adidas · adiClub Signups</h1><p style="margin:4px 0 0;">${label}</p></div><div style="font-size:11px;color:#888;">Exported ${now}</div></div><table style="width:100%;border-collapse:collapse;"><thead><tr>${['#','Name','ID','Date','Time'].map(h=>`<th style="background:#000;color:#fff;padding:10px;font-size:11px;text-align:left;">${h}</th>`).join('')}</tr></thead><tbody>${tableRows}</tbody></table></body></html>`;
+      const win=window.open('','_blank'); win.document.write(html); win.document.close(); setTimeout(()=>win.print(),400); showToast('✓ PDF ready','success');
     }
 
     async function updateExportPreview() {
-      const period  = document.getElementById('export-period')?.value;
-      const preview = document.getElementById('export-preview');
-      if (!period || !preview) return;
-      if (!allAdiClub.length && window._firebaseReady) {
-        preview.textContent = 'Loading…';
-        try {
-          const snap = await window._fbGet(window._fbRef(window._db, 'adiclub'));
-          allAdiClub = [];
-          if (snap.exists()) { snap.forEach(child => { const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); }); }
-        } catch(e) {}
-      }
-      const rows  = getExportRows(period);
-      const label = periodLabel(period);
-      preview.textContent = rows.length ? rows.length + ' entries · ' + label : 'No entries for ' + label;
+      const period=document.getElementById('export-period')?.value; const preview=document.getElementById('export-preview'); if(!period||!preview) return;
+      if(!allAdiClub.length&&window._firebaseReady){ preview.textContent='Loading…'; try{ const snap=await window._fbGet(window._fbRef(window._db,'adiclub')); allAdiClub=[]; if(snap.exists()) snap.forEach(child=>{ const val=child.val(); if(val&&val.timestamp) allAdiClub.push({key:child.key,...val}); }); }catch(e){} }
+      const rows=getExportRows(period); const label=periodLabel(period);
+      preview.textContent=rows.length?rows.length+' entries · '+label:'No entries for '+label;
     }
 
-    function loadFbConfigToForm() {
-      const box = document.getElementById('fb-status-box');
-      if (box) box.innerHTML = `<div style="padding:12px 16px; background:#f0fdf5; border:1px solid rgba(46,204,113,0.4); font-size:12px; color:#1a5c38; letter-spacing:0.04em;">✓ Firebase connected · Project: <strong>adidas-training-mtd</strong></div>`;
+    function loadFbConfigToForm() {}
+
+    /* ─── TOAST ─── */
+    function showToast(msg,type='') {
+      const t=document.getElementById('toast'); t.textContent=msg;
+      t.className='toast'+(type?' '+type:'')+ ' show';
+      setTimeout(()=>t.classList.remove('show'),3000);
     }
 
-    // ─── TOAST ───
-    function showToast(msg, type = '') {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = 'toast' + (type ? ' ' + type : '') + ' show';
-      setTimeout(() => { t.classList.remove('show'); }, 3000);
+    /* ─── UTILS ─── */
+    function escHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    /* ─── DELETE WORKER ─── */
+    async function deleteWorker(key,name) {
+      if(!confirm(`Delete all progress for "${name}"? This cannot be undone.`)) return;
+      try { const {ref,remove}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"); await remove(ref(window._db,'progress/'+key)); allProgress=allProgress.filter(r=>r.key!==key); populateStoreFilter(); renderTable(); updateStats(); showToast('✓ '+name+' deleted','success'); }
+      catch(e){ showToast('Delete failed — '+e.message,'error'); }
     }
 
-    // ─── UTILS ───
-    function escHtml(str) {
-      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    async function completeModule(key,modId) {
+      const row=allProgress.find(r=>r.key===key); if(!row) return;
+      const modNames={'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3'};
+      if(!confirm(`Mark ${modNames[modId]||modId} as complete for "${row.name}"?`)) return;
+      try { const newCompleted=[...new Set([...(row.completed||[]),modId])]; const {ref,update}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"); await update(ref(window._db,'progress/'+key),{completed:newCompleted}); row.completed=newCompleted; renderTable(); updateStats(); showToast('✓ Module marked complete','success'); }
+      catch(e){ showToast('Update failed — '+e.message,'error'); }
     }
 
-    // ─── DELETE WORKER ───
-    async function deleteWorker(key, name) {
-      if (!confirm(`Delete all progress for "${name}"? This cannot be undone.`)) return;
-      try {
-        const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        await remove(ref(window._db, 'progress/' + key));
-        allProgress = allProgress.filter(r => r.key !== key);
-        populateStoreFilter(); renderTable(); updateStats();
-        showToast('✓ ' + name + ' deleted', 'success');
-      } catch(e) { showToast('Delete failed — ' + e.message, 'error'); }
+    async function uncompleteModule(key,modId) {
+      const row=allProgress.find(r=>r.key===key); if(!row) return;
+      const modNames={'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3'};
+      if(!confirm(`Mark ${modNames[modId]||modId} as incomplete for "${row.name}"?`)) return;
+      try { const newCompleted=(row.completed||[]).filter(m=>m!==modId); const {ref,update}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"); await update(ref(window._db,'progress/'+key),{completed:newCompleted}); row.completed=newCompleted; renderTable(); updateStats(); showToast('✓ Module unmarked','success'); }
+      catch(e){ showToast('Update failed — '+e.message,'error'); }
     }
 
-    // ─── COMPLETE / UNCOMPLETE ───
-    async function completeModule(key, modId) {
-      const row = allProgress.find(r => r.key === key);
-      if (!row) return;
-      const modNames = { 'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3' };
-      if (!confirm(`Mark ${modNames[modId] || modId} as complete for "${row.name}"?`)) return;
-      try {
-        const newCompleted = [...new Set([...(row.completed || []), modId])];
-        const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        await update(ref(window._db, 'progress/' + key), { completed: newCompleted });
-        row.completed = newCompleted; renderTable(); updateStats();
-        showToast('✓ Module marked complete', 'success');
-      } catch(e) { showToast('Update failed — ' + e.message, 'error'); }
+    async function deleteAdiClub(key,name) {
+      if(!confirm(`Delete this adiClub signup for "${name}"? This cannot be undone.`)) return;
+      try { const {ref,remove}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"); await remove(ref(window._db,'adiclub/'+key)); allAdiClub=allAdiClub.filter(r=>r.key!==key); renderAdiClubTable(); updateAdiClubStats(); showToast('✓ Entry deleted','success'); }
+      catch(e){ showToast('Delete failed — '+e.message,'error'); }
     }
 
-    async function uncompleteModule(key, modId) {
-      const row = allProgress.find(r => r.key === key);
-      if (!row) return;
-      const modNames = { 'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3' };
-      if (!confirm(`Mark ${modNames[modId] || modId} as incomplete for "${row.name}"?`)) return;
-      try {
-        const newCompleted = (row.completed || []).filter(m => m !== modId);
-        const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        await update(ref(window._db, 'progress/' + key), { completed: newCompleted });
-        row.completed = newCompleted; renderTable(); updateStats();
-        showToast('✓ Module unmarked', 'success');
-      } catch(e) { showToast('Update failed — ' + e.message, 'error'); }
-    }
-
-    // ─── DELETE ADICLUB ENTRY ───
-    async function deleteAdiClub(key, name) {
-      if (!confirm(`Delete this adiClub signup for "${name}"? This cannot be undone.`)) return;
-      try {
-        const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        await remove(ref(window._db, 'adiclub/' + key));
-        allAdiClub = allAdiClub.filter(r => r.key !== key);
-        renderAdiClubTable(); updateAdiClubStats();
-        showToast('✓ Entry deleted', 'success');
-      } catch(e) { showToast('Delete failed — ' + e.message, 'error'); }
-    }
-
-    // ─── AUTO-LOGIN ───
-    (function() {
-      const persistent   = localStorage.getItem('adidas_admin_persistent');
-      const sessionSaved = sessionStorage.getItem('adidas_admin_session');
-      const usedDefault  = sessionStorage.getItem('adidas_used_default');
-      if (persistent) { currentUser = persistent; showAdmin(); }
-      else if (sessionSaved && !usedDefault) { currentUser = sessionSaved; showAdmin(); }
+    /* ─── AUTO-LOGIN ─── */
+    (function(){
+      const persistent=localStorage.getItem('adidas_admin_persistent');
+      const sessionSaved=sessionStorage.getItem('adidas_admin_session');
+      const usedDefault=sessionStorage.getItem('adidas_used_default');
+      if(persistent){ currentUser=persistent; showAdmin(); }
+      else if(sessionSaved&&!usedDefault){ currentUser=sessionSaved; showAdmin(); }
     })();
   </script>
-
 </body>
 </html>
