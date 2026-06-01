@@ -78,11 +78,15 @@
     .card-tag.outline { background: transparent; color: var(--black); border: 1.5px solid var(--black); }
 
     /* ─── MODULE EDITOR ─── */
-    .module-row { display: grid; grid-template-columns: 42px 1fr 1fr 1.4fr; gap: 10px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
+    .module-row { display: grid; grid-template-columns: 42px 1fr 1fr 1.4fr 36px; gap: 10px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
     .module-row:last-child { border-bottom: none; }
     .module-num-label { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--gray-200); line-height: 1; padding-top: 14px; }
     .module-row .form-group { margin-bottom: 0; }
     .module-row input { font-size: 13px; padding: 10px 12px; }
+    .btn-remove-module { width: 30px; height: 30px; background: none; border: 1.5px solid var(--gray-200); cursor: pointer; font-size: 14px; color: var(--red); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; margin-top: 26px; }
+    .btn-remove-module:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+    .btn-add-module { display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: none; border: 1.5px dashed var(--gray-300, #ccc); color: var(--gray-500); font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; margin-top: 12px; }
+    .btn-add-module:hover { border-color: var(--black); color: var(--black); background: var(--gray-100); }
     .save-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--gray-200); }
     .save-status { font-size: 13px; letter-spacing: 0.04em; color: var(--gray-500); transition: opacity 0.5s; }
     .btn-save { padding: 13px 28px; background: var(--black); color: var(--white); border: none; font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
@@ -162,7 +166,6 @@
        ID CARD SYSTEM — PORTRAIT
     ═══════════════════════════════════════════ */
 
-    /* Grid — portrait cards are narrower */
     .id-cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 240px));
@@ -187,7 +190,6 @@
       justify-content: space-between;
     }
 
-    /* Flip scene — PORTRAIT aspect ratio (CR80: 54×86mm ≈ 0.628) */
     .id-card-scene {
       width: 100%;
       aspect-ratio: 54 / 86;
@@ -218,14 +220,32 @@
       box-shadow: 0 6px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.1);
     }
 
-    /* ── FRONT FACE (portrait) ── */
+    /* ── FRONT FACE ── */
     .id-card-front {
       background: #fff;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
-    /* Black header bar */
+    /* Background image layer for front */
+    .id-card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* All content sits above bg */
+    .id-card-front > *:not(.id-card-bg),
+    .id-card-back > *:not(.id-card-bg) {
+      position: relative;
+      z-index: 1;
+    }
+
     .card-stripe-front {
       background: #000;
       padding: 10px 12px 9px;
@@ -255,18 +275,16 @@
       line-height: 1;
     }
 
-    /* White body — portrait */
     .id-card-front .card-body {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 14px 12px 12px;
-      background: #fff;
+      background: transparent;
       gap: 0;
     }
 
-    /* Photo */
     .id-card-photo-circle {
       width: 72px;
       height: 72px;
@@ -310,7 +328,6 @@
       text-align: center;
     }
 
-    /* Black accent bar */
     .id-card-accent-bar {
       width: 32px;
       height: 3px;
@@ -319,10 +336,8 @@
       flex-shrink: 0;
     }
 
-    /* Spacer */
     .id-card-spacer { flex: 1; }
 
-    /* Barcode */
     .id-card-barcode-section {
       width: 100%;
       display: flex;
@@ -353,6 +368,7 @@
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
     .card-stripe-back {
@@ -372,7 +388,7 @@
       align-items: center;
       justify-content: center;
       padding: 12px;
-      background: #fff;
+      background: transparent;
       gap: 8px;
     }
 
@@ -467,6 +483,46 @@
     /* Flip hint */
     .flip-hint { font-size: 10px; color: var(--gray-400); letter-spacing: 0.08em; text-transform: uppercase; text-align: center; margin-top: 2px; pointer-events: none; }
 
+    /* ─── BACKGROUND PICKER (FIX 3) ─── */
+    .bg-picker-section {
+      margin-bottom: 24px;
+      padding: 16px 18px;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
+    }
+    .bg-picker-title {
+      font-family: var(--font-display);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gray-500); margin-bottom: 12px;
+    }
+    .bg-picker-row {
+      display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;
+    }
+    .bg-picker-row .form-group { margin: 0; }
+    .opacity-slider-wrap { display: flex; flex-direction: column; gap: 6px; min-width: 160px; }
+    .opacity-slider-wrap label { margin-bottom: 0; }
+    .opacity-slider-wrap input[type="range"] {
+      width: 100%; height: 4px; cursor: pointer; accent-color: var(--black);
+      border: none; background: transparent; padding: 0;
+    }
+    .opacity-val { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--black); }
+    .bg-preview-swatch {
+      width: 40px; height: 40px; border: 1.5px solid var(--gray-200);
+      border-radius: 4px; overflow: hidden; flex-shrink: 0;
+      background: repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
+    }
+    .bg-preview-swatch-inner { width: 100%; height: 100%; }
+    .bg-apply-faces { display: flex; gap: 8px; margin-top: 10px; }
+    .bg-face-btn {
+      padding: 6px 14px; font-family: var(--font-display); font-size: 11px;
+      font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; border: 1.5px solid var(--gray-200); background: var(--white);
+      transition: all 0.15s;
+    }
+    .bg-face-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+    .bg-face-btn:hover:not(.active) { border-color: var(--black); }
+
     /* ─── TOAST ─── */
     .toast { position: fixed; bottom: 28px; right: 28px; background: var(--black); color: var(--white); font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 22px; z-index: 999; opacity: 0; transform: translateY(10px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
     .toast.show { opacity: 1; transform: translateY(0); }
@@ -505,7 +561,7 @@
       .stat-num { font-size: 28px; }
       .card { padding: 18px 14px; }
       .card-title { font-size: 16px; }
-      .module-row { grid-template-columns: 32px 1fr; gap: 6px; }
+      .module-row { grid-template-columns: 32px 1fr 36px; gap: 6px; }
       .module-row > .form-group:nth-child(3) { grid-column: 2; }
       .module-row > .form-group:nth-child(4) { grid-column: 2; }
       .module-num-label { font-size: 22px; padding-top: 10px; }
@@ -640,6 +696,8 @@
           <span class="card-tag">AREA</span>
         </div>
         <div id="area-module-rows"></div>
+        <!-- FIX 4: Add module button for AREA -->
+        <button class="btn-add-module" onclick="addModuleRow('area')">+ Add AREA Module</button>
         <div class="save-bar">
           <span class="save-status" id="save-status-area"></span>
           <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
@@ -651,6 +709,8 @@
           <span class="card-tag outline">ATTICUS</span>
         </div>
         <div id="atticus-module-rows"></div>
+        <!-- FIX 4: Add module button for Atticus -->
+        <button class="btn-add-module" onclick="addModuleRow('atticus')">+ Add Atticus Module</button>
         <div class="save-bar">
           <span class="save-status" id="save-status-atticus"></span>
           <button class="btn-save" onclick="saveModuleConfig()">Save All Modules →</button>
@@ -719,6 +779,38 @@
                 <button class="btn-logo-remove" id="btn-logo-remove" onclick="removeLogo()">✕ Remove</button>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- FIX 3: Card Background Picker -->
+        <div style="margin-bottom:20px;">
+          <p style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-500); margin-bottom:10px;">Card Background</p>
+          <div class="bg-picker-section">
+            <div class="bg-picker-row">
+              <div class="form-group" style="flex:0 0 auto;">
+                <label>Background Image</label>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <button class="btn-logo-upload" onclick="triggerBgUpload()">📁 Upload Image</button>
+                  <button class="btn-logo-remove" id="btn-bg-remove" style="display:none;" onclick="removeBg()">✕ Remove</button>
+                </div>
+              </div>
+              <div class="opacity-slider-wrap">
+                <label>Opacity: <span class="opacity-val" id="bg-opacity-val">20%</span></label>
+                <input type="range" id="bg-opacity-slider" min="0" max="100" value="20"
+                       oninput="onBgOpacityChange(this.value)" style="width:100%;"/>
+              </div>
+              <div class="bg-preview-swatch">
+                <div class="bg-preview-swatch-inner" id="bg-preview-swatch-inner"></div>
+              </div>
+            </div>
+            <div class="bg-apply-faces" style="margin-top:12px;">
+              <span style="font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-500); align-self:center; margin-right:6px;">Apply to:</span>
+              <button class="bg-face-btn active" id="bg-btn-front" onclick="toggleBgFace('front')">Front</button>
+              <button class="bg-face-btn active" id="bg-btn-back" onclick="toggleBgFace('back')">Back</button>
+            </div>
+            <p style="font-size:11px; color:var(--gray-400); margin-top:10px; letter-spacing:0.04em; line-height:1.6;">
+              Upload a texture or pattern (e.g. carbon fibre, subtle stripes). Adjust opacity to keep text readable. The download will include the background.
+            </p>
           </div>
         </div>
 
@@ -908,9 +1000,12 @@
     const BARCODE_PREFIX = 'SCN000';
 
     let teamMembers   = [...DEFAULT_NAMES];
-    let barcodeValues = {};
+    let barcodeValues = {};   // FIX 1: loaded from Firebase on ID Cards tab
     let memberPhotos  = {};
-    let cardLogoData  = null;   // base64 dataURL of uploaded logo, or null
+    let cardLogoData  = null;
+    let cardBgData    = null;   // FIX 3: background image base64
+    let cardBgOpacity = 0.20;   // FIX 3: 0–1
+    let cardBgFaces   = { front: true, back: true }; // FIX 3: which faces get bg
     let currentUser   = null;
     let allProgress   = [];
     let selectedMonth = getCurrentMonthKey();
@@ -918,7 +1013,8 @@
     let adminActiveModules = [];
     let selectedModuleMonth = getCurrentMonthKey();
 
-    const MODULE_DEFS = [
+    // FIX 4: MODULE_DEFS is now a live array that can grow
+    let MODULE_DEFS = [
       { id: 'mod-a1', num: '01', group: 'area',    defaultName: 'AREA Module 1',    defaultSub: 'AREA · Training' },
       { id: 'mod-a2', num: '02', group: 'area',    defaultName: 'AREA Module 2',    defaultSub: 'AREA · Training' },
       { id: 'mod-a3', num: '03', group: 'area',    defaultName: 'AREA Module 3',    defaultSub: 'AREA · Training' },
@@ -958,7 +1054,6 @@
     }
     function updateLogoPreview() {
       const area     = document.getElementById('logo-preview-area');
-      const textEl   = document.getElementById('logo-text-preview');
       const removBtn = document.getElementById('btn-logo-remove');
       if (!area) return;
       if (cardLogoData) {
@@ -968,12 +1063,111 @@
         area.innerHTML = `<span class="logo-text-preview" id="logo-text-preview">adidas</span>`;
         if (removBtn) removBtn.style.display = 'none';
       }
-      // Update header logo
       const headerArea = document.getElementById('header-logo-area');
       if (headerArea) {
         if (cardLogoData) headerArea.innerHTML = `<img src="${cardLogoData}" alt="Logo" class="adidas-logo" style="height:30px; width:auto; object-fit:contain; filter:brightness(0) invert(1);"/>`;
         else headerArea.innerHTML = 'adidas';
       }
+    }
+
+    /* ─── FIX 3: BACKGROUND IMAGE STORAGE ─── */
+    function loadBgFromStorage() {
+      try {
+        cardBgData    = localStorage.getItem('adidas_card_bg') || null;
+        cardBgOpacity = parseFloat(localStorage.getItem('adidas_card_bg_opacity') || '0.20');
+        const faces   = localStorage.getItem('adidas_card_bg_faces');
+        if (faces) cardBgFaces = JSON.parse(faces);
+      } catch(e) { cardBgData = null; cardBgOpacity = 0.20; }
+      syncBgUI();
+    }
+    function saveBgToStorage() {
+      try {
+        if (cardBgData) localStorage.setItem('adidas_card_bg', cardBgData);
+        else localStorage.removeItem('adidas_card_bg');
+        localStorage.setItem('adidas_card_bg_opacity', String(cardBgOpacity));
+        localStorage.setItem('adidas_card_bg_faces', JSON.stringify(cardBgFaces));
+      } catch(e) { showToast('Background storage failed','error'); }
+    }
+    function syncBgUI() {
+      const slider  = document.getElementById('bg-opacity-slider');
+      const valEl   = document.getElementById('bg-opacity-val');
+      const swatch  = document.getElementById('bg-preview-swatch-inner');
+      const removeBtn = document.getElementById('btn-bg-remove');
+      if (slider) slider.value = Math.round(cardBgOpacity * 100);
+      if (valEl)  valEl.textContent = Math.round(cardBgOpacity * 100) + '%';
+      if (swatch) {
+        if (cardBgData) swatch.style.cssText = `width:100%;height:100%;background-image:url(${cardBgData});background-size:cover;background-position:center;opacity:${cardBgOpacity};`;
+        else swatch.style.cssText = '';
+      }
+      if (removeBtn) removeBtn.style.display = cardBgData ? 'inline-block' : 'none';
+      // Sync face buttons
+      const btnFront = document.getElementById('bg-btn-front');
+      const btnBack  = document.getElementById('bg-btn-back');
+      if (btnFront) btnFront.classList.toggle('active', !!cardBgFaces.front);
+      if (btnBack)  btnBack.classList.toggle('active', !!cardBgFaces.back);
+    }
+    function triggerBgUpload() {
+      const input = document.createElement('input');
+      input.type = 'file'; input.accept = 'image/*';
+      input.onchange = e => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 600;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width  = Math.round(img.width  * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            cardBgData = canvas.toDataURL('image/jpeg', 0.85);
+            saveBgToStorage();
+            syncBgUI();
+            renderIDCards();
+            showToast('✓ Background uploaded', 'success');
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      };
+      input.click();
+    }
+    function removeBg() {
+      cardBgData = null;
+      saveBgToStorage();
+      syncBgUI();
+      renderIDCards();
+      showToast('Background removed', '');
+    }
+    function onBgOpacityChange(val) {
+      cardBgOpacity = parseInt(val) / 100;
+      const valEl = document.getElementById('bg-opacity-val');
+      if (valEl) valEl.textContent = val + '%';
+      const swatch = document.getElementById('bg-preview-swatch-inner');
+      if (swatch && cardBgData) swatch.style.opacity = cardBgOpacity;
+      saveBgToStorage();
+      // Live-update existing card backgrounds without full re-render
+      document.querySelectorAll('.id-card-bg').forEach(el => {
+        const isFront = el.closest('.id-card-front') !== null;
+        const isBack  = el.closest('.id-card-back')  !== null;
+        if ((isFront && cardBgFaces.front) || (isBack && cardBgFaces.back)) {
+          el.style.opacity = cardBgOpacity;
+        }
+      });
+    }
+    function toggleBgFace(face) {
+      cardBgFaces[face] = !cardBgFaces[face];
+      saveBgToStorage();
+      syncBgUI();
+      renderIDCards();
+    }
+    /* Build bg div HTML */
+    function buildBgHTML(face) {
+      if (!cardBgData) return '';
+      const show = (face === 'front' && cardBgFaces.front) || (face === 'back' && cardBgFaces.back);
+      if (!show) return '';
+      return `<div class="id-card-bg" style="background-image:url(${cardBgData});opacity:${cardBgOpacity};"></div>`;
     }
 
     /* ─── LOGO UPLOAD ─── */
@@ -987,7 +1181,6 @@
           const img = new Image();
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            // Scale to max 300px wide, keep aspect ratio
             const maxW = 300;
             const scale = Math.min(1, maxW / img.width);
             canvas.width  = Math.round(img.width  * scale);
@@ -996,7 +1189,6 @@
             cardLogoData = canvas.toDataURL('image/png');
             saveLogoToStorage(cardLogoData);
             updateLogoPreview();
-            // Re-render cards with new logo
             renderIDCards();
             showToast('✓ Logo uploaded', 'success');
           };
@@ -1079,25 +1271,80 @@
       document.getElementById('admin-badge').style.display='inline-block';
       document.getElementById('btn-logout').style.display='inline-block';
       document.getElementById('admin-badge').textContent='● '+currentUser;
-      loadPhotos(); loadLogoFromStorage();
+      loadPhotos(); loadLogoFromStorage(); loadBgFromStorage();
       buildModuleRows(); renderAdminUsers(); loadFbConfigToForm(); buildMonthChips(); buildModuleMonthChips();
       waitForFirebase(async()=>{ await loadModuleConfig(); await loadProgress(); await loadTeamMembersAdmin(); });
     }
 
     function waitForFirebase(cb) { if(window._firebaseReady) return cb(); document.addEventListener('firebase-ready',cb,{once:true}); }
 
-    /* ─── MODULE ROWS ─── */
+    /* ─── FIX 4: DYNAMIC MODULE ROWS ─── */
+
+    // Generate a unique id for a new module
+    function newModuleId(group) {
+      const prefix = group === 'area' ? 'mod-a' : 'mod-t';
+      const existing = MODULE_DEFS.filter(m => m.group === group).map(m => m.id);
+      for (let i = 1; i < 99; i++) {
+        const candidate = prefix + i;
+        if (!existing.includes(candidate)) return candidate;
+      }
+      return prefix + Date.now();
+    }
+
+    function addModuleRow(group) {
+      const id = newModuleId(group);
+      const existing = MODULE_DEFS.filter(m => m.group === group);
+      const num = String(MODULE_DEFS.length + 1).padStart(2, '0');
+      const groupLabel = group === 'area' ? 'AREA' : 'Atticus';
+      const idx = existing.length + 1;
+      const def = {
+        id,
+        num,
+        group,
+        defaultName: `${groupLabel} Module ${idx}`,
+        defaultSub:  `${groupLabel} · Training`,
+        dynamic: true
+      };
+      MODULE_DEFS.push(def);
+      const container = document.getElementById(group + '-module-rows');
+      const row = document.createElement('div');
+      row.className = 'module-row';
+      row.id = 'module-row-' + id;
+      row.innerHTML = `
+        <span class="module-num-label">${num}</span>
+        <div class="form-group"><label>Module Name</label><input type="text" id="inp-name-${id}" placeholder="${def.defaultName}"/></div>
+        <div class="form-group"><label>Subtitle</label><input type="text" id="inp-sub-${id}" placeholder="${def.defaultSub}"/></div>
+        <div class="form-group"><label>Training URL</label><input type="text" id="inp-url-${id}" placeholder="https://…"/></div>
+        <button class="btn-remove-module" onclick="removeModuleRow('${id}')" title="Remove module">✕</button>`;
+      container.appendChild(row);
+      // Focus the name field
+      setTimeout(() => { const n = document.getElementById('inp-name-' + id); if(n) n.focus(); }, 50);
+      showToast(`${groupLabel} module added — fill in details and Save`, '');
+    }
+
+    function removeModuleRow(id) {
+      const def = MODULE_DEFS.find(m => m.id === id);
+      if (!def) return;
+      if (!confirm(`Remove "${document.getElementById('inp-name-'+id)?.value || def.defaultName}"?`)) return;
+      MODULE_DEFS = MODULE_DEFS.filter(m => m.id !== id);
+      const row = document.getElementById('module-row-' + id);
+      if (row) row.remove();
+      showToast('Module removed — click Save to apply', '');
+    }
+
     function buildModuleRows() {
       const areaEl=document.getElementById('area-module-rows');
       const atticusEl=document.getElementById('atticus-module-rows');
       areaEl.innerHTML=''; atticusEl.innerHTML='';
       MODULE_DEFS.forEach(m=>{
-        const row=document.createElement('div'); row.className='module-row';
+        const row=document.createElement('div'); row.className='module-row'; row.id='module-row-'+m.id;
+        const isDefault = !m.dynamic;
         row.innerHTML=`
           <span class="module-num-label">${m.num}</span>
           <div class="form-group"><label>Module Name</label><input type="text" id="inp-name-${m.id}" placeholder="${m.defaultName}"/></div>
           <div class="form-group"><label>Subtitle</label><input type="text" id="inp-sub-${m.id}" placeholder="${m.defaultSub}"/></div>
-          <div class="form-group"><label>Training URL</label><input type="text" id="inp-url-${m.id}" placeholder="https://…"/></div>`;
+          <div class="form-group"><label>Training URL</label><input type="text" id="inp-url-${m.id}" placeholder="https://…"/></div>
+          ${isDefault ? '<span></span>' : `<button class="btn-remove-module" onclick="removeModuleRow('${m.id}')" title="Remove module">✕</button>`}`;
         (m.group==='area'?areaEl:atticusEl).appendChild(row);
       });
     }
@@ -1172,16 +1419,48 @@
       if(!window._firebaseReady) return;
       try {
         const snap=await window._fbGet(window._fbRef(window._db,moduleConfigPath(month)));
-        if(snap.exists()){ const cfg=snap.val(); applyModuleConfig(cfg); adminActiveModules=['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3'].filter(id=>cfg[id]&&cfg[id].url&&cfg[id].url!=='#'&&cfg[id].url.trim()!==''); }
-        else { MODULE_DEFS.forEach(m=>{ const n=document.getElementById('inp-name-'+m.id); const s=document.getElementById('inp-sub-'+m.id); const u=document.getElementById('inp-url-'+m.id); if(n)n.value=''; if(s)s.value=''; if(u)u.value=''; }); adminActiveModules=['mod-a1','mod-a2','mod-a3','mod-t1','mod-t2','mod-t3']; }
+        if(snap.exists()){
+          const cfg=snap.val();
+          // FIX 4: Reconstruct MODULE_DEFS from saved config keys to restore dynamic modules
+          rebuildModuleDefsFromConfig(cfg);
+          buildModuleRows();
+          applyModuleConfig(cfg);
+          adminActiveModules=MODULE_DEFS.map(m=>m.id).filter(id=>cfg[id]&&cfg[id].url&&cfg[id].url!=='#'&&cfg[id].url.trim()!=='');
+        } else {
+          buildModuleRows();
+          MODULE_DEFS.forEach(m=>{ ['name','sub','url'].forEach(f=>{ const el=document.getElementById('inp-'+f+'-'+m.id); if(el) el.value=''; }); });
+          adminActiveModules=MODULE_DEFS.map(m=>m.id);
+        }
       } catch(e){ console.warn('Could not load module config',e); }
+    }
+
+    // FIX 4: Rebuild MODULE_DEFS if Firebase has extra keys we don't know about
+    function rebuildModuleDefsFromConfig(cfg) {
+      const knownIds = new Set(MODULE_DEFS.map(m => m.id));
+      Object.keys(cfg).forEach(id => {
+        if (!knownIds.has(id)) {
+          // Determine group from id prefix
+          const group = id.startsWith('mod-a') ? 'area' : id.startsWith('mod-t') ? 'atticus' : 'area';
+          const existing = MODULE_DEFS.filter(m => m.group === group);
+          const idx = existing.length + 1;
+          const groupLabel = group === 'area' ? 'AREA' : 'Atticus';
+          MODULE_DEFS.push({
+            id,
+            num: String(MODULE_DEFS.length + 1).padStart(2,'0'),
+            group,
+            defaultName: cfg[id].name || `${groupLabel} Module ${idx}`,
+            defaultSub:  cfg[id].sub  || `${groupLabel} · Training`,
+            dynamic: true
+          });
+          knownIds.add(id);
+        }
+      });
     }
 
     function applyModuleConfig(cfg) {
       MODULE_DEFS.forEach(m=>{
-        const data=cfg[m.id];
+        const data=cfg[m.id]; if(!data) return;
         const n=document.getElementById('inp-name-'+m.id); const s=document.getElementById('inp-sub-'+m.id); const u=document.getElementById('inp-url-'+m.id);
-        if(!data) return;
         if(n) n.value=data.name||''; if(s) s.value=data.sub||''; if(u) u.value=(data.url&&data.url!=='#')?data.url:'';
       });
     }
@@ -1189,7 +1468,7 @@
     async function saveModuleConfig() {
       if(!window._firebaseReady){ showToast('Firebase not connected','error'); return; }
       const cfg={};
-      MODULE_DEFS.forEach(m=>{ cfg[m.id]={ name:document.getElementById('inp-name-'+m.id).value.trim()||m.defaultName, sub:document.getElementById('inp-sub-'+m.id).value.trim()||m.defaultSub, url:document.getElementById('inp-url-'+m.id).value.trim()||'#' }; });
+      MODULE_DEFS.forEach(m=>{ cfg[m.id]={ name:document.getElementById('inp-name-'+m.id)?.value.trim()||m.defaultName, sub:document.getElementById('inp-sub-'+m.id)?.value.trim()||m.defaultSub, url:document.getElementById('inp-url-'+m.id)?.value.trim()||'#' }; });
       try {
         await window._fbSet(window._fbRef(window._db,moduleConfigPath(selectedModuleMonth)),cfg);
         adminActiveModules=MODULE_DEFS.filter(m=>cfg[m.id]&&cfg[m.id].url&&cfg[m.id].url!=='#'&&cfg[m.id].url.trim()!=='').map(m=>m.id);
@@ -1243,7 +1522,7 @@
       const modLabels={'mod-a1':'A1','mod-a2':'A2','mod-a3':'A3','mod-t1':'T1','mod-t2':'T2','mod-t3':'T3'};
       const modTitles={'mod-a1':'AREA Module 1','mod-a2':'AREA Module 2','mod-a3':'AREA Module 3','mod-t1':'Atticus Module 1','mod-t2':'Atticus Module 2','mod-t3':'Atticus Module 3'};
       const thead=document.getElementById('progress-thead');
-      if(thead) thead.innerHTML=`<tr><th>Name</th><th>Store</th>${mods.map(m=>`<th title="${modTitles[m]}">${modLabels[m]}</th>`).join('')}<th>Progress</th><th>Last Seen</th><th>Actions</th></tr>`;
+      if(thead) thead.innerHTML=`<tr><th>Name</th><th>Store</th>${mods.map(m=>`<th title="${modTitles[m]||m}">${modLabels[m]||m}</th>`).join('')}<th>Progress</th><th>Last Seen</th><th>Actions</th></tr>`;
       const colCount=3+mods.length+3;
       if(rows.length===0){ tbody.innerHTML=`<tr><td colspan="${colCount}"><div class="empty-state"><p>No Data Found</p><span>No workers have logged progress for ${selectedMonth} yet.</span></div></td></tr>`; return; }
       rows.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
@@ -1315,8 +1594,13 @@
       const savedUrl=localStorage.getItem('adidas_qr_base_url');
       if(savedUrl) document.getElementById('qr-base-url').value=savedUrl;
       loadLogoFromStorage();
+      loadBgFromStorage();
+      // FIX 1: Load barcode values from Firebase first, then render
       if(window._firebaseReady){
-        try { const snap=await window._fbGet(window._fbRef(window._db,'config/barcode_values')); if(snap.exists()) barcodeValues=snap.val()||{}; } catch(e){}
+        try {
+          const snap=await window._fbGet(window._fbRef(window._db,'config/barcode_values'));
+          if(snap.exists()) barcodeValues=snap.val()||{};
+        } catch(e){}
       }
       if(teamMembers.length===0||(teamMembers.length===DEFAULT_NAMES.length&&JSON.stringify(teamMembers)===JSON.stringify(DEFAULT_NAMES))){ await loadTeamMembersAdmin(); }
       renderIDCards();
@@ -1339,10 +1623,10 @@
       return suffix ? BARCODE_PREFIX+suffix : '';
     }
 
-    /* ── Build the logo HTML for inside a card stripe ── */
+    /* Build the logo HTML for inside a card stripe */
     function buildLogoHTML() {
       if(cardLogoData) {
-        return `<img src="${cardLogoData}" alt="Logo" class="card-logo-img"/>`;
+        return `<img src="${cardLogoData}" alt="Logo" class="card-logo-img" crossorigin="anonymous"/>`;
       }
       return `<span class="card-logo-text">adidas</span>`;
     }
@@ -1368,17 +1652,14 @@
       wrapper.className = 'id-card-wrapper';
       wrapper.id = 'card-wrapper-'+safeName;
 
-      /* Label row */
       const labelRow = document.createElement('div');
       labelRow.className = 'id-card-label';
       labelRow.innerHTML = `<span>${escHtml(name)}</span><span style="font-size:10px;color:var(--gray-400);font-weight:600;">Tap to flip</span>`;
 
-      /* Scene — the flip container */
       const scene = document.createElement('div');
       scene.className = 'id-card-scene';
       scene.id = 'card-scene-'+safeName;
 
-      /* ── FIX: Toggle flip only when clicking the scene directly (not children that stopPropagation) ── */
       scene.addEventListener('click', function() {
         this.classList.toggle('flipped');
       });
@@ -1387,50 +1668,44 @@
       inner.className = 'id-card-inner';
       inner.id = 'card-inner-'+safeName;
 
-      /* ──────────────────────────────
-         FRONT FACE (portrait)
-      ────────────────────────────── */
+      /* ── FRONT FACE ── */
       const front = document.createElement('div');
       front.className = 'id-card-face id-card-front';
       front.id = 'card-front-'+safeName;
 
+      // FIX 3: background layer for front + FIX 2: use crossorigin on logo img
       front.innerHTML = `
-        <!-- Black header -->
+        ${buildBgHTML('front')}
         <div class="card-stripe-front">${buildLogoHTML()}</div>
-        <!-- White body -->
         <div class="card-body">
-          <!-- Photo -->
           <div class="id-card-photo-circle" id="photo-circle-${safeName}" title="Tap to upload photo">
             ${photoData
-              ? `<img src="${photoData}" alt="${escHtml(name)}"/>`
+              ? `<img src="${photoData}" alt="${escHtml(name)}" crossorigin="anonymous"/>`
               : `<span style="font-size:30px;user-select:none;">👤</span>`}
           </div>
           <div class="id-card-name">${escHtml(name)}</div>
           <div class="id-card-role">Team Member · adidas</div>
           <div class="id-card-accent-bar"></div>
           <div class="id-card-spacer"></div>
-          <!-- Barcode -->
           <div class="id-card-barcode-section">
             <canvas id="bc-canvas-${safeName}"></canvas>
             <div class="id-card-barcode-num" id="bc-num-${safeName}">${fullCode||'–'}</div>
           </div>
         </div>`;
 
-      /* Photo click — stop propagation so it doesn't flip card */
       const photoCircle = front.querySelector('#photo-circle-'+safeName);
       photoCircle.addEventListener('click', function(e) {
         e.stopPropagation();
         triggerPhotoUpload(name);
       });
 
-      /* ──────────────────────────────
-         BACK FACE (portrait)
-      ────────────────────────────── */
+      /* ── BACK FACE ── */
       const back = document.createElement('div');
       back.className = 'id-card-face id-card-back';
       back.id = 'card-back-'+safeName;
 
       back.innerHTML = `
+        ${buildBgHTML('back')}
         <div class="card-stripe-back">${buildLogoHTML()}</div>
         <div class="card-body">
           <div class="qr-container" id="qr-div-${safeName}" style="width:140px;height:140px;"></div>
@@ -1442,7 +1717,7 @@
       inner.appendChild(back);
       scene.appendChild(inner);
 
-      /* ── Barcode input + action buttons ── */
+      /* Barcode input */
       const inputRow = document.createElement('div');
       inputRow.style.cssText = 'display:flex; gap:6px; align-items:center;';
       inputRow.innerHTML = `
@@ -1455,10 +1730,10 @@
             placeholder="458"
             title="Enter digits (e.g. 458 → SCN000458)"
             oninput="onSuffixInput('${escHtml(name)}')"
-            onkeydown="if(event.key==='Enter') saveBarcodeValues()"/>
+            onblur="autoSaveBarcodeValue('${escHtml(name)}')"
+            onkeydown="if(event.key==='Enter') autoSaveBarcodeValue('${escHtml(name)}')"/>
         </div>`;
 
-      /* Action buttons row */
       const actionsRow = document.createElement('div');
       actionsRow.className = 'id-card-actions';
       actionsRow.innerHTML = `
@@ -1477,7 +1752,6 @@
       wrapper.appendChild(actionsRow);
       wrapper.appendChild(photoHint);
 
-      /* Generate barcode + QR after DOM append */
       setTimeout(()=>{
         if(fullCode) drawIDBarcode(safeName, fullCode);
         if(qrUrl)    drawIDQR(safeName, qrUrl);
@@ -1497,6 +1771,23 @@
       const numEl=document.getElementById('bc-num-'+safeName); if(numEl) numEl.textContent=fullCode||'–';
       if(fullCode) drawIDBarcode(safeName,fullCode);
       else { const c=document.getElementById('bc-canvas-'+safeName); if(c){ const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); } }
+    }
+
+    // FIX 1: Auto-save a single barcode value to Firebase on blur/enter
+    async function autoSaveBarcodeValue(name) {
+      const safeName = name.replace(/\s+/g, '_');
+      const input = document.getElementById('bc-suffix-' + safeName);
+      if (!input) return;
+      const suffix = input.value.trim();
+      if (suffix) barcodeValues[name] = suffix;
+      else delete barcodeValues[name];
+      if (!window._firebaseReady) return;
+      try {
+        await window._fbSet(window._fbRef(window._db, 'config/barcode_values'), barcodeValues);
+        // Small visual confirmation on the input
+        input.style.color = 'var(--green)';
+        setTimeout(() => { input.style.color = ''; }, 1200);
+      } catch(e) { console.warn('Barcode autosave failed', e); }
     }
 
     /* ── DRAW BARCODE ── */
@@ -1556,7 +1847,7 @@
       input.click();
     }
 
-    /* ── SAVE BARCODE VALUES ── */
+    /* FIX 1: Manual bulk save barcode values */
     async function saveBarcodeValues() {
       teamMembers.forEach(name=>{ const safeName=name.replace(/\s+/g,'_'); const input=document.getElementById('bc-suffix-'+safeName); if(input){ const val=input.value.trim(); if(val) barcodeValues[name]=val; else delete barcodeValues[name]; } });
       if(!window._firebaseReady){ showToast('Firebase not connected','error'); return; }
@@ -1564,64 +1855,100 @@
       catch(e){ showToast('Save failed — '+e.message,'error'); }
     }
 
-    /* ── DOWNLOAD CARD FACE (FIXED) ──
-       For the back face we clone the element, strip the 3D transform,
-       regenerate the QR code in the clone, capture it, then discard.
-    ── */
+    /* ── FIX 2: DOWNLOAD CARD FACE — logo + background rendered correctly ── */
     async function downloadCardFace(name, face) {
       const safeName = name.replace(/\s+/g,'_');
       if(!window.html2canvas) await loadHtml2Canvas();
       if(!window.html2canvas){ showToast('Renderer not available','error'); return; }
 
-      let captureEl;
       let tempContainer = null;
-
       try {
-        if(face === 'back') {
-          /* ── Clone the back face and remove the rotateY so it renders normally ── */
-          const backEl = document.getElementById('card-back-'+safeName);
-          if(!backEl){ showToast('Card not found','error'); return; }
+        const sceneEl = document.getElementById('card-scene-'+safeName);
+        const W = sceneEl ? sceneEl.offsetWidth  : 220;
+        const H = sceneEl ? sceneEl.offsetHeight : 350;
 
-          // Use the scene dimensions for correct sizing
-          const sceneEl = document.getElementById('card-scene-'+safeName);
-          const W = sceneEl ? sceneEl.offsetWidth  : 220;
-          const H = sceneEl ? sceneEl.offsetHeight : 350;
+        // Always clone so we work off-screen, remove 3D transform for back
+        const faceEl = document.getElementById('card-' + face + '-' + safeName);
+        if(!faceEl){ showToast('Card not found','error'); return; }
 
-          tempContainer = document.createElement('div');
-          tempContainer.style.cssText = `position:fixed;left:-9999px;top:0;width:${W}px;height:${H}px;z-index:-999;overflow:hidden;border-radius:12px;`;
+        tempContainer = document.createElement('div');
+        tempContainer.style.cssText = `position:fixed;left:-9999px;top:0;width:${W}px;height:${H}px;z-index:-999;overflow:hidden;border-radius:12px;`;
 
-          const clone = backEl.cloneNode(true);
-          clone.style.cssText = `
-            position:relative;width:100%;height:100%;
-            transform:none;
-            backface-visibility:visible;
-            -webkit-backface-visibility:visible;
-            border-radius:12px;
-            overflow:hidden;
-          `;
+        const clone = faceEl.cloneNode(true);
+        clone.style.cssText = `
+          position:relative;width:100%;height:100%;
+          transform:none;
+          backface-visibility:visible;
+          -webkit-backface-visibility:visible;
+          border-radius:12px;
+          overflow:hidden;
+          display:flex;
+          flex-direction:column;
+          background:#fff;
+        `;
 
-          // Regenerate QR inside clone (cloneNode doesn't copy canvas content)
-          const qrDiv = clone.querySelector('[id^="qr-div-"]');
-          if(qrDiv){ qrDiv.innerHTML=''; const qrUrl=buildQRUrl(name); if(qrUrl&&window.QRCode){ try{ new QRCode(qrDiv,{text:qrUrl,width:140,height:140,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){} } }
-
-          tempContainer.appendChild(clone);
-          document.body.appendChild(tempContainer);
-          captureEl = clone;
-
-          // Give QR a moment to render
-          await new Promise(r=>setTimeout(r,200));
-
-        } else {
-          captureEl = document.getElementById('card-front-'+safeName);
-          if(!captureEl){ showToast('Card not found','error'); return; }
+        // FIX 2: Replace <img> tags in clone with canvas-drawn versions to avoid taint
+        // For logo images in the header stripe:
+        const logoImgs = clone.querySelectorAll('.card-logo-img');
+        for (const img of logoImgs) {
+          if (cardLogoData) {
+            try {
+              const c = document.createElement('canvas');
+              const srcImg = new Image();
+              await new Promise(r => { srcImg.onload = r; srcImg.onerror = r; srcImg.src = cardLogoData; });
+              const maxH = 22;
+              const scale = maxH / srcImg.height;
+              c.width = Math.round(srcImg.width * scale);
+              c.height = maxH;
+              const ctx2 = c.getContext('2d');
+              // Draw white version (logo is rendered on black bg, invert via filter)
+              ctx2.filter = 'brightness(0) invert(1)';
+              ctx2.drawImage(srcImg, 0, 0, c.width, c.height);
+              c.style.cssText = 'max-height:22px;max-width:90px;object-fit:contain;display:block;';
+              img.replaceWith(c);
+            } catch(e) {}
+          }
         }
 
-        const canvas = await html2canvas(captureEl, {
+        // Regenerate QR inside clone (canvas content not copied by cloneNode)
+        if (face === 'back') {
+          const qrDiv = clone.querySelector('[id^="qr-div-"]');
+          if(qrDiv){ qrDiv.innerHTML=''; const qrUrl=buildQRUrl(name); if(qrUrl&&window.QRCode){ try{ new QRCode(qrDiv,{text:qrUrl,width:140,height:140,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){} } }
+        }
+
+        // Copy barcode canvas pixel data for front
+        if (face === 'front') {
+          const origCanvas = document.getElementById('bc-canvas-' + safeName);
+          const cloneCanvas = clone.querySelector('canvas');
+          if (origCanvas && cloneCanvas && origCanvas.width > 0) {
+            cloneCanvas.width  = origCanvas.width;
+            cloneCanvas.height = origCanvas.height;
+            cloneCanvas.getContext('2d').drawImage(origCanvas, 0, 0);
+          }
+        }
+
+        // FIX 3: Copy background image into bg div in clone (background-image CSS carries over via cloneNode)
+        // The bg div already has inline background-image style set, so it should render. 
+        // Make sure it's correct:
+        const bgDivClone = clone.querySelector('.id-card-bg');
+        if (bgDivClone && cardBgData) {
+          bgDivClone.style.backgroundImage = `url(${cardBgData})`;
+          bgDivClone.style.opacity = String(cardBgOpacity);
+        }
+
+        tempContainer.appendChild(clone);
+        document.body.appendChild(tempContainer);
+
+        await new Promise(r => setTimeout(r, 250));
+
+        const canvas = await html2canvas(clone, {
           scale: 3,
           useCORS: true,
           allowTaint: true,
           logging: false,
-          backgroundColor: '#ffffff'
+          backgroundColor: '#ffffff',
+          width: W,
+          height: H
         });
 
         const link = document.createElement('a');
@@ -1806,16 +2133,14 @@
 
     async function completeModule(key,modId) {
       const row=allProgress.find(r=>r.key===key); if(!row) return;
-      const modNames={'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3'};
-      if(!confirm(`Mark ${modNames[modId]||modId} as complete for "${row.name}"?`)) return;
+      if(!confirm(`Mark ${modId} as complete for "${row.name}"?`)) return;
       try { const newCompleted=[...new Set([...(row.completed||[]),modId])]; const {ref,update}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"); await update(ref(window._db,'progress/'+key),{completed:newCompleted}); row.completed=newCompleted; renderTable(); updateStats(); showToast('✓ Module marked complete','success'); }
       catch(e){ showToast('Update failed — '+e.message,'error'); }
     }
 
     async function uncompleteModule(key,modId) {
       const row=allProgress.find(r=>r.key===key); if(!row) return;
-      const modNames={'mod-a1':'AREA 1','mod-a2':'AREA 2','mod-a3':'AREA 3','mod-t1':'Atticus 1','mod-t2':'Atticus 2','mod-t3':'Atticus 3'};
-      if(!confirm(`Mark ${modNames[modId]||modId} as incomplete for "${row.name}"?`)) return;
+      if(!confirm(`Mark ${modId} as incomplete for "${row.name}"?`)) return;
       try { const newCompleted=(row.completed||[]).filter(m=>m!==modId); const {ref,update}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"); await update(ref(window._db,'progress/'+key),{completed:newCompleted}); row.completed=newCompleted; renderTable(); updateStats(); showToast('✓ Module unmarked','success'); }
       catch(e){ showToast('Update failed — '+e.message,'error'); }
     }
