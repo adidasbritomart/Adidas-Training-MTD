@@ -136,6 +136,23 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
 .sz-chip.none{opacity:0.3}
 .sz-qty{display:block;font-size:9px;color:var(--text3);margin-top:1px}
 
+/* SIZE CONVERSION TABS */
+.size-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px;gap:0}
+.size-tab{background:none;border:none;border-bottom:2px solid transparent;padding:6px 14px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);cursor:pointer;font-family:'Barlow Condensed',sans-serif;transition:all 0.15s;margin-bottom:-1px}
+.size-tab:hover{color:var(--text2)}
+.size-tab.active{color:#fff;border-bottom-color:#fff}
+.size-conv-row{display:flex;align-items:stretch;gap:0;margin-bottom:4px;border:1px solid var(--border);border-radius:2px;overflow:hidden}
+.size-conv-cell{flex:1;padding:7px 4px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;border-right:1px solid var(--border)}
+.size-conv-cell:last-child{border-right:none}
+.size-conv-cell.uk-col{background:var(--surface3);font-weight:500;color:var(--text2)}
+.size-conv-cell.converted{color:var(--text3)}
+.size-conv-cell.soh-num{font-weight:500}
+.size-conv-cell.soh-in{color:var(--green)}
+.size-conv-cell.soh-low{color:var(--amber)}
+.size-conv-cell.soh-out{color:var(--red);opacity:0.5}
+.size-conv-header{display:flex;gap:0;margin-bottom:4px}
+.size-conv-header-cell{flex:1;padding:4px;text-align:center;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);font-family:'Barlow Condensed',sans-serif}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -151,10 +168,7 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
 <!-- HEADER -->
 <div class="header">
   <div class="logo">
-    <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="16,2 30,28 2,28"/>
-    </svg>
-    <span class="logo-text">adidas</span>
+    <span class="logo-text" style="letter-spacing:6px;font-size:20px">SOH</span>
   </div>
   <div class="header-right">
     <span class="store-badge" id="store-name">NZ1104 · Britomart</span>
@@ -194,14 +208,13 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
       <div class="filter-group" id="gender-filters"></div>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label">Size</div>
+      <div class="sidebar-label" id="sidebar-size-label">Size (US)</div>
       <div class="size-grid" id="size-grid"></div>
     </div>
     <div class="sidebar-data">
       <div class="sidebar-label" style="margin-bottom:8px">Data</div>
-      <button class="btn" style="width:100%;justify-content:center" onclick="document.getElementById('file-input').click()">&#8593; Import CSV</button>
-      <button class="btn" style="width:100%;justify-content:center" onclick="downloadTemplate()">&#8595; Download Template</button>
-      <input type="file" id="file-input" accept=".csv" style="display:none" onchange="handleFile(event)"/>
+      <button class="btn primary" style="width:100%;justify-content:center" onclick="openPasteModal()">&#8593; Paste SOH Data</button>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:4px" onclick="loadSampleData()">Load Sample Data</button>
     </div>
   </div>
 
@@ -229,7 +242,33 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- PASTE MODAL -->
+<div class="modal-bg" id="paste-modal-bg" onclick="handlePasteBgClick(event)">
+  <div class="modal" id="paste-modal-box" style="max-width:580px">
+    <div class="modal-header" style="padding:20px 20px 16px">
+      <div>
+        <div class="modal-sku-label">SOH UPDATE</div>
+        <div class="modal-title" style="font-size:22px">Paste Stock Data</div>
+      </div>
+      <button class="modal-close" onclick="closePasteModal()">&#10005;</button>
+    </div>
+    <div style="padding:0 20px 20px;display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:12px;color:var(--text3);line-height:1.7;background:var(--surface2);padding:10px 12px;border-radius:2px;border-left:2px solid #333">
+        Copy your rows from the spreadsheet (including the header row) and paste below.<br/>
+        Expects columns: <span style="font-family:'DM Mono',monospace;color:var(--text2)">Location Code · Item No. · Item Description · Variant Code · Size Description · Calculated Quantity</span>
+      </div>
+      <textarea id="paste-area" placeholder="Paste your Excel data here…" style="width:100%;height:220px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 12px;border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;resize:vertical;outline:none;line-height:1.6"></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span id="paste-feedback" style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace"></span>
+        <div style="display:flex;gap:6px">
+          <button class="btn" onclick="closePasteModal()">Cancel</button>
+          <button class="btn primary" onclick="processPaste()">&#8594; Load Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="modal-bg" onclick="handleModalBgClick(event)">
   <div class="modal" id="modal-box">
     <div class="modal-header">
@@ -297,7 +336,35 @@ const SAMPLE_DATA = [
 
 // ─── UTILS ──────────────────────────────────────────────────────────────────
 function imgUrl(sku) {
+  // Primary: adidas assets CDN (most reliable for current articles)
   return `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`;
+}
+
+function imgUrlFallbacks(sku) {
+  const s = sku.toLowerCase();
+  return [
+    `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`,
+    `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${s}_01_standard.jpg`,
+    `https://assets.adidas.com/images/w_600,f_auto,q_auto/${sku}_01_standard.jpg`,
+    `https://assets.adidas.com/images/w_600,f_auto,q_auto/${s}_01_standard.jpg`,
+  ];
+}
+
+function attachImgFallback(imgEl, sku) {
+  const urls = imgUrlFallbacks(sku);
+  let idx = 0;
+  imgEl.onerror = function() {
+    idx++;
+    if (idx < urls.length) {
+      this.src = urls[idx];
+    } else {
+      // All failed — show fallback placeholder
+      this.style.display = 'none';
+      const fb = this.nextElementSibling;
+      if (fb) fb.style.display = 'flex';
+    }
+  };
+  imgEl.src = urls[0];
 }
 
 function sohStatus(total) {
@@ -390,7 +457,6 @@ function updateCounts() {
 function buildSidebar() {
   const cats = [...new Set(allData.map(r => r.category))].filter(Boolean).sort();
   const genders = [...new Set(allData.map(r => r.gender))].filter(Boolean).sort();
-  const sizes = [...new Set(allData.map(r => r.size))].filter(Boolean).sort(sizeSortFn);
 
   const catF = document.getElementById('cat-filters');
   catF.innerHTML = `<button class="filter-btn ${activeFilters.category==='all'?'active':''}" onclick="setFilter('category','all')">All Categories</button>`;
@@ -406,11 +472,39 @@ function buildSidebar() {
     genF.innerHTML += `<button class="filter-btn ${activeFilters.gender===g?'active':''}" onclick="setFilter('gender','${g}')">${genderLabel(g)} <span class="filter-count">${cnt}</span></button>`;
   });
 
+  // Build size chips — show US (M) label for shoe sizes, raw label for apparel sizes
+  const rawSizes = [...new Set(allData.map(r => r.size))].filter(Boolean).sort(sizeSortFn);
   const sizeG = document.getElementById('size-grid');
+  const sizeLabel = document.getElementById('sidebar-size-label');
+
+  // Detect whether we have shoe sizes or apparel sizes (or both)
+  const hasShoe = rawSizes.some(s => isShoeSize(s));
+  const hasApparel = rawSizes.some(s => isApparelSize(s));
+
+  if (sizeLabel) {
+    sizeLabel.textContent = hasShoe && !hasApparel ? 'Size (US)' : hasShoe ? 'Size' : 'Size';
+  }
+
   sizeG.innerHTML = '';
-  sizes.forEach(s => {
-    sizeG.innerHTML += `<button class="size-chip ${activeFilters.size===s?'active':''}" onclick="setFilter('size','${s}')">${s}</button>`;
+  rawSizes.forEach(raw => {
+    const ukNorm = normaliseToUK(raw);
+    const conv = SIZE_CONV.find(r => r.uk === ukNorm);
+    // Display label: US (M) for shoe sizes, raw value for apparel
+    const displayLabel = (conv && isShoeSize(raw)) ? conv.usM : raw;
+    const isActive = activeFilters.size === raw;
+    sizeG.innerHTML += `<button class="size-chip ${isActive?'active':''}" onclick="setFilter('size','${escAttr(raw)}')" title="UK: ${ukNorm}">${displayLabel}</button>`;
   });
+}
+
+function isShoeSize(s) {
+  if (/^UK\d/i.test(s)) return true;
+  const n = parseFloat(s);
+  if (!isNaN(n) && n >= 33 && n <= 52) return true; // EU range
+  return false;
+}
+
+function isApparelSize(s) {
+  return /^(2?XS|XS|S|M|L|XL|2XL|3XL|OSFM)$/i.test(s);
 }
 
 // ─── RENDER ─────────────────────────────────────────────────────────────────
@@ -429,7 +523,7 @@ function renderProducts() {
       <div class="empty-icon">▦</div>
       <div class="empty-title">No Stock Data</div>
       <div class="empty-sub">Import a CSV to load your stock on hand.<br>Use the sidebar or click below to get started.</div>
-      <button class="btn primary" style="margin-top:8px" onclick="document.getElementById('file-input').click()">&#8593; Import CSV</button>
+      <button class="btn primary" style="margin-top:8px" onclick="openPasteModal()">&#8593; Paste SOH Data</button>
     </div>`;
     return;
   }
@@ -451,16 +545,19 @@ function renderGrid(area) {
   let html = '<div class="product-grid">';
   filtered.forEach(p => {
     const st = sohStatus(p.totalSoh);
-    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => s.size);
+    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => {
+      const uk = normaliseToUK(s.size);
+      const conv = SIZE_CONV.find(r => r.uk === uk);
+      return (conv && isShoeSize(s.size)) ? conv.usM : s.size;
+    });
     html += `
     <div class="product-card" onclick="openModal('${escAttr(p.sku)}')">
       <div class="product-img-wrap">
-        <img src="${imgUrl(p.sku)}" alt="${escAttr(p.name)}" 
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy"/>
+        <img data-sku="${escAttr(p.sku)}" alt="${escAttr(p.name)}" loading="lazy" style="opacity:0;transition:opacity 0.3s"/>
         <div class="img-fallback">${p.sku}</div>
       </div>
-      <span class="cat-tag">${p.category}</span>
-      <span class="gender-tag">${p.gender}</span>
+      <span class="cat-tag">${p.category||''}</span>
+      <span class="gender-tag">${p.gender||''}</span>
       <div class="product-info">
         <div class="product-sku">${p.sku}</div>
         <div class="product-name">${p.name}</div>
@@ -477,6 +574,12 @@ function renderGrid(area) {
   });
   html += '</div>';
   area.innerHTML = html;
+  // Attach images with fallback chain
+  area.querySelectorAll('img[data-sku]').forEach(img => {
+    const sku = img.getAttribute('data-sku');
+    img.onload = function() { this.style.opacity = '1'; };
+    attachImgFallback(img, sku);
+  });
 }
 
 function renderList(area) {
@@ -487,17 +590,21 @@ function renderList(area) {
     <div class="list-rows">`;
   filtered.forEach(p => {
     const st = sohStatus(p.totalSoh);
-    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => s.size).join(', ') || '—';
+    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => {
+      const uk = normaliseToUK(s.size);
+      const conv = SIZE_CONV.find(r => r.uk === uk);
+      return (conv && isShoeSize(s.size)) ? conv.usM : s.size;
+    }).join(', ') || '—';
     html += `
     <div class="list-row" onclick="openModal('${escAttr(p.sku)}')">
       <div class="list-thumb">
-        <img src="${imgUrl(p.sku)}" alt="" onerror="this.style.display='none'" loading="lazy"/>
+        <img data-sku="${escAttr(p.sku)}" alt="" loading="lazy" style="opacity:0;transition:opacity 0.3s"/>
       </div>
       <div>
         <div class="list-sku">${p.sku}</div>
         <div class="list-name">${p.name}</div>
       </div>
-      <div class="list-col">${p.category}</div>
+      <div class="list-col">${p.category||'—'}</div>
       <div class="list-col-mono" style="font-size:11px">${p.color||'—'}</div>
       <div class="list-col-mono">${inSizes}</div>
       <div class="soh-badge">
@@ -508,10 +615,145 @@ function renderList(area) {
   });
   html += '</div></div>';
   area.innerHTML = html;
+  area.querySelectorAll('img[data-sku]').forEach(img => {
+    const sku = img.getAttribute('data-sku');
+    img.onload = function() { this.style.opacity = '1'; };
+    attachImgFallback(img, sku);
+  });
 }
 
 function escAttr(s) {
   return (s||'').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+
+// ─── SIZE CONVERSION TABLE ────────────────────────────────────────────────────
+// UK is the base (matches your SOH data). Rows: [UK, EU, US_M, US_W, JPN, CHN]
+const SIZE_CONV = [
+  { uk:'UK3',   eu:'35.5', usM:'3.5',  usW:'4.5',  jpn:'21.5', chn:'220' },
+  { uk:'UK3.5', eu:'36',   usM:'4',    usW:'5',    jpn:'22',   chn:'225' },
+  { uk:'UK4',   eu:'36.5', usM:'4.5',  usW:'5.5',  jpn:'22.5', chn:'230' },
+  { uk:'UK4.5', eu:'37',   usM:'5',    usW:'6',    jpn:'23',   chn:'235' },
+  { uk:'UK5',   eu:'38',   usM:'5.5',  usW:'6.5',  jpn:'23.5', chn:'240' },
+  { uk:'UK5.5', eu:'38.5', usM:'6',    usW:'7',    jpn:'24',   chn:'245' },
+  { uk:'UK6',   eu:'39',   usM:'6.5',  usW:'7.5',  jpn:'24.5', chn:'250' },
+  { uk:'UK6.5', eu:'40',   usM:'7',    usW:'8',    jpn:'25',   chn:'255' },
+  { uk:'UK7',   eu:'40.5', usM:'7.5',  usW:'8.5',  jpn:'25.5', chn:'260' },
+  { uk:'UK7.5', eu:'41',   usM:'8',    usW:'9',    jpn:'26',   chn:'265' },
+  { uk:'UK8',   eu:'42',   usM:'8.5',  usW:'9.5',  jpn:'26.5', chn:'270' },
+  { uk:'UK8.5', eu:'42.5', usM:'9',    usW:'10',   jpn:'27',   chn:'275' },
+  { uk:'UK9',   eu:'43',   usM:'9.5',  usW:'10.5', jpn:'27.5', chn:'280' },
+  { uk:'UK9.5', eu:'44',   usM:'10',   usW:'11',   jpn:'28',   chn:'285' },
+  { uk:'UK10',  eu:'44.5', usM:'10.5', usW:'11.5', jpn:'28.5', chn:'290' },
+  { uk:'UK10.5',eu:'45',   usM:'11',   usW:'12',   jpn:'29',   chn:'295' },
+  { uk:'UK11',  eu:'46',   usM:'11.5', usW:'12.5', jpn:'29.5', chn:'300' },
+  { uk:'UK11.5',eu:'46.5', usM:'12',   usW:'13',   jpn:'30',   chn:'305' },
+  { uk:'UK12',  eu:'47',   usM:'12.5', usW:'13.5', jpn:'30.5', chn:'310' },
+  { uk:'UK13',  eu:'48',   usM:'13.5', usW:'14.5', jpn:'32',   chn:'320' },
+  // Kids
+  { uk:'UK1',   eu:'33',   usM:'1.5',  usW:'2.5',  jpn:'19.5', chn:'200' },
+  { uk:'UK1.5', eu:'33.5', usM:'2',    usW:'3',    jpn:'20',   chn:'205' },
+  { uk:'UK2',   eu:'34',   usM:'2.5',  usW:'3.5',  jpn:'20.5', chn:'210' },
+  { uk:'UK2.5', eu:'35',   usM:'3',    usW:'4',    jpn:'21',   chn:'215' },
+];
+
+// Numeric sizes in data (e.g. "540", "560") map to EU sizes from your variant codes
+// We'll normalise those too — if size looks like EU already (3 digits = EU/CHN, 2-digit decimal = JPN)
+function normaliseToUK(sizeStr) {
+  const s = (sizeStr || '').trim();
+  // Already UK format
+  if (/^UK\d/i.test(s)) return s.replace(/^uk/i, 'UK');
+  // Bare number that matches EU (e.g. "42", "42.5")
+  const num = parseFloat(s);
+  if (!isNaN(num)) {
+    const match = SIZE_CONV.find(r => parseFloat(r.eu) === num);
+    if (match) return match.uk;
+  }
+  return s; // return as-is if unknown
+}
+
+let activeConvTab = 'EU';
+
+function buildFWConversionTable(sizes) {
+  // Normalise incoming sizes to UK keys
+  const sohMap = {};
+  sizes.forEach(s => {
+    const uk = normaliseToUK(s.size);
+    sohMap[uk] = (sohMap[uk] || 0) + s.soh;
+  });
+
+  const ukKeys = Object.keys(sohMap);
+  // Filter SIZE_CONV to only rows present in this product
+  const rows = SIZE_CONV.filter(r => ukKeys.includes(r.uk)).sort((a,b) => {
+    const na = parseFloat(a.uk.replace('UK','')), nb = parseFloat(b.uk.replace('UK',''));
+    return na - nb;
+  });
+  if (!rows.length) return null;
+
+  const tabKey = { EU:'eu', 'US (M)':'usM', 'US (W)':'usW', JPN:'jpn', CHN:'chn' };
+  const convCol = tabKey[activeConvTab] || 'eu';
+
+  let html = `<div class="size-tabs">`;
+  ['EU','US (M)','US (W)','JPN','CHN'].forEach(t => {
+    html += `<button class="size-tab ${activeConvTab===t?'active':''}" onclick="switchConvTab('${t}',this)">${t}</button>`;
+  });
+  html += `</div>`;
+
+  // Header row
+  html += `<div class="size-conv-header">
+    <div class="size-conv-header-cell">UK</div>
+    <div class="size-conv-header-cell">${activeConvTab}</div>
+    <div class="size-conv-header-cell">SOH</div>
+  </div>`;
+
+  rows.forEach(r => {
+    const soh = sohMap[r.uk] || 0;
+    const st = sohStatus(soh);
+    html += `<div class="size-conv-row">
+      <div class="size-conv-cell uk-col">${r.uk}</div>
+      <div class="size-conv-cell converted">${r[convCol]}</div>
+      <div class="size-conv-cell soh-num soh-${st}">${soh > 0 ? soh : '—'}</div>
+    </div>`;
+  });
+
+  return html;
+}
+
+function switchConvTab(tab, el) {
+  activeConvTab = tab;
+  // Re-render just the conversion section without closing modal
+  const sku = document.getElementById('m-sku').textContent;
+  const p = filtered.find(x => x.sku === sku);
+  if (p) renderModalSizes(p);
+}
+
+function renderModalSizes(p) {
+  const isFW = isFootwear(p);
+  const sizesEl = document.getElementById('m-sizes-section');
+  if (!sizesEl) return;
+
+  if (isFW) {
+    const table = buildFWConversionTable(p.sizes);
+    if (table) {
+      sizesEl.innerHTML = `<div class="sizes-title" style="margin-bottom:10px">Size & SOH</div>${table}`;
+      return;
+    }
+  }
+
+  // Apparel / fallback: original chip style
+  const sortedSizes = [...p.sizes].sort((a,b) => sizeSortFn(a.size, b.size));
+  let html = `<div class="sizes-title">Size Breakdown</div><div class="sizes-chips">`;
+  sortedSizes.forEach(s => {
+    html += `<div class="sz-chip ${s.soh > 0 ? 'has' : 'none'}">${s.size}<span class="sz-qty">${s.soh > 0 ? s.soh : '✕'}</span></div>`;
+  });
+  html += '</div>';
+  sizesEl.innerHTML = html;
+}
+
+function isFootwear(p) {
+  if (p.category && /foot|shoe|sneak|boot|trainer/i.test(p.category)) return true;
+  // If no category, check if sizes look like UK shoe sizes
+  const hasShoeSizes = p.sizes.some(s => /^UK\d/i.test(s.size) || (parseFloat(s.size) >= 33 && parseFloat(s.size) <= 50));
+  return hasShoeSizes;
 }
 
 // ─── MODAL ──────────────────────────────────────────────────────────────────
@@ -523,11 +765,13 @@ function openModal(sku) {
   document.getElementById('m-sku').textContent = sku;
   document.getElementById('m-name').textContent = p.name;
   const img = document.getElementById('m-img');
-  img.src = imgUrl(sku);
-  img.alt = p.name;
   img.style.display = '';
+  img.style.opacity = '0';
+  img.style.transition = 'opacity 0.3s';
+  img.alt = p.name;
+  img.onload = function() { this.style.opacity = '1'; };
+  attachImgFallback(img, sku);
 
-  const sortedSizes = [...p.sizes].sort((a,b) => sizeSortFn(a.size, b.size));
   let body = `
     <div class="detail-row"><span class="detail-label">Category</span><span class="detail-val">${p.category||'—'}</span></div>
     <div class="detail-row"><span class="detail-label">Gender</span><span class="detail-val">${genderLabel(p.gender)}</span></div>
@@ -537,16 +781,11 @@ function openModal(sku) {
       <span class="detail-label">Total SOH</span>
       <span class="detail-val" style="color:${sohColor(st)}">${p.totalSoh} &mdash; ${sohText(st)}</span>
     </div>
-    <div class="sizes-section">
-      <div class="sizes-title">Size Breakdown</div>
-      <div class="sizes-chips">`;
-  sortedSizes.forEach(s => {
-    body += `<div class="sz-chip ${s.soh > 0 ? 'has' : 'none'}">
-      ${s.size}<span class="sz-qty">${s.soh > 0 ? s.soh : '✕'}</span>
-    </div>`;
-  });
-  body += '</div></div>';
+    <div class="sizes-section" id="m-sizes-section" style="margin-top:14px"></div>`;
+
   document.getElementById('m-body').innerHTML = body;
+  activeConvTab = 'EU';
+  renderModalSizes(p);
   document.getElementById('modal-bg').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -562,82 +801,117 @@ function handleModalBgClick(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ─── CSV ─────────────────────────────────────────────────────────────────────
-function handleFile(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    parseCSV(ev.target.result);
-    document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'});
-    e.target.value = '';
-  };
-  reader.readAsText(file);
+// ─── PASTE IMPORT ────────────────────────────────────────────────────────────
+function openPasteModal() {
+  document.getElementById('paste-area').value = '';
+  document.getElementById('paste-feedback').textContent = '';
+  document.getElementById('paste-modal-bg').classList.add('open');
+  setTimeout(() => document.getElementById('paste-area').focus(), 100);
 }
 
-function parseCSV(text) {
-  const lines = text.trim().split(/\r?\n/);
-  if (lines.length < 2) { alert('CSV appears empty.'); return; }
-  const rawHeaders = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,'').toLowerCase().replace(/[^a-z0-9]/g,''));
-  
+function closePasteModal() {
+  document.getElementById('paste-modal-bg').classList.remove('open');
+}
+
+function handlePasteBgClick(e) {
+  if (e.target === document.getElementById('paste-modal-bg')) closePasteModal();
+}
+
+function processPaste() {
+  const raw = document.getElementById('paste-area').value.trim();
+  if (!raw) {
+    document.getElementById('paste-feedback').textContent = 'Nothing pasted yet.';
+    return;
+  }
+
+  const lines = raw.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) {
+    document.getElementById('paste-feedback').textContent = 'Need at least a header row + one data row.';
+    return;
+  }
+
+  // Detect delimiter — tab (from Excel) or comma
+  const delim = lines[0].includes('\t') ? '\t' : ',';
+  const headers = lines[0].split(delim).map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+  // Map your exact column headers + common aliases
   const aliases = {
-    sku:      ['sku','articlecode','article','articleno','code'],
-    name:     ['name','productname','product','description','title'],
-    category: ['category','cat','type','department'],
-    gender:   ['gender','sex','division'],
-    color:    ['color','colour','colorway','colourway'],
-    size:     ['size','sizes','sizeuk','sizeus'],
-    soh:      ['soh','stock','qty','quantity','stockonhand','available','onhand'],
-    price:    ['price','rrp','nzd','retailprice','saleprice']
+    location: ['locationcode','location','store','storecode'],
+    sku:      ['itemno','itemnumber','sku','articlecode','article','itemcode','code'],
+    name:     ['itemdescription','description','name','productname','product','title'],
+    size:     ['sizedescription','size','sizeuk','sizeus','sizes'],
+    soh:      ['calculatedquantity','calculated','soh','stock','qty','quantity','stockonhand','available','onhand','totalcountedquantity'],
+    variant:  ['variantcode','variant'],
   };
 
   const colIdx = {};
   Object.entries(aliases).forEach(([key, list]) => {
     for (const a of list) {
-      const i = rawHeaders.indexOf(a);
+      const i = headers.indexOf(a);
       if (i > -1) { colIdx[key] = i; break; }
     }
   });
 
-  if (colIdx.sku === undefined || colIdx.soh === undefined) {
-    alert('Could not find SKU or SOH columns. Please check your CSV matches the template format.');
+  if (colIdx.sku === undefined) {
+    document.getElementById('paste-feedback').textContent = '✕ Could not find Item No. column.';
+    return;
+  }
+  if (colIdx.soh === undefined) {
+    document.getElementById('paste-feedback').textContent = '✕ Could not find Calculated Quantity column.';
     return;
   }
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g,''));
-    if (!cols[colIdx.sku]) continue;
-    const row = {};
-    Object.keys(colIdx).forEach(k => { row[k] = cols[colIdx[k]] || ''; });
-    rows.push(row);
+    const cols = lines[i].split(delim).map(c => c.trim().replace(/^"|"$/g, ''));
+    const sku = cols[colIdx.sku];
+    if (!sku || sku === '') continue;
+
+    const sohRaw = parseInt(cols[colIdx.soh] || '0');
+    const soh = isNaN(sohRaw) ? 0 : Math.max(0, sohRaw); // negative = 0
+
+    rows.push({
+      sku:      sku,
+      name:     colIdx.name !== undefined ? (cols[colIdx.name] || sku) : sku,
+      size:     colIdx.size !== undefined ? (cols[colIdx.size] || '—') : '—',
+      soh:      soh,
+      location: colIdx.location !== undefined ? (cols[colIdx.location] || '') : '',
+      category: '',  // not in source — can be added manually later
+      gender:   '',
+      color:    '',
+      price:    '',
+    });
   }
 
-  if (!rows.length) { alert('No data rows found in CSV.'); return; }
+  if (!rows.length) {
+    document.getElementById('paste-feedback').textContent = '✕ No valid rows found.';
+    return;
+  }
 
   allData = rows;
   activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
   document.getElementById('search').value = '';
+
+  // Update store badge to show location if present
+  const locations = [...new Set(rows.map(r => r.location).filter(Boolean))];
+  if (locations.length === 1) {
+    document.getElementById('store-name').textContent = locations[0];
+  } else if (locations.length > 1) {
+    document.getElementById('store-name').textContent = locations.join(' · ');
+  }
+
+  document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'});
   applyFilters();
-  alert(`Loaded ${rows.length} size entries across ${groupBySku(rows).length} products.`);
+  closePasteModal();
 }
 
-function downloadTemplate() {
-  const csv = [
-    'SKU,Name,Category,Gender,Color,Size,SOH,Price',
-    'IF9966,Ultraboost 5,Footwear,M,Core Black,UK8,4,$260',
-    'IF9966,Ultraboost 5,Footwear,M,Core Black,UK9,2,$260',
-    'IF9966,Ultraboost 5,Footwear,M,Core Black,UK10,0,$260',
-    'JR3065,Tiro 23 Track Pants,Apparel,M,Black / White,S,6,$80',
-    'JR3065,Tiro 23 Track Pants,Apparel,M,Black / White,M,3,$80',
-    'JR3065,Tiro 23 Track Pants,Apparel,M,Black / White,L,0,$80',
-    'HQ1234,Adicolor Classics Tee,Apparel,W,White,XS,5,$55',
-    'HQ1234,Adicolor Classics Tee,Apparel,W,White,S,4,$55',
-  ].join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'adidas_soh_template.csv';
-  a.click();
+function loadSampleData() {
+  allData = SAMPLE_DATA;
+  activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
+  document.getElementById('search').value = '';
+  document.getElementById('store-name').textContent = 'NZ1104 · Britomart';
+  document.getElementById('last-updated').textContent = 'Sample data loaded';
+  applyFilters();
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
