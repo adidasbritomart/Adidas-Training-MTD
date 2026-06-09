@@ -336,18 +336,19 @@ const SAMPLE_DATA = [
 
 // ─── UTILS ──────────────────────────────────────────────────────────────────
 function imgUrl(sku) {
-  // Primary: adidas assets CDN (most reliable for current articles)
   return `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`;
 }
 
 function imgUrlFallbacks(sku) {
   const s = sku.toLowerCase();
-  return [
+  const urls = [
+    // Standard adidas CDN — uppercase and lowercase
     `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`,
     `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${s}_01_standard.jpg`,
     `https://assets.adidas.com/images/w_600,f_auto,q_auto/${sku}_01_standard.jpg`,
     `https://assets.adidas.com/images/w_600,f_auto,q_auto/${s}_01_standard.jpg`,
   ];
+  return urls;
 }
 
 function attachImgFallback(imgEl, sku) {
@@ -358,7 +359,6 @@ function attachImgFallback(imgEl, sku) {
     if (idx < urls.length) {
       this.src = urls[idx];
     } else {
-      // All failed — show fallback placeholder
       this.style.display = 'none';
       const fb = this.nextElementSibling;
       if (fb) fb.style.display = 'flex';
@@ -458,23 +458,22 @@ function updateCounts() {
 }
 
 // ─── CATEGORY DETECTION ──────────────────────────────────────────────────────
-// Rules (applied per size value):
-//   FW  → numeric 1–15 (with optional .5), or UK-prefixed
-//   APP → letter sizes XS–5XL, or has " (inch), or is a 4-digit number (e.g. 3032)
 function detectCategory(sizeStr) {
   const s = (sizeStr || '').trim();
-  // UK prefix → always FW
+  // UK prefix → FW
   if (/^UK\d/i.test(s)) return 'FW';
-  // Letter apparel sizes (XXS up to 5XL)
+  // Letter apparel sizes XXS–5XL
   if (/^(2?XXS|XXS|XS|S|M|L|XL|2XL|3XL|4XL|5XL|OSFM)$/i.test(s)) return 'APP';
-  // Contains an inch mark → APP
+  // Inch mark → APP
   if (s.includes('"')) return 'APP';
-  // 4-digit number (e.g. 3032, 3034) → APP
+  // 4-digit number (e.g. 3032) → APP
   if (/^\d{4}$/.test(s)) return 'APP';
-  // Pure number: 1–15 (including .5 halves) → FW
+  // Half-size dash notation e.g. "4-" = 4.5 → FW
+  if (/^\d+(\.\d+)?-$/.test(s)) return 'FW';
+  // Pure number 1–15 → FW (slides/sandals use EU 4–15, sneakers EU 30–55)
   const n = parseFloat(s);
-  if (!isNaN(n) && n >= 1 && n <= 15 && (s === String(Math.floor(n)) || s === String(n))) return 'FW';
-  // EU shoe size range → FW
+  if (!isNaN(n) && n >= 1 && n <= 15) return 'FW';
+  // EU shoe size range 30–55 → FW
   if (!isNaN(n) && n >= 30 && n <= 55) return 'FW';
   return 'OTHER';
 }
@@ -486,12 +485,35 @@ function categoriseRows(rows) {
   });
 }
 
-function isShoeSize(s) {
-  return detectCategory(s) === 'FW';
+function isShoeSize(s) { return detectCategory(s) === 'FW'; }
+function isApparelSize(s) { return detectCategory(s) === 'APP'; }
+
+// Convert any size format to a UK key for SIZE_CONV lookup
+function normaliseToUK(sizeStr) {
+  const s = (sizeStr || '').trim();
+  // Already UK format
+  if (/^UK\d/i.test(s)) return s.replace(/^uk/i, 'UK');
+  // Dash half-size: "4-" = 4.5 → look up EU value of base+0.5
+  if (/^(\d+(\.\d+)?)-$/.test(s)) {
+    const base = parseFloat(s);
+    const half = base + 0.5;
+    const match = SIZE_CONV.find(r => parseFloat(r.eu) === half);
+    if (match) return match.uk;
+  }
+  const num = parseFloat(s);
+  if (!isNaN(num)) {
+    const match = SIZE_CONV.find(r => parseFloat(r.eu) === num);
+    if (match) return match.uk;
+  }
+  return s;
 }
 
-function isApparelSize(s) {
-  return detectCategory(s) === 'APP';
+// Display size for sidebar/cards: US Men for FW, raw for APP
+function displaySize(raw) {
+  if (!isShoeSize(raw)) return raw;
+  const uk = normaliseToUK(raw);
+  const conv = SIZE_CONV.find(r => r.uk === uk);
+  return conv ? conv.usM : raw;
 }
 
 function buildSidebar() {
@@ -535,11 +557,9 @@ function buildSidebar() {
     sizeLabel.textContent = 'Size (US Men)';
     sizeG.innerHTML = '';
     rawSizes.forEach(raw => {
-      const ukNorm = normaliseToUK(raw);
-      const conv = SIZE_CONV.find(r => r.uk === ukNorm);
-      const displayLabel = conv ? conv.usM : raw;
+      const displayLabel = displaySize(raw);
       const isActive = activeFilters.size === raw;
-      sizeG.innerHTML += `<button class="size-chip ${isActive?'active':''}" onclick="setFilter('size','${escAttr(raw)}')" title="UK ${ukNorm}">${displayLabel}</button>`;
+      sizeG.innerHTML += `<button class="size-chip ${isActive?'active':''}" onclick="setFilter('size','${escAttr(raw)}')" title="Raw: ${raw}">${displayLabel}</button>`;
     });
   } else {
     // APP — show raw letter/number sizes
@@ -590,11 +610,7 @@ function renderGrid(area) {
   let html = '<div class="product-grid">';
   filtered.forEach(p => {
     const st = sohStatus(p.totalSoh);
-    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => {
-      const uk = normaliseToUK(s.size);
-      const conv = SIZE_CONV.find(r => r.uk === uk);
-      return (conv && isShoeSize(s.size)) ? conv.usM : s.size;
-    });
+    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => displaySize(s.size));
     html += `
     <div class="product-card" onclick="openModal('${escAttr(p.sku)}')">
       <div class="product-img-wrap">
@@ -635,11 +651,7 @@ function renderList(area) {
     <div class="list-rows">`;
   filtered.forEach(p => {
     const st = sohStatus(p.totalSoh);
-    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => {
-      const uk = normaliseToUK(s.size);
-      const conv = SIZE_CONV.find(r => r.uk === uk);
-      return (conv && isShoeSize(s.size)) ? conv.usM : s.size;
-    }).join(', ') || '—';
+    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => displaySize(s.size)).join(', ') || '—';
     html += `
     <div class="list-row" onclick="openModal('${escAttr(p.sku)}')">
       <div class="list-thumb">
@@ -672,33 +684,46 @@ function escAttr(s) {
 }
 
 // ─── SIZE CONVERSION TABLE ────────────────────────────────────────────────────
-// UK is the base (matches your SOH data). Rows: [UK, EU, US_M, US_W, JPN, CHN]
+// Base is EU (as it appears in your SOH data). UK, US Men, US Women, JPN, CHN derived.
 const SIZE_CONV = [
-  { uk:'UK3',   eu:'35.5', usM:'3.5',  usW:'4.5',  jpn:'21.5', chn:'220' },
-  { uk:'UK3.5', eu:'36',   usM:'4',    usW:'5',    jpn:'22',   chn:'225' },
-  { uk:'UK4',   eu:'36.5', usM:'4.5',  usW:'5.5',  jpn:'22.5', chn:'230' },
-  { uk:'UK4.5', eu:'37',   usM:'5',    usW:'6',    jpn:'23',   chn:'235' },
-  { uk:'UK5',   eu:'38',   usM:'5.5',  usW:'6.5',  jpn:'23.5', chn:'240' },
-  { uk:'UK5.5', eu:'38.5', usM:'6',    usW:'7',    jpn:'24',   chn:'245' },
-  { uk:'UK6',   eu:'39',   usM:'6.5',  usW:'7.5',  jpn:'24.5', chn:'250' },
-  { uk:'UK6.5', eu:'40',   usM:'7',    usW:'8',    jpn:'25',   chn:'255' },
-  { uk:'UK7',   eu:'40.5', usM:'7.5',  usW:'8.5',  jpn:'25.5', chn:'260' },
-  { uk:'UK7.5', eu:'41',   usM:'8',    usW:'9',    jpn:'26',   chn:'265' },
-  { uk:'UK8',   eu:'42',   usM:'8.5',  usW:'9.5',  jpn:'26.5', chn:'270' },
-  { uk:'UK8.5', eu:'42.5', usM:'9',    usW:'10',   jpn:'27',   chn:'275' },
-  { uk:'UK9',   eu:'43',   usM:'9.5',  usW:'10.5', jpn:'27.5', chn:'280' },
-  { uk:'UK9.5', eu:'44',   usM:'10',   usW:'11',   jpn:'28',   chn:'285' },
-  { uk:'UK10',  eu:'44.5', usM:'10.5', usW:'11.5', jpn:'28.5', chn:'290' },
-  { uk:'UK10.5',eu:'45',   usM:'11',   usW:'12',   jpn:'29',   chn:'295' },
-  { uk:'UK11',  eu:'46',   usM:'11.5', usW:'12.5', jpn:'29.5', chn:'300' },
-  { uk:'UK11.5',eu:'46.5', usM:'12',   usW:'13',   jpn:'30',   chn:'305' },
-  { uk:'UK12',  eu:'47',   usM:'12.5', usW:'13.5', jpn:'30.5', chn:'310' },
-  { uk:'UK13',  eu:'48',   usM:'13.5', usW:'14.5', jpn:'32',   chn:'320' },
-  // Kids
-  { uk:'UK1',   eu:'33',   usM:'1.5',  usW:'2.5',  jpn:'19.5', chn:'200' },
-  { uk:'UK1.5', eu:'33.5', usM:'2',    usW:'3',    jpn:'20',   chn:'205' },
-  { uk:'UK2',   eu:'34',   usM:'2.5',  usW:'3.5',  jpn:'20.5', chn:'210' },
-  { uk:'UK2.5', eu:'35',   usM:'3',    usW:'4',    jpn:'21',   chn:'215' },
+  // Slides / sandals (EU 4–15, as seen in Adilette data)
+  { uk:'UK3',    eu:'4',    usM:'4',    usW:'5',    jpn:'21',   chn:'220' },
+  { uk:'UK3.5',  eu:'5',    usM:'4.5',  usW:'5.5',  jpn:'21.5', chn:'222' },
+  { uk:'UK4',    eu:'6',    usM:'5',    usW:'6',    jpn:'22',   chn:'225' },
+  { uk:'UK4.5',  eu:'7',    usM:'5.5',  usW:'6.5',  jpn:'22.5', chn:'228' },
+  { uk:'UK5',    eu:'8',    usM:'6',    usW:'7',    jpn:'23',   chn:'230' },
+  { uk:'UK5.5',  eu:'9',    usM:'6.5',  usW:'7.5',  jpn:'23.5', chn:'235' },
+  { uk:'UK6',    eu:'10',   usM:'7',    usW:'8',    jpn:'24',   chn:'240' },
+  { uk:'UK6.5',  eu:'11',   usM:'7.5',  usW:'8.5',  jpn:'24.5', chn:'245' },
+  { uk:'UK7',    eu:'12',   usM:'8',    usW:'9',    jpn:'25',   chn:'250' },
+  { uk:'UK7.5',  eu:'13',   usM:'8.5',  usW:'9.5',  jpn:'25.5', chn:'255' },
+  { uk:'UK8',    eu:'14',   usM:'9',    usW:'10',   jpn:'26',   chn:'260' },
+  { uk:'UK8.5',  eu:'15',   usM:'9.5',  usW:'10.5', jpn:'26.5', chn:'265' },
+  // Standard sneaker sizes (EU 33–52)
+  { uk:'UK1',    eu:'33',   usM:'1.5',  usW:'2.5',  jpn:'19.5', chn:'200' },
+  { uk:'UK1.5',  eu:'33.5', usM:'2',    usW:'3',    jpn:'20',   chn:'205' },
+  { uk:'UK2',    eu:'34',   usM:'2.5',  usW:'3.5',  jpn:'20.5', chn:'210' },
+  { uk:'UK2.5',  eu:'35',   usM:'3',    usW:'4',    jpn:'21',   chn:'215' },
+  { uk:'UK3',    eu:'35.5', usM:'3.5',  usW:'4.5',  jpn:'21.5', chn:'220' },
+  { uk:'UK3.5',  eu:'36',   usM:'4',    usW:'5',    jpn:'22',   chn:'225' },
+  { uk:'UK4',    eu:'36.5', usM:'4.5',  usW:'5.5',  jpn:'22.5', chn:'230' },
+  { uk:'UK4.5',  eu:'37',   usM:'5',    usW:'6',    jpn:'23',   chn:'235' },
+  { uk:'UK5',    eu:'38',   usM:'5.5',  usW:'6.5',  jpn:'23.5', chn:'240' },
+  { uk:'UK5.5',  eu:'38.5', usM:'6',    usW:'7',    jpn:'24',   chn:'245' },
+  { uk:'UK6',    eu:'39',   usM:'6.5',  usW:'7.5',  jpn:'24.5', chn:'250' },
+  { uk:'UK6.5',  eu:'40',   usM:'7',    usW:'8',    jpn:'25',   chn:'255' },
+  { uk:'UK7',    eu:'40.5', usM:'7.5',  usW:'8.5',  jpn:'25.5', chn:'260' },
+  { uk:'UK7.5',  eu:'41',   usM:'8',    usW:'9',    jpn:'26',   chn:'265' },
+  { uk:'UK8',    eu:'42',   usM:'8.5',  usW:'9.5',  jpn:'26.5', chn:'270' },
+  { uk:'UK8.5',  eu:'42.5', usM:'9',    usW:'10',   jpn:'27',   chn:'275' },
+  { uk:'UK9',    eu:'43',   usM:'9.5',  usW:'10.5', jpn:'27.5', chn:'280' },
+  { uk:'UK9.5',  eu:'44',   usM:'10',   usW:'11',   jpn:'28',   chn:'285' },
+  { uk:'UK10',   eu:'44.5', usM:'10.5', usW:'11.5', jpn:'28.5', chn:'290' },
+  { uk:'UK10.5', eu:'45',   usM:'11',   usW:'12',   jpn:'29',   chn:'295' },
+  { uk:'UK11',   eu:'46',   usM:'11.5', usW:'12.5', jpn:'29.5', chn:'300' },
+  { uk:'UK11.5', eu:'46.5', usM:'12',   usW:'13',   jpn:'30',   chn:'305' },
+  { uk:'UK12',   eu:'47',   usM:'12.5', usW:'13.5', jpn:'30.5', chn:'310' },
+  { uk:'UK13',   eu:'48',   usM:'13.5', usW:'14.5', jpn:'32',   chn:'320' },
 ];
 
 // Numeric sizes in data (e.g. "540", "560") map to EU sizes from your variant codes
@@ -877,7 +902,12 @@ function processPaste() {
 
   // Detect delimiter — tab (from Excel) or comma
   const delim = lines[0].includes('\t') ? '\t' : ',';
-  const headers = lines[0].split(delim).map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+  const rawHeaders = lines[0].split(delim).map(h => h.trim());
+  const headers = rawHeaders.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+  // Debug: show what headers were detected
+  console.log('Raw headers:', rawHeaders);
+  console.log('Cleaned headers:', headers);
 
   // Map your exact column headers + common aliases
   const aliases = {
@@ -885,7 +915,7 @@ function processPaste() {
     sku:      ['itemno','itemnumber','sku','articlecode','article','itemcode','code'],
     name:     ['itemdescription','description','name','productname','product','title'],
     size:     ['sizedescription','size','sizeuk','sizeus','sizes'],
-    soh:      ['calculatedquantity','calculated','soh','stock','qty','quantity','stockonhand','available','onhand','totalcountedquantity'],
+    soh:      ['calculatedquantity','soh','stock','qty','stockonhand','available','onhand'],
     variant:  ['variantcode','variant'],
   };
 
@@ -897,14 +927,25 @@ function processPaste() {
     }
   });
 
+  console.log('Column mapping:', colIdx);
+  console.log('Mapped to:', Object.fromEntries(Object.entries(colIdx).map(([k,v]) => [k, rawHeaders[v]])));
+
+  const fb = document.getElementById('paste-feedback');
+
   if (colIdx.sku === undefined) {
-    document.getElementById('paste-feedback').textContent = '✕ Could not find Item No. column.';
+    fb.textContent = '✕ Could not find Item No. column. Headers found: ' + rawHeaders.join(', ');
     return;
   }
   if (colIdx.soh === undefined) {
-    document.getElementById('paste-feedback').textContent = '✕ Could not find Calculated Quantity column.';
+    fb.textContent = '✕ Could not find Calculated Quantity column. Headers found: ' + rawHeaders.join(', ');
     return;
   }
+  if (colIdx.size === undefined) {
+    fb.textContent = '✕ Could not find Size Description column. Headers found: ' + rawHeaders.join(', ');
+    return;
+  }
+
+  fb.textContent = `✓ Columns: SKU=${rawHeaders[colIdx.sku]}, Size=${rawHeaders[colIdx.size]}, SOH=${rawHeaders[colIdx.soh]}`;
 
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
@@ -913,15 +954,23 @@ function processPaste() {
     if (!sku || sku === '') continue;
 
     const sohRaw = parseInt(cols[colIdx.soh] || '0');
-    const soh = isNaN(sohRaw) ? 0 : Math.max(0, sohRaw); // negative = 0
+    const soh = isNaN(sohRaw) ? 0 : Math.max(0, sohRaw);
+    const size = colIdx.size !== undefined ? (cols[colIdx.size] || '—') : '—';
+
+    // Debug first row
+    if (i === 1) {
+      console.log('First data row:', cols);
+      console.log('Parsed → SKU:', sku, 'Size:', size, 'SOH:', soh);
+      fb.textContent += ` | First row: SKU=${sku}, Size=${size}, SOH=${soh}`;
+    }
 
     rows.push({
       sku:      sku,
       name:     colIdx.name !== undefined ? (cols[colIdx.name] || sku) : sku,
-      size:     colIdx.size !== undefined ? (cols[colIdx.size] || '—') : '—',
+      size:     size,
       soh:      soh,
       location: colIdx.location !== undefined ? (cols[colIdx.location] || '') : '',
-      category: '', // auto-detected below
+      category: '',
       gender:   '',
       color:    '',
       price:    '',
@@ -929,7 +978,7 @@ function processPaste() {
   }
 
   if (!rows.length) {
-    document.getElementById('paste-feedback').textContent = '✕ No valid rows found.';
+    fb.textContent = '✕ No valid rows found. Check console (F12) for debug info.';
     return;
   }
 
