@@ -207,8 +207,8 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
       <div class="sidebar-label">Gender</div>
       <div class="filter-group" id="gender-filters"></div>
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label" id="sidebar-size-label">Size (US)</div>
+    <div class="sidebar-section" id="size-section" style="display:none">
+      <div class="sidebar-label" id="sidebar-size-label">Size (US Men)</div>
       <div class="size-grid" id="size-grid"></div>
     </div>
     <div class="sidebar-data">
@@ -409,6 +409,9 @@ function groupBySku(rows) {
 
 // ─── FILTERS ────────────────────────────────────────────────────────────────
 function setFilter(type, val) {
+  if (type === 'category' && val !== activeFilters.category) {
+    activeFilters.size = 'all'; // reset size when switching category
+  }
   activeFilters[type] = val;
   applyFilters();
 }
@@ -454,57 +457,99 @@ function updateCounts() {
   });
 }
 
-function buildSidebar() {
-  const cats = [...new Set(allData.map(r => r.category))].filter(Boolean).sort();
-  const genders = [...new Set(allData.map(r => r.gender))].filter(Boolean).sort();
+// ─── CATEGORY DETECTION ──────────────────────────────────────────────────────
+// Rules (applied per size value):
+//   FW  → numeric 1–15 (with optional .5), or UK-prefixed
+//   APP → letter sizes XS–5XL, or has " (inch), or is a 4-digit number (e.g. 3032)
+function detectCategory(sizeStr) {
+  const s = (sizeStr || '').trim();
+  // UK prefix → always FW
+  if (/^UK\d/i.test(s)) return 'FW';
+  // Letter apparel sizes (XXS up to 5XL)
+  if (/^(2?XXS|XXS|XS|S|M|L|XL|2XL|3XL|4XL|5XL|OSFM)$/i.test(s)) return 'APP';
+  // Contains an inch mark → APP
+  if (s.includes('"')) return 'APP';
+  // 4-digit number (e.g. 3032, 3034) → APP
+  if (/^\d{4}$/.test(s)) return 'APP';
+  // Pure number: 1–15 (including .5 halves) → FW
+  const n = parseFloat(s);
+  if (!isNaN(n) && n >= 1 && n <= 15 && (s === String(Math.floor(n)) || s === String(n))) return 'FW';
+  // EU shoe size range → FW
+  if (!isNaN(n) && n >= 30 && n <= 55) return 'FW';
+  return 'OTHER';
+}
 
-  const catF = document.getElementById('cat-filters');
-  catF.innerHTML = `<button class="filter-btn ${activeFilters.category==='all'?'active':''}" onclick="setFilter('category','all')">All Categories</button>`;
-  cats.forEach(c => {
-    const cnt = groupBySku(allData.filter(r => r.category === c)).length;
-    catF.innerHTML += `<button class="filter-btn ${activeFilters.category===c?'active':''}" onclick="setFilter('category','${c}')">${c} <span class="filter-count">${cnt}</span></button>`;
-  });
-
-  const genF = document.getElementById('gender-filters');
-  genF.innerHTML = `<button class="filter-btn ${activeFilters.gender==='all'?'active':''}" onclick="setFilter('gender','all')">All</button>`;
-  genders.forEach(g => {
-    const cnt = groupBySku(allData.filter(r => r.gender === g)).length;
-    genF.innerHTML += `<button class="filter-btn ${activeFilters.gender===g?'active':''}" onclick="setFilter('gender','${g}')">${genderLabel(g)} <span class="filter-count">${cnt}</span></button>`;
-  });
-
-  // Build size chips — show US (M) label for shoe sizes, raw label for apparel sizes
-  const rawSizes = [...new Set(allData.map(r => r.size))].filter(Boolean).sort(sizeSortFn);
-  const sizeG = document.getElementById('size-grid');
-  const sizeLabel = document.getElementById('sidebar-size-label');
-
-  // Detect whether we have shoe sizes or apparel sizes (or both)
-  const hasShoe = rawSizes.some(s => isShoeSize(s));
-  const hasApparel = rawSizes.some(s => isApparelSize(s));
-
-  if (sizeLabel) {
-    sizeLabel.textContent = hasShoe && !hasApparel ? 'Size (US)' : hasShoe ? 'Size' : 'Size';
-  }
-
-  sizeG.innerHTML = '';
-  rawSizes.forEach(raw => {
-    const ukNorm = normaliseToUK(raw);
-    const conv = SIZE_CONV.find(r => r.uk === ukNorm);
-    // Display label: US (M) for shoe sizes, raw value for apparel
-    const displayLabel = (conv && isShoeSize(raw)) ? conv.usM : raw;
-    const isActive = activeFilters.size === raw;
-    sizeG.innerHTML += `<button class="size-chip ${isActive?'active':''}" onclick="setFilter('size','${escAttr(raw)}')" title="UK: ${ukNorm}">${displayLabel}</button>`;
+function categoriseRows(rows) {
+  return rows.map(r => {
+    const cat = r.category && r.category !== '' ? r.category : detectCategory(r.size);
+    return { ...r, category: cat };
   });
 }
 
 function isShoeSize(s) {
-  if (/^UK\d/i.test(s)) return true;
-  const n = parseFloat(s);
-  if (!isNaN(n) && n >= 33 && n <= 52) return true; // EU range
-  return false;
+  return detectCategory(s) === 'FW';
 }
 
 function isApparelSize(s) {
-  return /^(2?XS|XS|S|M|L|XL|2XL|3XL|OSFM)$/i.test(s);
+  return detectCategory(s) === 'APP';
+}
+
+function buildSidebar() {
+  const cats = [...new Set(allData.map(r => r.category))].filter(Boolean).sort();
+  const genders = [...new Set(allData.map(r => r.gender))].filter(Boolean).sort();
+
+  // Category filter
+  const catF = document.getElementById('cat-filters');
+  catF.innerHTML = `<button class="filter-btn ${activeFilters.category==='all'?'active':''}" onclick="setFilter('category','all')">All <span class="filter-count">${groupBySku(allData).length}</span></button>`;
+  cats.forEach(c => {
+    const cnt = groupBySku(allData.filter(r => r.category === c)).length;
+    catF.innerHTML += `<button class="filter-btn ${activeFilters.category===c?'active':''}" onclick="setFilter('category','${escAttr(c)}')">${c} <span class="filter-count">${cnt}</span></button>`;
+  });
+
+  // Gender filter
+  const genF = document.getElementById('gender-filters');
+  genF.innerHTML = `<button class="filter-btn ${activeFilters.gender==='all'?'active':''}" onclick="setFilter('gender','all')">All</button>`;
+  genders.forEach(g => {
+    if (!g) return;
+    const cnt = groupBySku(allData.filter(r => r.gender === g)).length;
+    genF.innerHTML += `<button class="filter-btn ${activeFilters.gender===g?'active':''}" onclick="setFilter('gender','${escAttr(g)}')">${genderLabel(g)} <span class="filter-count">${cnt}</span></button>`;
+  });
+
+  // Size panel — only show when FW or APP is selected
+  const sizeSection = document.getElementById('size-section');
+  const sizeG = document.getElementById('size-grid');
+  const sizeLabel = document.getElementById('sidebar-size-label');
+  const cat = activeFilters.category;
+
+  if (cat !== 'FW' && cat !== 'APP') {
+    sizeSection.style.display = 'none';
+    return;
+  }
+  sizeSection.style.display = '';
+
+  // Get sizes that belong to the active category from the currently filtered data source
+  const relevantRows = allData.filter(r => r.category === cat);
+  const rawSizes = [...new Set(relevantRows.map(r => r.size))].filter(Boolean).sort(sizeSortFn);
+
+  if (cat === 'FW') {
+    sizeLabel.textContent = 'Size (US Men)';
+    sizeG.innerHTML = '';
+    rawSizes.forEach(raw => {
+      const ukNorm = normaliseToUK(raw);
+      const conv = SIZE_CONV.find(r => r.uk === ukNorm);
+      const displayLabel = conv ? conv.usM : raw;
+      const isActive = activeFilters.size === raw;
+      sizeG.innerHTML += `<button class="size-chip ${isActive?'active':''}" onclick="setFilter('size','${escAttr(raw)}')" title="UK ${ukNorm}">${displayLabel}</button>`;
+    });
+  } else {
+    // APP — show raw letter/number sizes
+    sizeLabel.textContent = 'Size';
+    sizeG.innerHTML = '';
+    rawSizes.forEach(raw => {
+      const isActive = activeFilters.size === raw;
+      sizeG.innerHTML += `<button class="size-chip ${isActive?'active':''}" onclick="setFilter('size','${escAttr(raw)}')">${raw}</button>`;
+    });
+  }
 }
 
 // ─── RENDER ─────────────────────────────────────────────────────────────────
@@ -876,7 +921,7 @@ function processPaste() {
       size:     colIdx.size !== undefined ? (cols[colIdx.size] || '—') : '—',
       soh:      soh,
       location: colIdx.location !== undefined ? (cols[colIdx.location] || '') : '',
-      category: '',  // not in source — can be added manually later
+      category: '', // auto-detected below
       gender:   '',
       color:    '',
       price:    '',
@@ -888,11 +933,14 @@ function processPaste() {
     return;
   }
 
-  allData = rows;
+  // Auto-detect category from size
+  const categorised = categoriseRows(rows);
+
+  allData = categorised;
   activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
   document.getElementById('search').value = '';
 
-  // Update store badge to show location if present
+  // Update store badge
   const locations = [...new Set(rows.map(r => r.location).filter(Boolean))];
   if (locations.length === 1) {
     document.getElementById('store-name').textContent = locations[0];
@@ -903,10 +951,71 @@ function processPaste() {
   document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'});
   applyFilters();
   closePasteModal();
+
+  // Kick off gender lookup in background
+  lookupGenders();
+}
+
+// ─── GENDER LOOKUP VIA CLAUDE API ────────────────────────────────────────────
+let genderLookupRunning = false;
+
+async function lookupGenders() {
+  if (genderLookupRunning) return;
+  genderLookupRunning = true;
+
+  // Get unique SKUs that don't have gender yet
+  const skus = [...new Set(allData.map(r => r.sku))].filter(sku => {
+    const rows = allData.filter(r => r.sku === sku);
+    return rows.every(r => !r.gender || r.gender === '');
+  });
+
+  if (!skus.length) { genderLookupRunning = false; return; }
+
+  // Show indicator
+  const badge = document.getElementById('store-name');
+  const origText = badge.textContent;
+  badge.textContent = origText + ' · Looking up genders…';
+
+  // Batch into groups of 20 to stay within token limits
+  const BATCH = 20;
+  for (let i = 0; i < skus.length; i += BATCH) {
+    const batch = skus.slice(i, i + BATCH);
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are a product database assistant for adidas. Given a list of adidas article/SKU codes, return a JSON object mapping each SKU to its gender target: "M" for Men's, "W" for Women's, "U" for Unisex/Kids. Use your knowledge of adidas product lines. Return ONLY valid JSON, no explanation, no markdown. Example: {"IF9966":"M","HQ1234":"W","GW8900":"U"}`,
+          messages: [{
+            role: 'user',
+            content: `Classify these adidas SKUs by gender target. Return JSON only: ${JSON.stringify(batch)}`
+          }]
+        })
+      });
+      const data = await response.json();
+      const text = (data.content || []).map(c => c.text || '').join('');
+      const clean = text.replace(/```json|```/g, '').trim();
+      const map = JSON.parse(clean);
+
+      // Apply to allData
+      allData = allData.map(r => {
+        if (map[r.sku]) return { ...r, gender: map[r.sku] };
+        return r;
+      });
+      applyFilters();
+    } catch(e) {
+      console.warn('Gender lookup failed for batch', batch, e);
+    }
+  }
+
+  badge.textContent = origText;
+  genderLookupRunning = false;
 }
 
 function loadSampleData() {
-  allData = SAMPLE_DATA;
+  allData = SAMPLE_DATA.map(r => ({ ...r, category: r.category || detectCategory(r.size) }));
   activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
   document.getElementById('search').value = '';
   document.getElementById('store-name').textContent = 'NZ1104 · Britomart';
