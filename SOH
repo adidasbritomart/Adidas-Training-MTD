@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>adidas SOH Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0d;--surface:#161616;--surface2:#1f1f1f;--surface3:#2a2a2a;
+  --border:#2e2e2e;--border2:#3a3a3a;
+  --text:#f0f0f0;--text2:#a0a0a0;--text3:#666;
+  --accent:#f5f5f5;
+  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;
+}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow:hidden}
+h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
+.mono{font-family:'DM Mono',monospace}
+
+/* HEADER */
+.header{background:#000;border-bottom:1px solid #222;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:100}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{width:28px;height:28px}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:4px;color:#fff;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:16px}
+.store-badge{background:#1a1a1a;border:1px solid #333;padding:4px 12px;border-radius:2px;font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#999;font-family:'Barlow Condensed',sans-serif}
+.last-updated{font-size:11px;color:#555;font-family:'DM Mono',monospace}
+
+/* LAYOUT */
+.app{display:flex;height:calc(100vh - 56px);margin-top:56px}
+.sidebar{width:240px;min-width:240px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;flex-shrink:0}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+
+/* SIDEBAR */
+.sidebar-section{border-bottom:1px solid var(--border);padding:14px 16px}
+.sidebar-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;font-family:'Barlow Condensed',sans-serif}
+.filter-group{display:flex;flex-direction:column;gap:3px}
+.filter-btn{background:none;border:none;text-align:left;padding:6px 10px;border-radius:2px;font-size:13px;font-family:'Barlow',sans-serif;color:var(--text2);cursor:pointer;transition:all 0.15s;display:flex;justify-content:space-between;align-items:center;width:100%}
+.filter-btn:hover{background:var(--surface2);color:var(--text)}
+.filter-btn.active{background:#fff;color:#000;font-weight:500}
+.filter-count{font-size:10px;font-family:'DM Mono',monospace;opacity:0.6}
+
+/* SIZE GRID */
+.size-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.size-chip{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:5px 2px;text-align:center;font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);cursor:pointer;transition:all 0.15s}
+.size-chip:hover{border-color:var(--border2);color:var(--text)}
+.size-chip.active{background:#fff;border-color:#fff;color:#000;font-weight:500}
+
+/* SEARCH BAR */
+.search-bar{padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.search-wrap{position:relative}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px;pointer-events:none}
+.search-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 12px 8px 34px;border-radius:2px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;transition:border 0.15s}
+.search-input:focus{border-color:#555}
+.search-input::placeholder{color:var(--text3)}
+
+/* TOOLBAR */
+.toolbar{padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0}
+.result-count{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace}
+.result-count span{color:var(--text2)}
+.toolbar-actions{display:flex;gap:6px;align-items:center}
+.btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:2px;font-size:12px;font-family:'Barlow',sans-serif;font-weight:500;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{background:var(--surface3);color:var(--text);border-color:var(--border2)}
+.btn.primary{background:#fff;color:#000;border-color:#fff}
+.btn.primary:hover{background:#e0e0e0}
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden}
+.view-btn{background:none;border:none;padding:5px 10px;cursor:pointer;color:var(--text3);font-size:15px;transition:all 0.15s;line-height:1}
+.view-btn.active{background:var(--surface3);color:var(--text)}
+
+/* SOH */
+.soh-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+.dot-in{background:var(--green)}
+.dot-low{background:var(--amber)}
+.dot-out{background:var(--red)}
+
+/* PRODUCT GRID */
+.scroll-area{flex:1;overflow-y:auto}
+.product-grid{padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:all 0.15s;cursor:pointer;position:relative}
+.product-card:hover{border-color:#444;transform:translateY(-2px)}
+.product-img-wrap{width:100%;aspect-ratio:1;background:#f5f5f5;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.product-img-wrap img{width:100%;height:100%;object-fit:contain}
+.img-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;color:#999;letter-spacing:1px;background:#f0f0f0}
+.product-info{padding:10px 10px 9px}
+.product-sku{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1.5px;margin-bottom:3px}
+.product-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:7px}
+.product-footer{display:flex;align-items:center;justify-content:space-between}
+.soh-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace}
+.product-sizes{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;text-align:right;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.product-price{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px}
+.cat-tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.65);padding:2px 7px;border-radius:1px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#bbb;font-family:'Barlow Condensed',sans-serif}
+.gender-tag{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.65);padding:2px 6px;border-radius:1px;font-size:9px;color:#888;font-family:'DM Mono',monospace}
+
+/* LIST VIEW */
+.product-list-wrap{padding:8px 16px}
+.list-header{display:grid;grid-template-columns:52px 1fr 100px 120px 160px 90px;gap:12px;align-items:center;padding:6px 14px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);font-weight:600;border-bottom:1px solid var(--border);font-family:'Barlow Condensed',sans-serif}
+.list-rows{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.list-row{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:9px 14px;display:grid;grid-template-columns:52px 1fr 100px 120px 160px 90px;gap:12px;align-items:center;cursor:pointer;transition:all 0.15s}
+.list-row:hover{border-color:#444;background:var(--surface2)}
+.list-thumb{width:44px;height:44px;background:#f5f5f5;border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.list-thumb img{width:100%;height:100%;object-fit:contain}
+.list-sku{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1px;margin-bottom:2px}
+.list-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--text)}
+.list-col{font-size:12px;color:var(--text2)}
+.list-col-mono{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace}
+
+/* EMPTY STATE */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 24px;text-align:center}
+.empty-icon{font-size:56px;opacity:0.1;line-height:1}
+.empty-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;color:var(--text2);letter-spacing:3px;text-transform:uppercase}
+.empty-sub{font-size:13px;color:var(--text3);line-height:1.7;max-width:360px}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:4px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto}
+.modal-header{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-sku-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:4px}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:1px;color:var(--text);line-height:1}
+.modal-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;padding:0;line-height:1;margin-top:-2px}
+.modal-close:hover{color:var(--text)}
+.modal-img{width:100%;background:#f5f5f5;aspect-ratio:1.4;display:flex;align-items:center;justify-content:center;margin-top:16px}
+.modal-img img{max-width:55%;max-height:55%;object-fit:contain}
+.modal-body{padding:16px 20px 24px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.detail-row:last-of-type{border-bottom:none}
+.detail-label{font-size:12px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:1px;font-family:'Barlow Condensed',sans-serif}
+.detail-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)}
+.sizes-section{margin-top:14px}
+.sizes-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-family:'Barlow Condensed',sans-serif}
+.sizes-chips{display:flex;flex-wrap:wrap;gap:5px}
+.sz-chip{background:var(--surface2);border:1px solid var(--border);padding:6px 10px;border-radius:2px;font-size:11px;font-family:'DM Mono',monospace;text-align:center;min-width:52px}
+.sz-chip.has{border-color:#333;color:var(--text)}
+.sz-chip.none{opacity:0.3}
+.sz-qty{display:block;font-size:9px;color:var(--text3);margin-top:1px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:#3a3a3a}
+
+/* DATA SECTION IN SIDEBAR */
+.sidebar-data{padding:14px 16px;margin-top:auto;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="16,2 30,28 2,28"/>
+    </svg>
+    <span class="logo-text">adidas</span>
+  </div>
+  <div class="header-right">
+    <span class="store-badge" id="store-name">NZ1104 · Britomart</span>
+    <span class="last-updated" id="last-updated">Sample data loaded</span>
+  </div>
+</div>
+
+<!-- APP BODY -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Stock Status</div>
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="setFilter('status','all')">All Stock <span class="filter-count" id="cnt-all">0</span></button>
+        <button class="filter-btn" id="fb-in" onclick="setFilter('status','in')">
+          <span style="display:flex;align-items:center;gap:7px"><span class="soh-dot dot-in"></span>In Stock</span>
+          <span class="filter-count" id="cnt-in">0</span>
+        </button>
+        <button class="filter-btn" id="fb-low" onclick="setFilter('status','low')">
+          <span style="display:flex;align-items:center;gap:7px"><span class="soh-dot dot-low"></span>Low Stock</span>
+          <span class="filter-count" id="cnt-low">0</span>
+        </button>
+        <button class="filter-btn" id="fb-out" onclick="setFilter('status','out')">
+          <span style="display:flex;align-items:center;gap:7px"><span class="soh-dot dot-out"></span>Out of Stock</span>
+          <span class="filter-count" id="cnt-out">0</span>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Category</div>
+      <div class="filter-group" id="cat-filters"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Gender</div>
+      <div class="filter-group" id="gender-filters"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Size</div>
+      <div class="size-grid" id="size-grid"></div>
+    </div>
+    <div class="sidebar-data">
+      <div class="sidebar-label" style="margin-bottom:8px">Data</div>
+      <button class="btn" style="width:100%;justify-content:center" onclick="document.getElementById('file-input').click()">&#8593; Import CSV</button>
+      <button class="btn" style="width:100%;justify-content:center" onclick="downloadTemplate()">&#8595; Download Template</button>
+      <input type="file" id="file-input" accept=".csv" style="display:none" onchange="handleFile(event)"/>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <div class="search-bar">
+      <div class="search-wrap">
+        <span class="search-icon">&#9906;</span>
+        <input class="search-input" type="text" id="search" placeholder="Search by name or SKU…" oninput="applyFilters()"/>
+      </div>
+    </div>
+    <div class="toolbar">
+      <span class="result-count">Showing <span id="result-count">0</span> products</span>
+      <div class="toolbar-actions">
+        <button class="btn" onclick="clearAllFilters()">Clear filters</button>
+        <div class="view-toggle">
+          <button class="view-btn active" id="vbtn-grid" onclick="setView('grid')" title="Grid view">&#9638;</button>
+          <button class="view-btn" id="vbtn-list" onclick="setView('list')" title="List view">&#9776;</button>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-area" id="scroll-area">
+      <div id="product-area"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="handleModalBgClick(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-sku-label" id="m-sku"></div>
+        <div class="modal-title" id="m-name"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    </div>
+    <div class="modal-img">
+      <img id="m-img" src="" alt="" onerror="this.style.display='none'"/>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+let allData = [];
+let filtered = [];
+let activeFilters = { status: 'all', category: 'all', gender: 'all', size: 'all' };
+let viewMode = 'grid';
+
+const SAMPLE_DATA = [
+  {sku:'IF9966',name:'Ultraboost 5',category:'Footwear',gender:'M',color:'Core Black',size:'UK7',soh:3,price:'$260'},
+  {sku:'IF9966',name:'Ultraboost 5',category:'Footwear',gender:'M',color:'Core Black',size:'UK8',soh:4,price:'$260'},
+  {sku:'IF9966',name:'Ultraboost 5',category:'Footwear',gender:'M',color:'Core Black',size:'UK9',soh:2,price:'$260'},
+  {sku:'IF9966',name:'Ultraboost 5',category:'Footwear',gender:'M',color:'Core Black',size:'UK10',soh:0,price:'$260'},
+  {sku:'IF9966',name:'Ultraboost 5',category:'Footwear',gender:'M',color:'Core Black',size:'UK11',soh:1,price:'$260'},
+  {sku:'JR3065',name:'Tiro 23 Track Pants',category:'Apparel',gender:'M',color:'Black / White',size:'S',soh:6,price:'$80'},
+  {sku:'JR3065',name:'Tiro 23 Track Pants',category:'Apparel',gender:'M',color:'Black / White',size:'M',soh:3,price:'$80'},
+  {sku:'JR3065',name:'Tiro 23 Track Pants',category:'Apparel',gender:'M',color:'Black / White',size:'L',soh:0,price:'$80'},
+  {sku:'JR3065',name:'Tiro 23 Track Pants',category:'Apparel',gender:'M',color:'Black / White',size:'XL',soh:2,price:'$80'},
+  {sku:'HQ1234',name:'Adicolor Classics Tee',category:'Apparel',gender:'W',color:'White',size:'XS',soh:5,price:'$55'},
+  {sku:'HQ1234',name:'Adicolor Classics Tee',category:'Apparel',gender:'W',color:'White',size:'S',soh:4,price:'$55'},
+  {sku:'HQ1234',name:'Adicolor Classics Tee',category:'Apparel',gender:'W',color:'White',size:'M',soh:1,price:'$55'},
+  {sku:'HQ1234',name:'Adicolor Classics Tee',category:'Apparel',gender:'W',color:'White',size:'L',soh:0,price:'$55'},
+  {sku:'IE3477',name:'Terrex Free Hiker 2',category:'Footwear',gender:'W',color:'Wonder Red',size:'UK5',soh:0,price:'$320'},
+  {sku:'IE3477',name:'Terrex Free Hiker 2',category:'Footwear',gender:'W',color:'Wonder Red',size:'UK6',soh:3,price:'$320'},
+  {sku:'IE3477',name:'Terrex Free Hiker 2',category:'Footwear',gender:'W',color:'Wonder Red',size:'UK7',soh:2,price:'$320'},
+  {sku:'GW8900',name:'Forum Mid',category:'Footwear',gender:'U',color:'Cloud White',size:'UK7',soh:5,price:'$160'},
+  {sku:'GW8900',name:'Forum Mid',category:'Footwear',gender:'U',color:'Cloud White',size:'UK8',soh:3,price:'$160'},
+  {sku:'GW8900',name:'Forum Mid',category:'Footwear',gender:'U',color:'Cloud White',size:'UK9',soh:0,price:'$160'},
+  {sku:'GW8900',name:'Forum Mid',category:'Footwear',gender:'U',color:'Cloud White',size:'UK10',soh:1,price:'$160'},
+  {sku:'HS9557',name:'3-Stripes Fleece Hoodie',category:'Apparel',gender:'M',color:'Legend Ink',size:'S',soh:2,price:'$110'},
+  {sku:'HS9557',name:'3-Stripes Fleece Hoodie',category:'Apparel',gender:'M',color:'Legend Ink',size:'M',soh:0,price:'$110'},
+  {sku:'HS9557',name:'3-Stripes Fleece Hoodie',category:'Apparel',gender:'M',color:'Legend Ink',size:'L',soh:4,price:'$110'},
+  {sku:'HS9557',name:'3-Stripes Fleece Hoodie',category:'Apparel',gender:'M',color:'Legend Ink',size:'XL',soh:1,price:'$110'},
+  {sku:'IA0294',name:'Stan Smith Lux',category:'Footwear',gender:'U',color:'Off White / Green',size:'UK6',soh:2,price:'$200'},
+  {sku:'IA0294',name:'Stan Smith Lux',category:'Footwear',gender:'U',color:'Off White / Green',size:'UK7',soh:0,price:'$200'},
+  {sku:'IA0294',name:'Stan Smith Lux',category:'Footwear',gender:'U',color:'Off White / Green',size:'UK8',soh:3,price:'$200'},
+  {sku:'IA0294',name:'Stan Smith Lux',category:'Footwear',gender:'U',color:'Off White / Green',size:'UK9',soh:1,price:'$200'},
+  {sku:'IJ0713',name:'Tiro League Shorts',category:'Apparel',gender:'U',color:'Black',size:'S',soh:8,price:'$45'},
+  {sku:'IJ0713',name:'Tiro League Shorts',category:'Apparel',gender:'U',color:'Black',size:'M',soh:5,price:'$45'},
+  {sku:'IJ0713',name:'Tiro League Shorts',category:'Apparel',gender:'U',color:'Black',size:'L',soh:2,price:'$45'},
+  {sku:'IJ0713',name:'Tiro League Shorts',category:'Apparel',gender:'U',color:'Black',size:'XL',soh:0,price:'$45'},
+  {sku:'IC9821',name:'Predator 24 Gloves',category:'Accessories',gender:'U',color:'Black / White',size:'S',soh:3,price:'$35'},
+  {sku:'IC9821',name:'Predator 24 Gloves',category:'Accessories',gender:'U',color:'Black / White',size:'M',soh:2,price:'$35'},
+  {sku:'IC9821',name:'Predator 24 Gloves',category:'Accessories',gender:'U',color:'Black / White',size:'L',soh:0,price:'$35'},
+  {sku:'IB4926',name:'Ultraboost 5 W',category:'Footwear',gender:'W',color:'Spark / Pink',size:'UK4',soh:1,price:'$260'},
+  {sku:'IB4926',name:'Ultraboost 5 W',category:'Footwear',gender:'W',color:'Spark / Pink',size:'UK5',soh:3,price:'$260'},
+  {sku:'IB4926',name:'Ultraboost 5 W',category:'Footwear',gender:'W',color:'Spark / Pink',size:'UK6',soh:2,price:'$260'},
+  {sku:'IB4926',name:'Ultraboost 5 W',category:'Footwear',gender:'W',color:'Spark / Pink',size:'UK7',soh:0,price:'$260'},
+];
+
+// ─── UTILS ──────────────────────────────────────────────────────────────────
+function imgUrl(sku) {
+  return `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`;
+}
+
+function sohStatus(total) {
+  if (total === 0) return 'out';
+  if (total <= 3) return 'low';
+  return 'in';
+}
+
+function sohColor(st) {
+  return st === 'in' ? 'var(--green)' : st === 'low' ? 'var(--amber)' : 'var(--red)';
+}
+
+function sohText(st) {
+  return st === 'in' ? 'In Stock' : st === 'low' ? 'Low Stock' : 'Out of Stock';
+}
+
+function genderLabel(g) {
+  return {M:'Men',W:'Women',U:'Unisex',K:'Kids'}[g] || g;
+}
+
+function sizeSortFn(a, b) {
+  const appOrder = ['2XS','XS','S','M','L','XL','2XL','3XL','OSFM'];
+  const ai = appOrder.indexOf(a), bi = appOrder.indexOf(b);
+  if (ai > -1 && bi > -1) return ai - bi;
+  if (ai > -1) return -1;
+  if (bi > -1) return 1;
+  const na = parseFloat(a.replace(/[^\d.]/g,'')), nb = parseFloat(b.replace(/[^\d.]/g,''));
+  if (!isNaN(na) && !isNaN(nb)) return na - nb;
+  return a.localeCompare(b);
+}
+
+function groupBySku(rows) {
+  const map = {};
+  rows.forEach(r => {
+    const k = r.sku;
+    if (!map[k]) map[k] = { sku:r.sku, name:r.name, category:r.category, gender:r.gender, color:r.color, price:r.price, sizes:[], totalSoh:0 };
+    map[k].sizes.push({ size: r.size, soh: parseInt(r.soh) || 0 });
+    map[k].totalSoh += parseInt(r.soh) || 0;
+  });
+  return Object.values(map);
+}
+
+// ─── FILTERS ────────────────────────────────────────────────────────────────
+function setFilter(type, val) {
+  activeFilters[type] = val;
+  applyFilters();
+}
+
+function clearAllFilters() {
+  activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
+  document.getElementById('search').value = '';
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = (document.getElementById('search').value || '').toLowerCase().trim();
+  let rows = allData;
+
+  if (activeFilters.status !== 'all') {
+    const grouped = groupBySku(rows);
+    const skus = grouped.filter(p => sohStatus(p.totalSoh) === activeFilters.status).map(p => p.sku);
+    rows = rows.filter(r => skus.includes(r.sku));
+  }
+  if (activeFilters.category !== 'all') rows = rows.filter(r => r.category === activeFilters.category);
+  if (activeFilters.gender !== 'all') rows = rows.filter(r => r.gender === activeFilters.gender);
+  if (activeFilters.size !== 'all') rows = rows.filter(r => r.size === activeFilters.size);
+  if (q) rows = rows.filter(r => (r.name||'').toLowerCase().includes(q) || (r.sku||'').toLowerCase().includes(q));
+
+  filtered = groupBySku(rows);
+
+  updateCounts();
+  buildSidebar();
+  document.getElementById('result-count').textContent = filtered.length;
+  renderProducts();
+}
+
+function updateCounts() {
+  const all = groupBySku(allData);
+  document.getElementById('cnt-all').textContent = all.length;
+  document.getElementById('cnt-in').textContent = all.filter(p => sohStatus(p.totalSoh) === 'in').length;
+  document.getElementById('cnt-low').textContent = all.filter(p => sohStatus(p.totalSoh) === 'low').length;
+  document.getElementById('cnt-out').textContent = all.filter(p => sohStatus(p.totalSoh) === 'out').length;
+
+  ['all','in','low','out'].forEach(s => {
+    const btn = document.querySelector(`[onclick="setFilter('status','${s}')"]`);
+    if (btn) btn.classList.toggle('active', activeFilters.status === s);
+  });
+}
+
+function buildSidebar() {
+  const cats = [...new Set(allData.map(r => r.category))].filter(Boolean).sort();
+  const genders = [...new Set(allData.map(r => r.gender))].filter(Boolean).sort();
+  const sizes = [...new Set(allData.map(r => r.size))].filter(Boolean).sort(sizeSortFn);
+
+  const catF = document.getElementById('cat-filters');
+  catF.innerHTML = `<button class="filter-btn ${activeFilters.category==='all'?'active':''}" onclick="setFilter('category','all')">All Categories</button>`;
+  cats.forEach(c => {
+    const cnt = groupBySku(allData.filter(r => r.category === c)).length;
+    catF.innerHTML += `<button class="filter-btn ${activeFilters.category===c?'active':''}" onclick="setFilter('category','${c}')">${c} <span class="filter-count">${cnt}</span></button>`;
+  });
+
+  const genF = document.getElementById('gender-filters');
+  genF.innerHTML = `<button class="filter-btn ${activeFilters.gender==='all'?'active':''}" onclick="setFilter('gender','all')">All</button>`;
+  genders.forEach(g => {
+    const cnt = groupBySku(allData.filter(r => r.gender === g)).length;
+    genF.innerHTML += `<button class="filter-btn ${activeFilters.gender===g?'active':''}" onclick="setFilter('gender','${g}')">${genderLabel(g)} <span class="filter-count">${cnt}</span></button>`;
+  });
+
+  const sizeG = document.getElementById('size-grid');
+  sizeG.innerHTML = '';
+  sizes.forEach(s => {
+    sizeG.innerHTML += `<button class="size-chip ${activeFilters.size===s?'active':''}" onclick="setFilter('size','${s}')">${s}</button>`;
+  });
+}
+
+// ─── RENDER ─────────────────────────────────────────────────────────────────
+function setView(v) {
+  viewMode = v;
+  document.getElementById('vbtn-grid').classList.toggle('active', v === 'grid');
+  document.getElementById('vbtn-list').classList.toggle('active', v === 'list');
+  renderProducts();
+}
+
+function renderProducts() {
+  const area = document.getElementById('product-area');
+
+  if (!allData.length) {
+    area.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">▦</div>
+      <div class="empty-title">No Stock Data</div>
+      <div class="empty-sub">Import a CSV to load your stock on hand.<br>Use the sidebar or click below to get started.</div>
+      <button class="btn primary" style="margin-top:8px" onclick="document.getElementById('file-input').click()">&#8593; Import CSV</button>
+    </div>`;
+    return;
+  }
+
+  if (!filtered.length) {
+    area.innerHTML = `<div class="empty-state">
+      <div class="empty-icon" style="font-size:40px">&#8960;</div>
+      <div class="empty-title">No Results</div>
+      <div class="empty-sub">No products match your current filters.</div>
+      <button class="btn" style="margin-top:8px" onclick="clearAllFilters()">Clear all filters</button>
+    </div>`;
+    return;
+  }
+
+  viewMode === 'grid' ? renderGrid(area) : renderList(area);
+}
+
+function renderGrid(area) {
+  let html = '<div class="product-grid">';
+  filtered.forEach(p => {
+    const st = sohStatus(p.totalSoh);
+    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => s.size);
+    html += `
+    <div class="product-card" onclick="openModal('${escAttr(p.sku)}')">
+      <div class="product-img-wrap">
+        <img src="${imgUrl(p.sku)}" alt="${escAttr(p.name)}" 
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy"/>
+        <div class="img-fallback">${p.sku}</div>
+      </div>
+      <span class="cat-tag">${p.category}</span>
+      <span class="gender-tag">${p.gender}</span>
+      <div class="product-info">
+        <div class="product-sku">${p.sku}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-footer">
+          <div class="soh-badge">
+            <span class="soh-dot dot-${st}"></span>
+            <span style="color:${sohColor(st)};font-weight:500">${p.totalSoh}</span>
+          </div>
+          <span class="product-sizes">${inSizes.slice(0,4).join(' · ')}</span>
+        </div>
+        ${p.price ? `<div class="product-price">${p.price}</div>` : ''}
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  area.innerHTML = html;
+}
+
+function renderList(area) {
+  let html = `<div class="product-list-wrap">
+    <div class="list-header">
+      <div></div><div>Product</div><div>Category</div><div>Colour</div><div>Sizes In Stock</div><div>Total SOH</div>
+    </div>
+    <div class="list-rows">`;
+  filtered.forEach(p => {
+    const st = sohStatus(p.totalSoh);
+    const inSizes = p.sizes.filter(s => s.soh > 0).map(s => s.size).join(', ') || '—';
+    html += `
+    <div class="list-row" onclick="openModal('${escAttr(p.sku)}')">
+      <div class="list-thumb">
+        <img src="${imgUrl(p.sku)}" alt="" onerror="this.style.display='none'" loading="lazy"/>
+      </div>
+      <div>
+        <div class="list-sku">${p.sku}</div>
+        <div class="list-name">${p.name}</div>
+      </div>
+      <div class="list-col">${p.category}</div>
+      <div class="list-col-mono" style="font-size:11px">${p.color||'—'}</div>
+      <div class="list-col-mono">${inSizes}</div>
+      <div class="soh-badge">
+        <span class="soh-dot dot-${st}"></span>
+        <span style="color:${sohColor(st)};font-family:'DM Mono',monospace;font-size:12px">${p.totalSoh} <span style="color:var(--text3);font-size:10px">${sohText(st)}</span></span>
+      </div>
+    </div>`;
+  });
+  html += '</div></div>';
+  area.innerHTML = html;
+}
+
+function escAttr(s) {
+  return (s||'').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+
+// ─── MODAL ──────────────────────────────────────────────────────────────────
+function openModal(sku) {
+  const p = filtered.find(x => x.sku === sku);
+  if (!p) return;
+  const st = sohStatus(p.totalSoh);
+
+  document.getElementById('m-sku').textContent = sku;
+  document.getElementById('m-name').textContent = p.name;
+  const img = document.getElementById('m-img');
+  img.src = imgUrl(sku);
+  img.alt = p.name;
+  img.style.display = '';
+
+  const sortedSizes = [...p.sizes].sort((a,b) => sizeSortFn(a.size, b.size));
+  let body = `
+    <div class="detail-row"><span class="detail-label">Category</span><span class="detail-val">${p.category||'—'}</span></div>
+    <div class="detail-row"><span class="detail-label">Gender</span><span class="detail-val">${genderLabel(p.gender)}</span></div>
+    <div class="detail-row"><span class="detail-label">Colour</span><span class="detail-val">${p.color||'—'}</span></div>
+    ${p.price ? `<div class="detail-row"><span class="detail-label">Price</span><span class="detail-val">${p.price}</span></div>` : ''}
+    <div class="detail-row">
+      <span class="detail-label">Total SOH</span>
+      <span class="detail-val" style="color:${sohColor(st)}">${p.totalSoh} &mdash; ${sohText(st)}</span>
+    </div>
+    <div class="sizes-section">
+      <div class="sizes-title">Size Breakdown</div>
+      <div class="sizes-chips">`;
+  sortedSizes.forEach(s => {
+    body += `<div class="sz-chip ${s.soh > 0 ? 'has' : 'none'}">
+      ${s.size}<span class="sz-qty">${s.soh > 0 ? s.soh : '✕'}</span>
+    </div>`;
+  });
+  body += '</div></div>';
+  document.getElementById('m-body').innerHTML = body;
+  document.getElementById('modal-bg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleModalBgClick(e) {
+  if (e.target === document.getElementById('modal-bg')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─── CSV ─────────────────────────────────────────────────────────────────────
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    parseCSV(ev.target.result);
+    document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'});
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) { alert('CSV appears empty.'); return; }
+  const rawHeaders = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,'').toLowerCase().replace(/[^a-z0-9]/g,''));
+  
+  const aliases = {
+    sku:      ['sku','articlecode','article','articleno','code'],
+    name:     ['name','productname','product','description','title'],
+    category: ['category','cat','type','department'],
+    gender:   ['gender','sex','division'],
+    color:    ['color','colour','colorway','colourway'],
+    size:     ['size','sizes','sizeuk','sizeus'],
+    soh:      ['soh','stock','qty','quantity','stockonhand','available','onhand'],
+    price:    ['price','rrp','nzd','retailprice','saleprice']
+  };
+
+  const colIdx = {};
+  Object.entries(aliases).forEach(([key, list]) => {
+    for (const a of list) {
+      const i = rawHeaders.indexOf(a);
+      if (i > -1) { colIdx[key] = i; break; }
+    }
+  });
+
+  if (colIdx.sku === undefined || colIdx.soh === undefined) {
+    alert('Could not find SKU or SOH columns. Please check your CSV matches the template format.');
+    return;
+  }
+
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g,''));
+    if (!cols[colIdx.sku]) continue;
+    const row = {};
+    Object.keys(colIdx).forEach(k => { row[k] = cols[colIdx[k]] || ''; });
+    rows.push(row);
+  }
+
+  if (!rows.length) { alert('No data rows found in CSV.'); return; }
+
+  allData = rows;
+  activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
+  document.getElementById('search').value = '';
+  applyFilters();
+  alert(`Loaded ${rows.length} size entries across ${groupBySku(rows).length} products.`);
+}
+
+function downloadTemplate() {
+  const csv = [
+    'SKU,Name,Category,Gender,Color,Size,SOH,Price',
+    'IF9966,Ultraboost 5,Footwear,M,Core Black,UK8,4,$260',
+    'IF9966,Ultraboost 5,Footwear,M,Core Black,UK9,2,$260',
+    'IF9966,Ultraboost 5,Footwear,M,Core Black,UK10,0,$260',
+    'JR3065,Tiro 23 Track Pants,Apparel,M,Black / White,S,6,$80',
+    'JR3065,Tiro 23 Track Pants,Apparel,M,Black / White,M,3,$80',
+    'JR3065,Tiro 23 Track Pants,Apparel,M,Black / White,L,0,$80',
+    'HQ1234,Adicolor Classics Tee,Apparel,W,White,XS,5,$55',
+    'HQ1234,Adicolor Classics Tee,Apparel,W,White,S,4,$55',
+  ].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'adidas_soh_template.csv';
+  a.click();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+allData = SAMPLE_DATA;
+applyFilters();
+</script>
+</body>
+</html>
