@@ -344,30 +344,94 @@ function imgUrl(sku) {
 
 function imgUrlFallbacks(sku) {
   const s = sku.toLowerCase();
-  const urls = [
-    // Standard adidas CDN — uppercase and lowercase
+  return [
+    // Standard CDN — uppercase SKU
+    `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`,
+    // Standard CDN — lowercase SKU
+    `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${s}_01_standard.jpg`,
+    // Alternate CDN path
+    `https://assets.adidas.com/images/w_600,f_auto,q_auto/${sku}_01_standard.jpg`,
+    `https://assets.adidas.com/images/w_600,f_auto,q_auto/${s}_01_standard.jpg`,
+    // adidas NZ product page — browser fetches og:image via our scraper
+    `https://www.adidas.co.nz/on/demandware.static/-/Library-Sites-adidas-Shared/default/images/${sku}.jpg`,
+  ];
+}
+
+// Cache for resolved image URLs
+const imgCache = {};
+
+// The adidas CDN uses a hash prefix we can't predict, but the NZ product API
+// exposes image URLs. We try the API, then fall back to the CDN guesses.
+async function fetchAdidasImage(sku) {
+  if (imgCache[sku] !== undefined) return imgCache[sku];
+  imgCache[sku] = null;
+
+  // Try adidas NZ product API — returns JSON with image data
+  const endpoints = [
+    `https://www.adidas.co.nz/api/products/${sku}`,
+    `https://www.adidas.com/api/products/${sku}`,
+  ];
+
+  for (const url of endpoints) {
+    try {
+      const res = await fetch(url, {
+        signal: AbortSignal.timeout(5000),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) continue;
+      const data = await res.json();
+      // Try common image fields in adidas API responses
+      const imgUrl = (
+        data?.view_list?.[0]?.image_url ||
+        data?.product_description?.images?.[0]?.image_url ||
+        data?.image_url ||
+        data?.images?.[0]?.url ||
+        null
+      );
+      if (imgUrl) {
+        imgCache[sku] = imgUrl;
+        return imgUrl;
+      }
+    } catch(e) { /* timeout or CORS — continue */ }
+  }
+
+  imgCache[sku] = false;
+  return null;
+}
+
+function attachImgFallback(imgEl, sku) {
+  const s = sku.toLowerCase();
+  const cdnUrls = [
     `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${sku}_01_standard.jpg`,
     `https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/${s}_01_standard.jpg`,
     `https://assets.adidas.com/images/w_600,f_auto,q_auto/${sku}_01_standard.jpg`,
     `https://assets.adidas.com/images/w_600,f_auto,q_auto/${s}_01_standard.jpg`,
   ];
-  return urls;
-}
-
-function attachImgFallback(imgEl, sku) {
-  const urls = imgUrlFallbacks(sku);
   let idx = 0;
-  imgEl.onerror = function() {
-    idx++;
-    if (idx < urls.length) {
-      this.src = urls[idx];
-    } else {
-      this.style.display = 'none';
-      const fb = this.nextElementSibling;
-      if (fb) fb.style.display = 'flex';
-    }
+
+  const showFallback = () => {
+    imgEl.style.display = 'none';
+    const fb = imgEl.nextElementSibling;
+    if (fb) fb.style.display = 'flex';
   };
-  imgEl.src = urls[0];
+
+  const tryCdn = () => {
+    if (idx >= cdnUrls.length) { showFallback(); return; }
+    imgEl.onerror = () => { idx++; tryCdn(); };
+    imgEl.onload = function() { this.style.opacity = '1'; };
+    imgEl.src = cdnUrls[idx];
+  };
+
+  // Try API first, then fall through to CDN chain
+  fetchAdidasImage(sku).then(apiUrl => {
+    if (apiUrl) {
+      imgEl.onerror = () => tryCdn(); // if API URL also fails, try CDN
+      imgEl.onload = function() { this.style.opacity = '1'; };
+      imgEl.src = apiUrl;
+    } else {
+      tryCdn();
+    }
+  }).catch(() => tryCdn());
 }
 
 function sohStatus(total) {
@@ -823,10 +887,11 @@ function renderModalSizes(p) {
 }
 
 function isFootwear(p) {
-  if (p.category && /foot|shoe|sneak|boot|trainer/i.test(p.category)) return true;
-  // If no category, check if sizes look like UK shoe sizes
-  const hasShoeSizes = p.sizes.some(s => /^UK\d/i.test(s.size) || (parseFloat(s.size) >= 33 && parseFloat(s.size) <= 50));
-  return hasShoeSizes;
+  // Use category if already set
+  if (p.category === 'FW') return true;
+  if (p.category === 'APP') return false;
+  // Fall back to checking sizes
+  return p.sizes.some(s => detectCategory(s.size) === 'FW');
 }
 
 // ─── MODAL ──────────────────────────────────────────────────────────────────
