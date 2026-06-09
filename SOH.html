@@ -65,6 +65,8 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
 .btn:hover{background:var(--surface3);color:var(--text);border-color:var(--border2)}
 .btn.primary{background:#fff;color:#000;border-color:#fff}
 .btn.primary:hover{background:#e0e0e0}
+.btn.danger{background:none;border-color:#3a1a1a;color:#f87171}
+.btn.danger:hover{background:#2a1010;border-color:#f87171}
 .view-toggle{display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden}
 .view-btn{background:none;border:none;padding:5px 10px;cursor:pointer;color:var(--text3);font-size:15px;transition:all 0.15s;line-height:1}
 .view-btn.active{background:var(--surface3);color:var(--text)}
@@ -215,6 +217,7 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
       <div class="sidebar-label" style="margin-bottom:8px">Data</div>
       <button class="btn primary" style="width:100%;justify-content:center" onclick="openPasteModal()">&#8593; Paste SOH Data</button>
       <button class="btn" style="width:100%;justify-content:center;margin-top:4px" onclick="loadSampleData()">Load Sample Data</button>
+      <button class="btn danger" style="width:100%;justify-content:center;margin-top:4px" onclick="resetData()">&#8856; Reset Data</button>
     </div>
   </div>
 
@@ -253,14 +256,14 @@ h1,h2,h3,.condensed{font-family:'Barlow Condensed',sans-serif}
       <button class="modal-close" onclick="closePasteModal()">&#10005;</button>
     </div>
     <div style="padding:0 20px 20px;display:flex;flex-direction:column;gap:12px">
-      <div style="font-size:12px;color:var(--text3);line-height:1.7;background:var(--surface2);padding:10px 12px;border-radius:2px;border-left:2px solid #333">
-        Copy your rows from the spreadsheet (including the header row) and paste below.<br/>
-        Expects columns: <span style="font-family:'DM Mono',monospace;color:var(--text2)">Location Code · Item No. · Item Description · Variant Code · Size Description · Calculated Quantity</span>
+      <div style="font-size:12px;color:var(--text3);line-height:1.8;background:var(--surface2);padding:10px 12px;border-radius:2px;border-left:2px solid #444">
+        Select <strong style="color:var(--text2)">columns A–E</strong> including the header row, copy and paste below.<br/>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:#555">A: Location Code &nbsp;·&nbsp; B: Item No. &nbsp;·&nbsp; C: Item Description &nbsp;·&nbsp; D: Size Description &nbsp;·&nbsp; E: Calculated Quantity</span>
       </div>
       <textarea id="paste-area" placeholder="Paste your Excel data here…" style="width:100%;height:220px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 12px;border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;resize:vertical;outline:none;line-height:1.6"></textarea>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <span id="paste-feedback" style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace"></span>
-        <div style="display:flex;gap:6px">
+        <span id="paste-feedback" style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;flex:1"></span>
+        <div style="display:flex;gap:6px;flex-shrink:0">
           <button class="btn" onclick="closePasteModal()">Cancel</button>
           <button class="btn primary" onclick="processPaste()">&#8594; Load Data</button>
         </div>
@@ -889,119 +892,66 @@ function handlePasteBgClick(e) {
 
 function processPaste() {
   const raw = document.getElementById('paste-area').value.trim();
-  if (!raw) {
-    document.getElementById('paste-feedback').textContent = 'Nothing pasted yet.';
-    return;
-  }
-
-  const lines = raw.split(/\r?\n/).filter(l => l.trim());
-  if (lines.length < 2) {
-    document.getElementById('paste-feedback').textContent = 'Need at least a header row + one data row.';
-    return;
-  }
-
-  // Detect delimiter — tab (from Excel) or comma
-  const delim = lines[0].includes('\t') ? '\t' : ',';
-  const rawHeaders = lines[0].split(delim).map(h => h.trim());
-  const headers = rawHeaders.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
-
-  // Debug: show what headers were detected
-  console.log('Raw headers:', rawHeaders);
-  console.log('Cleaned headers:', headers);
-
-  // Map your exact column headers + common aliases
-  const aliases = {
-    location: ['locationcode','location','store','storecode'],
-    sku:      ['itemno','itemnumber','sku','articlecode','article','itemcode','code'],
-    name:     ['itemdescription','description','name','productname','product','title'],
-    size:     ['sizedescription','size','sizeuk','sizeus','sizes'],
-    soh:      ['calculatedquantity','soh','stock','qty','stockonhand','available','onhand'],
-    variant:  ['variantcode','variant'],
-  };
-
-  const colIdx = {};
-  Object.entries(aliases).forEach(([key, list]) => {
-    for (const a of list) {
-      const i = headers.indexOf(a);
-      if (i > -1) { colIdx[key] = i; break; }
-    }
-  });
-
-  console.log('Column mapping:', colIdx);
-  console.log('Mapped to:', Object.fromEntries(Object.entries(colIdx).map(([k,v]) => [k, rawHeaders[v]])));
-
   const fb = document.getElementById('paste-feedback');
 
-  if (colIdx.sku === undefined) {
-    fb.textContent = '✕ Could not find Item No. column. Headers found: ' + rawHeaders.join(', ');
-    return;
-  }
-  if (colIdx.soh === undefined) {
-    fb.textContent = '✕ Could not find Calculated Quantity column. Headers found: ' + rawHeaders.join(', ');
-    return;
-  }
-  if (colIdx.size === undefined) {
-    fb.textContent = '✕ Could not find Size Description column. Headers found: ' + rawHeaders.join(', ');
-    return;
-  }
+  if (!raw) { fb.textContent = 'Nothing pasted yet.'; return; }
 
-  fb.textContent = `✓ Columns: SKU=${rawHeaders[colIdx.sku]}, Size=${rawHeaders[colIdx.size]}, SOH=${rawHeaders[colIdx.soh]}`;
+  const lines = raw.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { fb.textContent = 'Need at least a header row + one data row.'; return; }
+
+  // Always tab-separated from Excel. Strip the header row and read by fixed position:
+  // Col 0: Location Code  Col 1: Item No.  Col 2: Item Description  Col 3: Size Description  Col 4: Calculated Quantity
+  const delim = lines[0].includes('\t') ? '\t' : ',';
+
+  // Verify first line looks right — col 1 should be "Item No." area
+  const headerCols = lines[0].split(delim).map(h => h.trim());
+  if (headerCols.length < 5) {
+    fb.textContent = `✕ Expected 5 columns (A–E), only found ${headerCols.length}. Make sure to copy columns A through E including the header.`;
+    return;
+  }
 
   const rows = [];
+  let skipped = 0;
+
   for (let i = 1; i < lines.length; i++) {
     const cols = lines[i].split(delim).map(c => c.trim().replace(/^"|"$/g, ''));
-    const sku = cols[colIdx.sku];
-    if (!sku || sku === '') continue;
+    if (cols.length < 5) { skipped++; continue; }
 
-    const sohRaw = parseInt(cols[colIdx.soh] || '0');
-    const soh = isNaN(sohRaw) ? 0 : Math.max(0, sohRaw);
-    const size = colIdx.size !== undefined ? (cols[colIdx.size] || '—') : '—';
+    const location = cols[0] || '';
+    const sku      = cols[1] || '';
+    const name     = cols[2] || sku;
+    const size     = cols[3] || '—';
+    const sohRaw   = parseInt(cols[4]);
+    const soh      = isNaN(sohRaw) ? 0 : Math.max(0, sohRaw); // negatives → 0
 
-    // Debug first row
-    if (i === 1) {
-      console.log('First data row:', cols);
-      console.log('Parsed → SKU:', sku, 'Size:', size, 'SOH:', soh);
-      fb.textContent += ` | First row: SKU=${sku}, Size=${size}, SOH=${soh}`;
-    }
+    if (!sku) { skipped++; continue; }
 
-    rows.push({
-      sku:      sku,
-      name:     colIdx.name !== undefined ? (cols[colIdx.name] || sku) : sku,
-      size:     size,
-      soh:      soh,
-      location: colIdx.location !== undefined ? (cols[colIdx.location] || '') : '',
-      category: '',
-      gender:   '',
-      color:    '',
-      price:    '',
-    });
+    rows.push({ sku, name, size, soh, location, category:'', gender:'', color:'', price:'' });
   }
 
   if (!rows.length) {
-    fb.textContent = '✕ No valid rows found. Check console (F12) for debug info.';
+    fb.textContent = `✕ No valid rows found. ${skipped} rows skipped.`;
     return;
   }
 
-  // Auto-detect category from size
-  const categorised = categoriseRows(rows);
-
-  allData = categorised;
+  // Auto-detect category from size, then load
+  allData = categoriseRows(rows);
   activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
   document.getElementById('search').value = '';
 
-  // Update store badge
+  // Update store badge from location column
   const locations = [...new Set(rows.map(r => r.location).filter(Boolean))];
-  if (locations.length === 1) {
-    document.getElementById('store-name').textContent = locations[0];
-  } else if (locations.length > 1) {
-    document.getElementById('store-name').textContent = locations.join(' · ');
-  }
+  if (locations.length === 1) document.getElementById('store-name').textContent = locations[0];
+  else if (locations.length > 1) document.getElementById('store-name').textContent = locations.join(' · ');
 
+  const products = groupBySku(allData).length;
   document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-NZ',{hour:'2-digit',minute:'2-digit'});
+  fb.textContent = `✓ Loaded ${rows.length} rows · ${products} products`;
+
   applyFilters();
   closePasteModal();
 
-  // Kick off gender lookup in background
+  // Gender lookup in background
   lookupGenders();
 }
 
@@ -1069,6 +1019,18 @@ function loadSampleData() {
   document.getElementById('search').value = '';
   document.getElementById('store-name').textContent = 'NZ1104 · Britomart';
   document.getElementById('last-updated').textContent = 'Sample data loaded';
+  applyFilters();
+}
+
+function resetData() {
+  if (!allData.length) return;
+  if (!confirm('Clear all stock data? This cannot be undone.')) return;
+  allData = [];
+  filtered = [];
+  activeFilters = { status:'all', category:'all', gender:'all', size:'all' };
+  document.getElementById('search').value = '';
+  document.getElementById('store-name').textContent = 'NZ1104 · Britomart';
+  document.getElementById('last-updated').textContent = 'No data loaded';
   applyFilters();
 }
 
