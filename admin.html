@@ -904,8 +904,8 @@
           </div>
           <div style="flex:1; min-width:240px;">
             <label style="display:block; font-family:var(--font-display); font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-500); margin-bottom:6px;">Signup Page URL</label>
-            <input type="url" id="ac-qr-url" placeholder="https://yoursite.com/signup.html" style="margin-bottom:10px;"/>
-            <p style="font-size:12px; color:var(--gray-500); line-height:1.6; margin-bottom:14px;">Paste the address where your signup page is hosted. The store tag <strong id="ac-qr-tag"></strong> is added automatically, so this QR only counts toward this store.</p>
+            <input type="url" id="ac-qr-url" placeholder="https://yoursite.com/signup.html" onchange="renderStoreQR()" style="margin-bottom:10px;"/>
+            <p style="font-size:12px; color:var(--gray-500); line-height:1.6; margin-bottom:14px;">Paste the address where your signup page is hosted. The store tag <strong id="ac-qr-tag"></strong> is added automatically, so this QR only counts toward this store. It's saved automatically and will reappear on any device you log in from.</p>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
               <button class="btn-primary" style="width:auto; padding:11px 20px;" onclick="renderStoreQR()">Generate QR</button>
               <button class="btn-refresh" id="ac-qr-download" style="display:none;" onclick="downloadStoreQR()">↓ Download PNG</button>
@@ -2062,16 +2062,42 @@
 
     /* ─── STORE SIGNUP QR ─── */
     function storeSignupUrl(base){ if(!base) return ''; const clean=base.trim().replace(/[?&]store=[^&]*/i,'').replace(/[?&]$/,''); const sep=clean.includes('?')?'&':'?'; return clean+sep+'store='+encodeURIComponent(currentStore); }
-    function restoreStoreQR(){ const saved=localStorage.getItem('adidas_signup_base_url'); const input=document.getElementById('ac-qr-url'); if(saved&&input){ input.value=saved; renderStoreQR(true); } }
+    function qrCacheKey(){ return 'adidas_signup_base_url_'+currentStore; }
+
+    /* Loads the saved signup URL: instantly from local cache, then from
+       Firebase so it appears on ANY device and survives refreshes. */
+    async function restoreStoreQR(){
+      const input=document.getElementById('ac-qr-url'); if(!input) return;
+      const cached=localStorage.getItem(qrCacheKey()) || localStorage.getItem('adidas_signup_base_url');
+      if(cached){ input.value=cached; renderStoreQR(true); }
+      if(window._firebaseReady){
+        try{
+          const snap=await window._fbGet(window._fbRef(window._db,'config/signup_url/'+currentStore));
+          if(snap.exists()){
+            const saved=snap.val();
+            if(saved){
+              localStorage.setItem(qrCacheKey(),saved);
+              if(saved!==input.value){ input.value=saved; renderStoreQR(true); }
+            }
+          }
+        }catch(e){ /* offline — local cache already shown */ }
+      }
+    }
+
     async function renderStoreQR(silent){
       const input=document.getElementById('ac-qr-url'); const base=input?input.value.trim():'';
       const box=document.getElementById('ac-qr-box'); const dl=document.getElementById('ac-qr-download'); const linkEl=document.getElementById('ac-qr-link');
       if(!base){ if(!silent) showToast('Enter your signup page URL first','error'); return; }
-      localStorage.setItem('adidas_signup_base_url',base);
+      localStorage.setItem(qrCacheKey(),base);
+      // Save to Firebase on a real edit (not on silent auto-load) so it syncs everywhere.
+      if(!silent && window._firebaseReady){
+        try{ await window._fbSet(window._fbRef(window._db,'config/signup_url/'+currentStore),base); }
+        catch(e){ showToast('Saved on this device, but sync failed','error'); }
+      }
       const url=storeSignupUrl(base);
       await loadQRLib();
       box.innerHTML=''; box.style.padding='8px';
-      try{ new QRCode(box,{text:url,width:150,height:150,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); dl.style.display='inline-flex'; if(linkEl) linkEl.textContent=url; if(!silent) showToast('✓ QR generated','success'); }
+      try{ new QRCode(box,{text:url,width:150,height:150,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); dl.style.display='inline-flex'; if(linkEl) linkEl.textContent=url; if(!silent) showToast('✓ QR saved','success'); }
       catch(e){ box.innerHTML='<span style="color:var(--red);font-size:12px;">QR failed to load</span>'; }
     }
     function downloadStoreQR(){ const cv=document.querySelector('#ac-qr-box canvas'); if(!cv){ showToast('Generate the QR first','error'); return; } const a=document.createElement('a'); a.href=cv.toDataURL('image/png'); a.download='signup-qr-'+currentStore+'.png'; a.click(); showToast('✓ QR downloaded','success'); }
