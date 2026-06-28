@@ -663,18 +663,14 @@
     </div>
   </div>
 
-  <!-- SCREEN: SET UP ACCOUNT -->
+  <!-- SCREEN: SET STORE PASSWORD (first login for a store) -->
   <div class="page" id="screen-setup" style="display:none;">
     <div class="login-box">
-      <p class="step-label">First Login Detected</p>
-      <h2>Set Up Your<br>Account</h2>
+      <p class="step-label">First Login · <span id="setup-store-name"></span></p>
+      <h2>Set Store<br>Password</h2>
       <p style="font-size:13px; color:var(--gray-700); margin-bottom:24px; line-height:1.6;">
-        You logged in with the default password. Choose a username and new password.
+        No password has been set for this store yet. Choose one now. It's stored only as a salted hash — never as plain text.
       </p>
-      <div class="form-group">
-        <label for="setup-user">Choose Username</label>
-        <input type="text" id="setup-user" placeholder="e.g. sarah" autocomplete="off"/>
-      </div>
       <div class="form-group">
         <label for="setup-pass">Choose Password</label>
         <input type="password" id="setup-pass" placeholder="Min. 8 characters" autocomplete="new-password"/>
@@ -682,10 +678,10 @@
       <div class="form-group">
         <label for="setup-confirm">Confirm Password</label>
         <input type="password" id="setup-confirm" placeholder="Repeat your password" autocomplete="new-password"
-               onkeydown="if(event.key==='Enter') saveNewCredentials()"/>
+               onkeydown="if(event.key==='Enter') saveStorePassword()"/>
       </div>
       <p class="error-msg" id="setup-error"></p>
-      <button class="btn-primary" onclick="saveNewCredentials()">Save & Continue →</button>
+      <button class="btn-primary" onclick="saveStorePassword()">Save & Continue →</button>
     </div>
   </div>
 
@@ -976,7 +972,7 @@
         <div class="card-header"><span class="card-title">Store Logins</span></div>
         <div class="user-list" id="admin-user-list"></div>
         <p style="font-size:12px; color:var(--gray-500); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
-          Two store accounts. Each login only sees its own store's signups. Passwords can be changed in the page source (the <strong>STORES</strong> block near the top of the script).
+          Two store accounts. Each login only sees its own store's signups. Passwords are set on each store's first login and stored only as a salted hash in the database — never as plain text. To reset a store's password, delete its entry under <strong>config/storeAuth</strong> in the Firebase console; the next login will set a new one.
         </p>
       </div>
       <div class="card">
@@ -1080,12 +1076,18 @@
       return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
     }
     /* ─── STORE LOGINS ───────────────────────────────────────────────
-       Two users, one per store. To change a password, edit `pass` below.
-       The username you type at login is the store code (left-hand key). */
+       Two stores. NO passwords are stored here — only the store codes
+       and display names. Each store's password is hashed (salted SHA-256)
+       and held in Firebase at config/storeAuth/<code>. The first person to
+       log into a store sets its password; after that it's verified by hash. */
     const STORES = {
-      'NZ1104': { name: 'NZ1104 BRITOMART',  pass: 'britomart1104' },
-      'NZ1113': { name: 'NZ1113 CUSTOMS ST', pass: 'customs1113'  }
+      'NZ1104': { name: 'NZ1104 BRITOMART'  },
+      'NZ1113': { name: 'NZ1113 CUSTOMS ST' }
     };
+    /* Salt is not secret — it exists to defeat precomputed (rainbow-table) attacks. */
+    const AUTH_SALT = 'adi-mtd-v2::a9F3k';
+    async function hashCred(code, pass){ return await sha256(code + '::' + pass + '::' + AUTH_SALT); }
+    let pendingStore = null;
 
     /* ─── PHOTO / LOGO STORAGE ─── */
     function loadPhotos() {
@@ -1255,44 +1257,65 @@
 
     /* ─── LOGIN ─── */
     async function doLogin() {
-      const user=document.getElementById('login-user').value.trim().toUpperCase();
+      const code=document.getElementById('login-user').value.trim().toUpperCase();
       const pass=document.getElementById('login-pass').value;
       const err=document.getElementById('login-error');
       const btn=document.getElementById('login-btn');
       err.style.display='none';
-      if(!user||!pass){ err.textContent='Please enter your username and password.'; err.style.display='block'; return; }
-      const store=STORES[user];
-      if(store&&pass===store.pass){
-        currentUser=store.name; currentStore=user;
-        sessionStorage.setItem('adidas_store', user);
-        if(document.getElementById('keep-logged-in')?.checked) localStorage.setItem('adidas_store_persistent', user);
-        showAdmin();
-      } else {
-        err.textContent='Incorrect username or password.'; err.style.display='block';
-        document.getElementById('login-pass').value=''; document.getElementById('login-pass').focus();
-      }
+      if(!code||!pass){ err.textContent='Please enter your store code and password.'; err.style.display='block'; return; }
+      const store=STORES[code];
+      if(!store){ err.textContent='Incorrect store code or password.'; err.style.display='block'; return; }
+      if(!window._firebaseReady){ err.textContent='No connection — please try again in a moment.'; err.style.display='block'; return; }
+      btn.textContent='Checking…'; btn.disabled=true;
+      try {
+        const snap=await window._fbGet(window._fbRef(window._db,'config/storeAuth/'+code));
+        if(!snap.exists()){
+          // No password set for this store yet → first-time setup.
+          pendingStore=code; showStoreSetup(store.name);
+          return;
+        }
+        const hash=await hashCred(code,pass);
+        if(snap.val()===hash){
+          currentUser=store.name; currentStore=code;
+          sessionStorage.setItem('adidas_store', code);
+          if(document.getElementById('keep-logged-in')?.checked) localStorage.setItem('adidas_store_persistent', code);
+          showAdmin();
+        } else {
+          err.textContent='Incorrect store code or password.'; err.style.display='block';
+          document.getElementById('login-pass').value=''; document.getElementById('login-pass').focus();
+        }
+      } catch(e){ err.textContent='Could not verify — please try again.'; err.style.display='block'; }
+      finally { btn.textContent='Access Dashboard →'; btn.disabled=false; }
     }
 
-    function showSetup() { document.getElementById('screen-login').style.display='none'; document.getElementById('screen-setup').style.display='flex'; }
+    function showStoreSetup(storeName) {
+      document.getElementById('screen-login').style.display='none';
+      document.getElementById('screen-setup').style.display='flex';
+      const lbl=document.getElementById('setup-store-name'); if(lbl) lbl.textContent=storeName;
+      const e=document.getElementById('setup-error'); if(e) e.style.display='none';
+      document.getElementById('setup-pass').value=''; document.getElementById('setup-confirm').value='';
+      document.getElementById('setup-pass').focus();
+    }
 
-    async function saveNewCredentials() {
-      const user=document.getElementById('setup-user').value.trim();
+    async function saveStorePassword() {
       const pass=document.getElementById('setup-pass').value;
       const confirm=document.getElementById('setup-confirm').value;
       const err=document.getElementById('setup-error');
       err.style.display='none';
-      if(!user){ err.textContent='Please choose a username.'; err.style.display='block'; return; }
+      if(!pendingStore||!STORES[pendingStore]){ err.textContent='Session expired — please start again.'; err.style.display='block'; return; }
       if(pass.length<8){ err.textContent='Password must be at least 8 characters.'; err.style.display='block'; return; }
       if(pass!==confirm){ err.textContent='Passwords do not match.'; err.style.display='block'; return; }
-      if(!window._firebaseReady){ err.textContent='Firebase not connected.'; err.style.display='block'; return; }
-      if(!window._firebaseReady){ err.textContent='Firebase not connected.'; err.style.display='block'; return; }
+      if(!window._firebaseReady){ err.textContent='No connection — please try again.'; err.style.display='block'; return; }
       try {
-        const hash=await sha256(pass);
-        await window._fbSet(window._fbRef(window._db,'config/admins/'+safeKey(user)),hash);
-        currentUser=user; sessionStorage.setItem('adidas_admin_session',user); sessionStorage.removeItem('adidas_used_default');
-        document.getElementById('screen-setup').style.display='none'; showAdmin();
-        showToast('✓ Account saved','success');
-      } catch(e){ err.textContent='Could not save to Firebase.'; err.style.display='block'; }
+        const hash=await hashCred(pendingStore,pass);
+        await window._fbSet(window._fbRef(window._db,'config/storeAuth/'+pendingStore),hash);
+        currentUser=STORES[pendingStore].name; currentStore=pendingStore;
+        sessionStorage.setItem('adidas_store', pendingStore);
+        pendingStore=null;
+        document.getElementById('screen-setup').style.display='none';
+        showAdmin();
+        showToast('✓ Password set','success');
+      } catch(e){ err.textContent='Could not save — please try again.'; err.style.display='block'; }
     }
 
     function logout() {
