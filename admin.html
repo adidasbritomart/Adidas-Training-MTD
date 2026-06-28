@@ -663,28 +663,6 @@
     </div>
   </div>
 
-  <!-- SCREEN: SET STORE PASSWORD (first login for a store) -->
-  <div class="page" id="screen-setup" style="display:none;">
-    <div class="login-box">
-      <p class="step-label">First Login · <span id="setup-store-name"></span></p>
-      <h2>Set Store<br>Password</h2>
-      <p style="font-size:13px; color:var(--gray-700); margin-bottom:24px; line-height:1.6;">
-        No password has been set for this store yet. Choose one now. It's stored only as a salted hash — never as plain text.
-      </p>
-      <div class="form-group">
-        <label for="setup-pass">Choose Password</label>
-        <input type="password" id="setup-pass" placeholder="Min. 8 characters" autocomplete="new-password"/>
-      </div>
-      <div class="form-group">
-        <label for="setup-confirm">Confirm Password</label>
-        <input type="password" id="setup-confirm" placeholder="Repeat your password" autocomplete="new-password"
-               onkeydown="if(event.key==='Enter') saveStorePassword()"/>
-      </div>
-      <p class="error-msg" id="setup-error"></p>
-      <button class="btn-primary" onclick="saveStorePassword()">Save & Continue →</button>
-    </div>
-  </div>
-
   <!-- SCREEN: ADMIN PANEL -->
   <div class="page" id="screen-admin">
 
@@ -972,7 +950,7 @@
         <div class="card-header"><span class="card-title">Store Logins</span></div>
         <div class="user-list" id="admin-user-list"></div>
         <p style="font-size:12px; color:var(--gray-500); margin-top:16px; letter-spacing:0.04em; line-height:1.6;">
-          Two store accounts. Each login only sees its own store's signups. Passwords are set on each store's first login and stored only as a salted hash in the database — never as plain text. To reset a store's password, delete its entry under <strong>config/storeAuth</strong> in the Firebase console; the next login will set a new one.
+          Two store accounts, secured by Firebase Authentication. Each login only sees its own store's signups, and the database only releases data to a signed-in store. No password or hash is stored in this page. To change a password or add a store, use the Firebase console under <strong>Authentication → Users</strong>.
         </p>
       </div>
       <div class="card">
@@ -1016,6 +994,9 @@
   <script type="module">
     import { initializeApp }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+             setPersistence, browserLocalPersistence, browserSessionPersistence }
+             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     const firebaseConfig = {
       apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
       authDomain:        "adidas-training-mtd.firebaseapp.com",
@@ -1025,13 +1006,19 @@
       messagingSenderId: "208658627122",
       appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
     };
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
+    const app  = initializeApp(firebaseConfig);
+    const db   = getDatabase(app);
+    const auth = getAuth(app);
     window._db            = db;
     window._fbRef         = ref;
     window._fbSet         = set;
     window._fbGet         = get;
+    window._auth          = auth;
+    window._signIn        = (email,pass,keep)=> setPersistence(auth, keep?browserLocalPersistence:browserSessionPersistence).then(()=>signInWithEmailAndPassword(auth,email,pass));
+    window._signOut       = ()=> signOut(auth);
     window._firebaseReady = true;
+    // Restore an existing session (and react to login/logout) once the app script is ready.
+    onAuthStateChanged(auth, user => { if(typeof window._onAuthChange==='function') window._onAuthChange(user); });
     document.dispatchEvent(new Event('firebase-ready'));
   </script>
 
@@ -1075,19 +1062,20 @@
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
     }
-    /* ─── STORE LOGINS ───────────────────────────────────────────────
-       Two stores. NO passwords are stored here — only the store codes
-       and display names. Each store's password is hashed (salted SHA-256)
-       and held in Firebase at config/storeAuth/<code>. The first person to
-       log into a store sets its password; after that it's verified by hash. */
+    /* ─── STORE LOGINS (Firebase Authentication) ─────────────────────
+       No passwords or hashes live in this file. Each store is a Firebase
+       Auth user; logging in signs into Firebase, and the database rules only
+       release data to a signed-in store. You type the store code at login and
+       it maps to that store's Auth email below.
+
+       Passwords are managed in the Firebase console:
+         Authentication → Users  (add user / reset password).
+       The two Auth users must use exactly these emails: */
     const STORES = {
-      'NZ1104': { name: 'NZ1104 BRITOMART'  },
-      'NZ1113': { name: 'NZ1113 CUSTOMS ST' }
+      'NZ1104': { name: 'NZ1104 BRITOMART',  email: 'nz1104@adiclub.store' },
+      'NZ1113': { name: 'NZ1113 CUSTOMS ST', email: 'nz1113@adiclub.store' }
     };
-    /* Salt is not secret — it exists to defeat precomputed (rainbow-table) attacks. */
-    const AUTH_SALT = 'adi-mtd-v2::a9F3k';
-    async function hashCred(code, pass){ return await sha256(code + '::' + pass + '::' + AUTH_SALT); }
-    let pendingStore = null;
+    function storeByEmail(email){ email=(email||'').toLowerCase(); return Object.keys(STORES).find(c=>STORES[c].email===email)||null; }
 
     /* ─── PHOTO / LOGO STORAGE ─── */
     function loadPhotos() {
@@ -1265,75 +1253,54 @@
       if(!code||!pass){ err.textContent='Please enter your store code and password.'; err.style.display='block'; return; }
       const store=STORES[code];
       if(!store){ err.textContent='Incorrect store code or password.'; err.style.display='block'; return; }
-      if(!window._firebaseReady){ err.textContent='No connection — please try again in a moment.'; err.style.display='block'; return; }
+      if(!window._firebaseReady){ err.textContent='Still connecting — please try again in a moment.'; err.style.display='block'; return; }
+      const keep=!!document.getElementById('keep-logged-in')?.checked;
       btn.textContent='Checking…'; btn.disabled=true;
       try {
-        const snap=await window._fbGet(window._fbRef(window._db,'config/storeAuth/'+code));
-        if(!snap.exists()){
-          // No password set for this store yet → first-time setup.
-          pendingStore=code; showStoreSetup(store.name);
-          return;
-        }
-        const hash=await hashCred(code,pass);
-        if(snap.val()===hash){
-          currentUser=store.name; currentStore=code;
-          sessionStorage.setItem('adidas_store', code);
-          if(document.getElementById('keep-logged-in')?.checked) localStorage.setItem('adidas_store_persistent', code);
-          showAdmin();
-        } else {
-          err.textContent='Incorrect store code or password.'; err.style.display='block';
-          document.getElementById('login-pass').value=''; document.getElementById('login-pass').focus();
-        }
-      } catch(e){ err.textContent='Could not verify — please try again.'; err.style.display='block'; }
-      finally { btn.textContent='Access Dashboard →'; btn.disabled=false; }
+        await window._signIn(store.email, pass, keep);
+        // onAuthStateChanged will set currentStore and open the dashboard.
+      } catch(e){
+        const m=(e&&e.code)||'';
+        if(m==='auth/network-request-failed') err.textContent='Network error — check your connection.';
+        else if(m==='auth/too-many-requests') err.textContent='Too many attempts. Try again shortly.';
+        else err.textContent='Incorrect store code or password.';
+        err.style.display='block';
+        document.getElementById('login-pass').value=''; document.getElementById('login-pass').focus();
+      } finally { btn.textContent='Access Dashboard →'; btn.disabled=false; }
     }
 
-    function showStoreSetup(storeName) {
-      document.getElementById('screen-login').style.display='none';
-      document.getElementById('screen-setup').style.display='flex';
-      const lbl=document.getElementById('setup-store-name'); if(lbl) lbl.textContent=storeName;
-      const e=document.getElementById('setup-error'); if(e) e.style.display='none';
-      document.getElementById('setup-pass').value=''; document.getElementById('setup-confirm').value='';
-      document.getElementById('setup-pass').focus();
-    }
-
-    async function saveStorePassword() {
-      const pass=document.getElementById('setup-pass').value;
-      const confirm=document.getElementById('setup-confirm').value;
-      const err=document.getElementById('setup-error');
-      err.style.display='none';
-      if(!pendingStore||!STORES[pendingStore]){ err.textContent='Session expired — please start again.'; err.style.display='block'; return; }
-      if(pass.length<8){ err.textContent='Password must be at least 8 characters.'; err.style.display='block'; return; }
-      if(pass!==confirm){ err.textContent='Passwords do not match.'; err.style.display='block'; return; }
-      if(!window._firebaseReady){ err.textContent='No connection — please try again.'; err.style.display='block'; return; }
-      try {
-        const hash=await hashCred(pendingStore,pass);
-        await window._fbSet(window._fbRef(window._db,'config/storeAuth/'+pendingStore),hash);
-        currentUser=STORES[pendingStore].name; currentStore=pendingStore;
-        sessionStorage.setItem('adidas_store', pendingStore);
-        pendingStore=null;
-        document.getElementById('screen-setup').style.display='none';
+    /* Firebase reports login/logout (and restores a saved session) here. */
+    window._onAuthChange = function(user){
+      const code = user ? storeByEmail(user.email) : null;
+      if(code){
+        currentUser=STORES[code].name; currentStore=code;
         showAdmin();
-        showToast('✓ Password set','success');
-      } catch(e){ err.textContent='Could not save — please try again.'; err.style.display='block'; }
-    }
+      } else if(user){
+        // Signed in but not a recognised store → sign back out.
+        window._signOut && window._signOut();
+      } else {
+        currentUser=null; currentStore=null;
+        showLogin();
+      }
+    };
 
-    function logout() {
-      currentUser=null; currentStore=null;
-      sessionStorage.removeItem('adidas_store'); localStorage.removeItem('adidas_store_persistent');
-      sessionStorage.removeItem('adidas_admin_session'); sessionStorage.removeItem('adidas_used_default'); localStorage.removeItem('adidas_admin_persistent');
+    function showLogin(){
       document.getElementById('screen-admin').style.display='none';
-      document.getElementById('screen-setup').style.display='none';
       document.getElementById('screen-login').style.display='flex';
       document.getElementById('admin-badge').style.display='none';
       document.getElementById('btn-logout').style.display='none';
       document.getElementById('login-user').value=''; document.getElementById('login-pass').value='';
-      document.getElementById('keep-logged-in').checked=false;
+      const k=document.getElementById('keep-logged-in'); if(k) k.checked=false;
+    }
+
+    function logout() {
+      if(window._signOut) window._signOut();   // triggers _onAuthChange → showLogin()
+      currentUser=null; currentStore=null;
+      showLogin();
     }
 
     function showAdmin() {
       document.getElementById('screen-login').style.display='none';
-      document.getElementById('screen-setup').style.display='none';
       document.getElementById('screen-admin').style.display='block';
       document.getElementById('admin-badge').style.display='inline-block';
       document.getElementById('btn-logout').style.display='inline-block';
@@ -2206,13 +2173,10 @@
       catch(e){ showToast('Delete failed — '+e.message,'error'); }
     }
 
-    /* ─── AUTO-LOGIN ─── */
-    (function(){
-      const persistent=localStorage.getItem('adidas_store_persistent');
-      const sessionSaved=sessionStorage.getItem('adidas_store');
-      const code=persistent||sessionSaved;
-      if(code&&STORES[code]){ currentUser=STORES[code].name; currentStore=code; showAdmin(); }
-    })();
+    /* ─── SESSION RESTORE ───────────────────────────────────────────
+       Firebase remembers the signed-in store and fires _onAuthChange once
+       on load: it reopens the dashboard if a session exists, or shows the
+       login screen if not. Nothing else needed here. */
   </script>
 </body>
 </html>
